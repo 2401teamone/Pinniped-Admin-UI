@@ -11,10 +11,10 @@ const ICONS = {
   json: 'code',
 };
 
-export default function Type({ type, children }) {
+export default function Icon({ column }) {
   let icon;
 
-  switch (type) {
+  switch (column.type) {
     case 'pk':
       icon = <i className={`fa-light fa-${ICONS.pk}`}></i>;
       break;
@@ -49,10 +49,5 @@ export default function Type({ type, children }) {
       icon = <div></div>;
   }
 
-  return (
-    <>
-      <span className="type-icon">{icon}</span>
-      <span className="type-name">{children}</span>
-    </>
-  );
+  return <>{icon}</>;
 }

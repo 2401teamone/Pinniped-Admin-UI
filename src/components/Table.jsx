@@ -1,49 +1,55 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 
-import { useSearch } from 'wouter';
+import TableHead from './utils/TableHead';
 
 import axios from 'axios';
 
 import TableRow from './TableRow';
-import Type from './utils/Type';
-import Delim from './utils/Delim';
 
 // add search
 
-export default function Table({ table }) {
-  const [rows, setRows] = useState([]);
-
+export default function Table({ table, rows, setRows }) {
   useEffect(() => {
     async function getRows() {
       const { data } = await axios.get(
-        `http://localhost:3000/api/tables/${table.name}`
+        `http://localhost:3000/api/tables/${table.id}/rows`
       );
       setRows(data.rows);
     }
     if (table) {
       getRows();
     }
-  }, [table]);
+  }, [table, setRows]);
 
   return (
-    <div className="table">
-      <div className="table-header">
-        {table &&
-          JSON.parse(table.columns).map((column) => (
-            <div key={column.name}>
-              {column.name} / {column.type}
-            </div>
-          ))}
-      </div>
-      <Type type="pk">id</Type>
-      <Delim />
-      <div className="table-records">
-        {rows.length &&
-          rows.map((row) => {
-            return <TableRow key={row.size} row={row} />; // change back to row.id when fixed
-          })}
-      </div>
-      <Delim />
+    <div className="table-container">
+      <table className="table">
+        <thead className="thead">
+          <tr className="tr tr-header">
+            <TableHead column={{ type: 'pk', name: 'id' }}></TableHead>
+            {table &&
+              table.columns.map((column) => (
+                <TableHead key={column.name} column={column} />
+              ))}
+            <TableHead column={{ type: 'date', name: 'created_at' }} />
+            <TableHead column={{ type: 'date', name: 'updated_at' }} />
+          </tr>
+        </thead>
+        <tbody className="tbody">
+          {rows &&
+            rows.map((row) => {
+              return (
+                <TableRow
+                  key={row.id}
+                  table={table}
+                  row={row}
+                  setRows={setRows}
+                />
+              );
+            })}
+        </tbody>
+      </table>
+      <div className="table-footer">Total Found: {rows.length}</div>
     </div>
   );
 }

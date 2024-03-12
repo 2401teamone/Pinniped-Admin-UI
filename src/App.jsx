@@ -8,6 +8,7 @@ import Settings from './pages/Settings';
 import SideModal from './components/utils/SideModal';
 import EditRowForm from './components/forms/EditRowForm';
 import AddTableForm from './components/forms/AddTableForm';
+import AddRowForm from './components/forms/AddRowForm';
 import EditTableForm from './components/forms/EditTableForm';
 import LogView from './components/LogView';
 
@@ -24,7 +25,13 @@ function App() {
   let modalContent = null;
   switch (component) {
     case MODAL_CONTENT.addRecord:
-      modalContent = 'add record';
+      modalContent = (
+        <AddRowForm
+          table={data.table}
+          setRows={data.setRows}
+          closeModal={actionCreators.close}
+        />
+      );
       break;
     case MODAL_CONTENT.editRecord:
       modalContent = <EditRowForm row={data} />;

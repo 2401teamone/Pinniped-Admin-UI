@@ -27,7 +27,7 @@
 
   --navbar-width: 70px;
   --subnavbar-width: 200px;
-  --side-modal-width: 600px;
+  --side-modal-width: 500px;
 
   --content-padding: 40px;
 
@@ -93,7 +93,7 @@ input {
 
   /* core pages = data, observability, and settings */
   & .page {
-    height: 100vh;
+    /* height: 100%; */
     margin-left: var(--navbar-width);
     background-color: var(--background);
 
@@ -150,25 +150,92 @@ input {
           gap: 20px;
           align-items: center;
         }
+        & .table-container {
+          overflow-x: auto;
+          /* overflow-y: scroll; */
 
-        & .table {
-          & .table-records {
-            & .table-row {
-              display: flex;
-              gap: 20px;
-              align-items: center;
-              padding: 15px;
-              border-bottom: 1px solid var(--blue-light);
-              cursor: pointer;
-
-              &:hover {
-                background-color: var(--hover);
+          & .table {
+            /* table-layout: fixed; */
+            & .thead {
+              & .tr-header {
+                padding: 5px;
               }
-
-              & .table-cell {
-                flex: 1;
+              & .th {
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
               }
             }
+            & .tr {
+              display: flex;
+              align-items: baseline;
+              gap: 20px;
+              padding: 5px;
+              border-bottom: 1px solid var(--blue-light);
+
+              & .td,
+              .th {
+                position: relative;
+                display: flex;
+                align-items: center;
+
+                min-width: 100px;
+                width: 100px;
+                max-width: 100px;
+                height: 20px;
+
+                overflow: hidden;
+              }
+
+              & .cell-value {
+                display: inline-block;
+                width: 100px;
+                /* height: 40px; */
+              }
+
+              & .cell-update {
+                position: absolute;
+                top: 0px;
+                left: 0px;
+                z-index: 100;
+                border: 1px solid var(--blue-light);
+                height: 20px;
+                width: 200px;
+                box-shadow: var(--shadow-2);
+              }
+            }
+            & .tbody {
+              overflow: auto;
+              height: calc(100vh - 55px);
+              & .tr-row {
+                display: flex;
+                gap: 20px;
+                align-items: center;
+                padding: 5px;
+                border-bottom: 1px solid var(--blue-light);
+                cursor: pointer;
+
+                & .td {
+                  &:hover {
+                    background-color: var(--hover);
+                  }
+                  & span {
+                    display: inline-block;
+                  }
+                  & .pk {
+                    background-color: var(--light-gray);
+                    padding: 3px;
+                    border-radius: var(--min-radius);
+                  }
+                }
+              }
+            }
+          }
+          & .table-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
           }
         }
       }
@@ -486,3 +553,23 @@ input {
     background-color: var(--sage-light);
   }
 } */
+
+.pk-col {
+  position: sticky;
+}
+
+.copy-id {
+  /* padding: 3px; */
+  /* margin-right: 10px; */
+}
+
+.panel {
+  /* padding: 20px; */
+  position: absolute;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-2);
+  background-color: white;
+  /* margin-bottom: 20px; */
+  z-index: 100;
+  /* border: 3px solid red; */
+}

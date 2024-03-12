@@ -1,121 +1,24 @@
-export const schema = () => {
-  return [
-    {
-      type: 'table',
-      subType: 'auth',
-      name: 'users',
-      cols: [
-        {
-          cid: 0,
-          name: 'id',
-          type: 'INTEGER',
-          notnull: 0,
-          dflt_value: null,
-          pk: true,
-          order: 0,
-        },
-        {
-          cid: 1,
-          name: 'username',
-          type: 'TEXT',
-          notnull: 0,
-          dflt_value: null,
-          pk: false,
-          order: 1,
-        },
-      ],
-      pk: 'id',
-    },
-    {
-      type: 'table',
-      subType: 'resource',
-      name: 'posts',
-      cols: [
-        {
-          cid: 0,
-          name: 'id',
-          type: 'INTEGER',
-          notnull: 0,
-          dflt_value: null,
-          pk: true,
-          order: 0,
-        },
-        {
-          cid: 1,
-          name: 'post',
-          type: 'TEXT',
-          notnull: 1,
-          dflt_value: null,
-          pk: false,
-          order: 1,
-        },
-        {
-          cid: 2,
-          name: 'userId',
-          type: 'INTEGER',
-          notnull: 0,
-          dflt_value: null,
-          pk: false,
-          order: 2,
-          fk: [Object],
-        },
-      ],
-      pk: 'id',
-    },
-    {
-      type: 'table',
-      subType: 'resource',
-      name: 'comments',
-      cols: [
-        {
-          cid: 0,
-          name: 'id',
-          type: 'INTEGER',
-          notnull: 0,
-          dflt_value: null,
-          pk: true,
-          order: 0,
-        },
-        {
-          cid: 1,
-          name: 'comment',
-          type: 'TEXT',
-          notnull: 1,
-          dflt_value: null,
-          pk: false,
-          order: 1,
-        },
-        {
-          cid: 2,
-          name: 'postId',
-          type: 'INTEGER',
-          notnull: 0,
-          dflt_value: null,
-          pk: false,
-          order: 2,
-          fk: [Object],
-        },
-        {
-          cid: 3,
-          name: 'userId',
-          type: 'INTEGER',
-          notnull: 0,
-          dflt_value: null,
-          pk: false,
-          order: 3,
-          fk: [Object],
-        },
-        {
-          cid: 4,
-          name: 'commented_at',
-          type: 'timestamp',
-          notnull: 0,
-          dflt_value: 'CURRENT_TIMESTAMP',
-          pk: false,
-          order: 4,
-        },
-      ],
-      pk: 'id',
-    },
-  ];
+import axios from 'axios';
+
+export const createOne = async (tableId, data) => {
+  const res = await axios.post(
+    `http://localhost:3000/api/tables/${tableId}/rows`,
+    data
+  );
+  return res;
+};
+
+export const updateOne = async (tableId, rowId, data) => {
+  const res = await axios.patch(
+    `http://localhost:3000/api/tables/${tableId}/rows/${rowId}`,
+    data
+  );
+  return res;
+};
+
+export const deleteOne = async (tableId, rowId) => {
+  const res = await axios.delete(
+    `http://localhost:3000/api/tables/${tableId}/rows/${rowId}`
+  );
+  return res;
 };

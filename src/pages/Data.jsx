@@ -17,6 +17,7 @@ import { useLocation, useSearch } from 'wouter';
 
 export default function Data() {
   const [tables, setTables] = useState([]);
+  const [rows, setRows] = useState([]);
 
   const {
     actionCreators: { addRecord, editRecord },
@@ -69,13 +70,18 @@ export default function Data() {
             </div>
           </div>
           <div className="right">
-            <Button type="confirm" onClick={() => addRecord()}>
+            <Button
+              type="confirm"
+              onClick={() => addRecord({ table: getTable(tableName), setRows })}
+            >
               <i className="fa-regular fa-plus"></i> Add Record
             </Button>
           </div>
         </PageHeader>
         <SearchBar />
-        {tableName && <Table table={getTable(tableName)} />}
+        {tableName && (
+          <Table table={getTable(tableName)} rows={rows} setRows={setRows} />
+        )}
       </div>
     </div>
   );
