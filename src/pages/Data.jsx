@@ -20,7 +20,7 @@ export default function Data() {
   const [rows, setRows] = useState([]);
 
   const {
-    actionCreators: { addRecord, editRecord },
+    actionCreators: { addRecord, editTable },
   } = useModalContext();
 
   const [, setLocation] = useLocation();
@@ -54,14 +54,22 @@ export default function Data() {
 
   return (
     <div className="data-page">
-      <DataNavbar tables={tables} chooseTable={chooseTable} />
+      <DataNavbar
+        tables={tables}
+        chooseTable={chooseTable}
+        setTables={setTables}
+      />
 
       <div className="data-page-content">
         <PageHeader>
           <div className="left">
             <Crumbs crumbs={['Data', `${tableName}`]} />
             <div className="data-page-action-icons">
-              <ActionIcon onClick={() => editRecord({ name: 'my table' })}>
+              <ActionIcon
+                onClick={() =>
+                  editTable({ setTables, currentSchema: getTable(tableName) })
+                }
+              >
                 <i className="fa-sharp fa-regular fa-gear"></i>
               </ActionIcon>
               <ActionIcon>

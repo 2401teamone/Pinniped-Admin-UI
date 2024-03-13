@@ -16,7 +16,7 @@ export const TYPES = {
   // pk: 'pk',
   text: 'text',
   number: 'number',
-  boolean: 'boolean',
+  bool: 'bool',
   date: 'date',
   email: 'email',
   url: 'url',

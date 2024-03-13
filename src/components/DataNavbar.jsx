@@ -3,11 +3,9 @@ import Button from './utils/Button';
 import Delim from './utils/Delim';
 import SubNavbar from './utils/SubNavbar';
 
-import { useLocation, useSearch } from 'wouter';
-
 import { useModalContext } from '../hooks/useModal';
 
-export default function DataNavbar({ tables, chooseTable }) {
+export default function DataNavbar({ tables, chooseTable, setTables }) {
   const {
     actionCreators: { addTable },
   } = useModalContext();
@@ -15,8 +13,8 @@ export default function DataNavbar({ tables, chooseTable }) {
   return (
     <SubNavbar>
       <div className="data-page-navbar">
-        <Button type="primary" onClick={() => addTable()}>
-          + New Collection
+        <Button type="primary" onClick={() => addTable({ setTables })}>
+          + New Table
         </Button>
         <Delim />
         <div className="nav-rows">

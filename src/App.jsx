@@ -7,7 +7,7 @@ import Observability from './pages/Observability';
 import Settings from './pages/Settings';
 import SideModal from './components/utils/SideModal';
 import EditRowForm from './components/forms/EditRowForm';
-import AddTableForm from './components/forms/AddTableForm';
+import TableForm from './components/forms/TableForm';
 import AddRowForm from './components/forms/AddRowForm';
 import EditTableForm from './components/forms/EditTableForm';
 import LogView from './components/LogView';
@@ -37,10 +37,21 @@ function App() {
       modalContent = <EditRowForm row={data} />;
       break;
     case MODAL_CONTENT.addTable:
-      modalContent = <AddTableForm />;
+      modalContent = (
+        <TableForm
+          setTables={data.setTables}
+          closeModal={actionCreators.close}
+        />
+      );
       break;
     case MODAL_CONTENT.editTable:
-      modalContent = <EditTableForm table={data} />;
+      modalContent = (
+        <TableForm
+          setTables={data.setTables}
+          closeModal={actionCreators.close}
+          currentSchema={data.currentSchema}
+        />
+      );
       break;
     case 'VIEW_LOG':
       modalContent = <LogView log={data} />;
