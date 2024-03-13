@@ -7,7 +7,7 @@ import Button from '../components/utils/Button';
 import ActionIcon from '../components/utils/ActionIcon';
 import SearchBar from '../components/utils/SearchBar';
 import DataNavbar from '../components/DataNavbar';
-import Table from '../components/Table';
+import Table from '../components/table/Table';
 
 // import { schema } from '../api';
 

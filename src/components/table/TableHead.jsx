@@ -1,10 +1,10 @@
-import Icon from './Icon';
+import Icon from '../utils/Icon';
 
 export default function TableHead({ column }) {
   return (
-    <th className={`th ${column.type === 'pk' ? 'pk-col' : ''}`}>
+    <div className={`th size ${column.type === 'pk' ? 'pk-col' : ''}`}>
       <Icon column={column} />
       {column.name}
-    </th>
+    </div>
   );
 }

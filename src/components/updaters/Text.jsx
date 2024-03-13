@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 
-export default function TextUpdate({ value, setValue, handleUpdate }) {
+export default function Text({ value, setValue, handleUpdate }) {
   const inputRef = useRef();
 
   useEffect(() => {
@@ -10,13 +10,16 @@ export default function TextUpdate({ value, setValue, handleUpdate }) {
   return (
     <input
       type="text"
+      className="text-update"
       ref={inputRef}
       value={value}
       onChange={(e) => {
         console.log('setting state to: ', e.target.value);
         setValue(e.target.value);
       }}
-      onBlur={handleUpdate}
+      onBlur={() => {
+        handleUpdate();
+      }}
     />
   );
 }

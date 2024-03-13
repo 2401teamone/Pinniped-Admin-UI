@@ -1,12 +1,8 @@
-import { useModalContext } from '../hooks/useModal';
-import TableCell from './utils/TableCell';
-import { deleteOne } from '../api';
+import TableCell from './TableCell';
+
+import { deleteOne } from '../../api';
 
 export default function TableRow({ table, row, setRows }) {
-  const {
-    actionCreators: { editRecord },
-  } = useModalContext();
-
   let renderedRow = table.columns.map((column) => {
     return (
       <TableCell
@@ -26,7 +22,7 @@ export default function TableRow({ table, row, setRows }) {
   };
 
   return (
-    <tr className="tr tr-row">
+    <div className="tr">
       <TableCell table={table} column={{ type: 'pk', name: 'id' }} row={row} />
       {renderedRow}
       <TableCell
@@ -39,9 +35,9 @@ export default function TableRow({ table, row, setRows }) {
         column={{ type: 'date', name: 'updated_at' }}
         row={row}
       />
-      <td onClick={handleDelete}>
+      <div onClick={handleDelete}>
         <i className="fa-thin fa-trash"></i>
-      </td>
-    </tr>
+      </div>
+    </div>
   );
 }

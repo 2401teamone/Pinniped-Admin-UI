@@ -17,7 +17,7 @@ export default function Panel({ setIsOpen, children }) {
   }, [setIsOpen]);
 
   return (
-    <div className="panel" ref={panelRef}>
+    <div className={`panel`} ref={panelRef}>
       {children}
     </div>
   );
