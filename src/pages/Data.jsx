@@ -1,5 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
+
 import axios from 'axios';
+
+import { useModalContext } from '../hooks/useModal';
+
+import { useLocation, useSearch } from 'wouter';
 
 import PageHeader from '../components/utils/PageHeader';
 import Crumbs from '../components/utils/Crumbs';
@@ -8,12 +13,7 @@ import ActionIcon from '../components/utils/ActionIcon';
 import SearchBar from '../components/utils/SearchBar';
 import DataNavbar from '../components/DataNavbar';
 import Table from '../components/table/Table';
-
-// import { schema } from '../api';
-
-import { useModalContext } from '../hooks/useModal';
-
-import { useLocation, useSearch } from 'wouter';
+import Footer from '../components/utils/Footer';
 
 export default function Data() {
   const [tables, setTables] = useState([]);
@@ -42,6 +42,7 @@ export default function Data() {
   };
 
   useEffect(() => {
+    console.log('getting tables');
     async function getTables() {
       const { data } = await axios.get('http://localhost:3000/api/schema');
       return data;
@@ -58,6 +59,7 @@ export default function Data() {
         tables={tables}
         chooseTable={chooseTable}
         setTables={setTables}
+        currentTable={tableName}
       />
 
       <div className="data-page-content">
@@ -82,7 +84,7 @@ export default function Data() {
               type="confirm"
               onClick={() => addRecord({ table: getTable(tableName), setRows })}
             >
-              <i className="fa-regular fa-plus"></i> Add Record
+              <i className="fa-regular fa-plus"></i> Add Row
             </Button>
           </div>
         </PageHeader>
@@ -90,6 +92,7 @@ export default function Data() {
         {tableName && (
           <Table table={getTable(tableName)} rows={rows} setRows={setRows} />
         )}
+        <Footer>Total Found: {rows.length}</Footer>
       </div>
     </div>
   );

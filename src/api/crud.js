@@ -1,5 +1,12 @@
 import axios from 'axios';
 
+export const getAll = async (tableId) => {
+  const res = await axios.get(
+    `http://localhost:3000/api/tables/${tableId}/rows`
+  );
+  return res;
+};
+
 export const createOne = async (tableId, data) => {
   const res = await axios.post(
     `http://localhost:3000/api/tables/${tableId}/rows`,

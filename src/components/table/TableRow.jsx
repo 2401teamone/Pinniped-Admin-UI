@@ -1,12 +1,11 @@
 import TableCell from './TableCell';
-
-import { deleteOne } from '../../api';
+import { deleteOne } from '../../api/crud.js';
 
 export default function TableRow({ table, row, setRows }) {
   let renderedRow = table.columns.map((column) => {
     return (
       <TableCell
-        key={`${column.name}-${row.name}`}
+        key={`${column.name}-${row.id}`}
         table={table}
         column={column}
         row={row}
@@ -35,8 +34,8 @@ export default function TableRow({ table, row, setRows }) {
         column={{ type: 'date', name: 'updated_at' }}
         row={row}
       />
-      <div onClick={handleDelete}>
-        <i className="fa-thin fa-trash"></i>
+      <div onClick={handleDelete} className="row-delete">
+        <i className="fa-regular fa-trash"></i>
       </div>
     </div>
   );

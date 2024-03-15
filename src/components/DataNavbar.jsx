@@ -5,7 +5,12 @@ import SubNavbar from './utils/SubNavbar';
 
 import { useModalContext } from '../hooks/useModal';
 
-export default function DataNavbar({ tables, chooseTable, setTables }) {
+export default function DataNavbar({
+  tables,
+  chooseTable,
+  setTables,
+  currentTable,
+}) {
   const {
     actionCreators: { addTable },
   } = useModalContext();
@@ -23,8 +28,7 @@ export default function DataNavbar({ tables, chooseTable, setTables }) {
               return (
                 <NavRow
                   key={table.name}
-                  // active={table.name === currentTable}
-
+                  active={table.name === currentTable}
                   onClick={() => chooseTable(table.name)}
                 >
                   {table.name}

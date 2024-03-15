@@ -16,6 +16,7 @@ export default function Table({ table, rows, setRows }) {
       setRows(data.rows);
     }
     if (table) {
+      console.log('fetched rows');
       getRows();
     }
   }, [table, setRows]);
@@ -48,7 +49,6 @@ export default function Table({ table, rows, setRows }) {
           </div>
         </div>
       </div>
-      <div className="table-footer">Total Found: {rows.length}</div>
     </div>
   );
 }

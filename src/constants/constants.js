@@ -22,3 +22,8 @@ export const TYPES = {
   url: 'url',
   select: 'select',
 };
+
+export const NOTIFICATION_TYPES = {
+  status: 'status',
+  error: 'error',
+};

@@ -6,13 +6,14 @@ import Data from './pages/Data';
 import Observability from './pages/Observability';
 import Settings from './pages/Settings';
 import SideModal from './components/utils/SideModal';
+import Notification from './components/utils/Notification';
 import EditRowForm from './components/forms/EditRowForm';
 import TableForm from './components/forms/TableForm';
-import AddRowForm from './components/forms/AddRowForm';
-import EditTableForm from './components/forms/EditTableForm';
+import RowForm from './components/forms/RowForm';
 import LogView from './components/LogView';
 
 import { useModalContext } from './hooks/useModal';
+import { useNotificationContext } from './hooks/useNotifications';
 
 import { LINKS, MODAL_CONTENT } from './constants/constants';
 
@@ -22,11 +23,13 @@ function App() {
     actionCreators,
   } = useModalContext();
 
+  const { notificationState } = useNotificationContext();
+
   let modalContent = null;
   switch (component) {
     case MODAL_CONTENT.addRecord:
       modalContent = (
-        <AddRowForm
+        <RowForm
           table={data.table}
           setRows={data.setRows}
           closeModal={actionCreators.close}
@@ -73,6 +76,13 @@ function App() {
       <div>
         {isOpen && (
           <SideModal onClose={actionCreators.close}>{modalContent}</SideModal>
+        )}
+      </div>
+      <div>
+        {notificationState.showing && (
+          <Notification type={notificationState.type}>
+            {notificationState.message}
+          </Notification>
         )}
       </div>
     </div>

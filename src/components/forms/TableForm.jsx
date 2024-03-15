@@ -2,11 +2,14 @@ import { useState, useEffect, useReducer, useCallback } from 'react';
 
 import AddColumnBar from './AddColumnBar.jsx';
 import ColumnInput from './ColumnInput.jsx';
-import FieldInput from './fields/FieldInput.jsx';
+import Field from './fields/Field.jsx';
 import Button from '../utils/Button.jsx';
 import ApiRules from './ApiRules.jsx';
+import EditTableSettings from './misc/EditTableSettings.jsx';
 
 import { createTable, editTable } from '../../api/schema.js';
+
+import { useNotificationContext } from '../../hooks/useNotifications';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -46,9 +49,16 @@ export default function TableForm({
     deleteRule: 'admin',
   },
 }) {
-  const [tempIdsGenerated, setTempIdsGenrated] = useState(false);
+  const [tempIdsGenerated, setTempIdsGenerated] = useState(false);
   const [chosenInterface, setChosenInterface] = useState('columns');
+
   const [schema, dispatch] = useReducer(reducer, currentSchema);
+
+  const {
+    actionCreators: { showStatus, showError },
+  } = useNotificationContext();
+
+  const tableName = currentSchema.name;
 
   const addTempIds = (columns) => {
     columns.forEach((column) => {
@@ -72,28 +82,86 @@ export default function TableForm({
     console.log('SETTING TEMP IDS');
     if (!isNew()) {
       addTempIds(schema.columns);
-      setTempIdsGenrated(true);
     }
+    setTempIdsGenerated(true);
   }, [isNew]);
 
   return (
     <div className="table-form-container">
-      <h1 className="table-form-header">
-        {`${isNew() ? 'New' : 'Edit'} Table`}
-      </h1>{' '}
+      <div onClick={() => showStatus('status')}>test notification</div>
+      <div onClick={() => showError('errorrrr')}>test error</div>
+      <div className="table-form-header-container">
+        <h2 className="table-form-header">
+          {`${isNew() ? 'New' : `Edit ${tableName}`} Table`}
+        </h2>{' '}
+        {!isNew() && (
+          <EditTableSettings
+            tableId={currentSchema.id}
+            closeModal={closeModal}
+            setTables={setTables}
+          />
+        )}
+      </div>
       {tempIdsGenerated && (
         <form className="table-form">
           <div className="table-form-name">
-            <FieldInput
+            <Field
               label="Table Name"
               type="text"
               value={schema.name}
-              onChange={(e) =>
-                dispatch({ type: 'UPDATE_NAME', payload: e.target.value })
+              onChange={(val) =>
+                dispatch({ type: 'UPDATE_NAME', payload: val })
               }
-              required={true}
-              preventSpaces={true}
+              config={{ required: true, preventSpaces: true }}
+              isValid={(val) => {
+                if (val.length < 3) {
+                  return 'Name must be at least 3 characters';
+                }
+                return '';
+              }}
             />
+            {/* <Field
+              // label="Table Type"
+              type="select"
+              value={schema.name}
+              onChange={(option) =>
+                dispatch({ type: 'UPDATE_NAME', payload: option })
+              }
+              config={{ options: ['abc', 'def'], inline: true }}
+            />
+            <Field
+              // label="Table Date"
+              type="date"
+              value={schema.date || Date.now()}
+              onChange={
+                (date) => console.log(date)
+                // dispatch({ type: 'UPDATE_NAME', payload: date })
+              }
+              config={{ inline: true }}
+            />
+            <Field
+              // label="Table Date"
+              type="bool"
+              value={schema.bool}
+              onChange={
+                (val) => console.log(val)
+                // dispatch({ type: 'UPDATE_NAME', payload: date })
+              }
+              config={{ inline: true }}
+            />
+            <Field
+              label="Table Relation"
+              type="relation"
+              value={schema.relation}
+              onChange={(newRel) => console.log(newRel)}
+              config={{ tableId: 'be2d98d4-175c-44b9-a806-fb068c4eca7b' }}
+            />
+            <Field
+              label="Table Json"
+              type="json"
+              value={schema.json}
+              onChange={(json) => console.log(json)}
+            /> */}
           </div>
           <div className="table-form-navbar">
             <div
@@ -117,15 +185,17 @@ export default function TableForm({
             {chosenInterface === 'columns' ? (
               <div className="columns-interface">
                 <AddColumnBar dispatch={dispatch} />
-                {schema.columns.map((column) => {
-                  return (
-                    <ColumnInput
-                      key={column.tempId}
-                      column={column}
-                      dispatch={dispatch}
-                    />
-                  );
-                })}
+                <div className="actual-columns">
+                  {schema.columns.map((column) => {
+                    return (
+                      <ColumnInput
+                        key={column.tempId}
+                        column={column}
+                        dispatch={dispatch}
+                      />
+                    );
+                  })}
+                </div>
               </div>
             ) : (
               <ApiRules schema={schema} dispatch={dispatch} />
@@ -136,10 +206,11 @@ export default function TableForm({
       <div className="table-form-footer">
         <Button
           type="confirm"
-          onClick={(e) => {
+          onClick={async (e) => {
             e.preventDefault();
             const clone = { ...schema };
             removeTempIds(clone.columns);
+            console.log(clone);
 
             if (isNew()) {
               createTable(clone).then((newTable) => {
@@ -148,15 +219,15 @@ export default function TableForm({
                 closeModal();
               });
             } else {
-              editTable(currentSchema.id, clone).then((editedTable) => {
-                console.log('edited table', editedTable);
-                setTables((prev) =>
-                  prev.map((table) =>
-                    table.id === editedTable.id ? editedTable : table
-                  )
+              const editedTable = await editTable(currentSchema.id, clone);
+
+              setTables((prev) => {
+                console.log('setting table state');
+                return prev.map((table) =>
+                  table.id === editedTable.id ? editedTable : table
                 );
-                closeModal();
               });
+              closeModal();
             }
           }}
         >

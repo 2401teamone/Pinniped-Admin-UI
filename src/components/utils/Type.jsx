@@ -11,7 +11,7 @@ const ICONS = {
   json: 'code',
 };
 
-export default function Type({ type, children }) {
+export default function Type({ type, error, children }) {
   let icon;
 
   switch (type) {
@@ -50,9 +50,9 @@ export default function Type({ type, children }) {
   }
 
   return (
-    <>
+    <div className={`type ${error && 'error'}`}>
       <span className="type-icon">{icon}</span>
       <span className="type-name">{children}</span>
-    </>
+    </div>
   );
 }

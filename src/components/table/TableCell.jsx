@@ -1,105 +1,43 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 
-import Panel from '../utils/Panel';
+import Field from '../forms/fields/Field.jsx';
+import PK from './PK.jsx';
 
-import PK from './types/PK';
-import TextDisplay from './types/TextDisplay';
-import SelectDisplay from './types/SelectDisplay';
+import { updateOne } from '../../api/crud.js';
 
-import Text from '../updaters/Text';
-import Select from '../updaters/Select';
+export default function TableCell({ table, column, row }) {
+  const [value, setValue] = useState(null);
 
-import { updateOne } from '../../api';
-
-export default function TableCell({ table, column, row, setRows }) {
-  const [editing, setEditing] = useState(false);
-  const [value, setValue] = useState(row[column.name]);
-
-  const handleUpdate = useCallback(() => {
-    console.log('update', value);
-    updateOne(table.id, row.id, { [column.name]: value }).then((res) => {
-      console.log(res.data);
-      setRows((prev) => {
-        return prev.map((row) => {
-          if (row.id === res.data.row.id) {
-            return res.data.row;
-          }
-          return row;
-        });
-      });
+  const handleUpdate = async (updatedVal) => {
+    console.log('update', updatedVal);
+    const res = await updateOne(table.id, row.id, {
+      [column.name]: updatedVal,
     });
-  }, [column.name, row.id, value, table.id, setRows]);
+    console.log(res.data.row);
+  };
 
-  let staticComponent = null;
-  let updateComponent = null;
-
-  switch (column.type) {
-    case 'pk':
-      staticComponent = <PK id={row.id} />;
-      break;
-    case 'text':
-      staticComponent = <TextDisplay>{value}</TextDisplay>;
-      updateComponent = (
-        <Text value={value} setValue={setValue} handleUpdate={handleUpdate} />
-      );
-      break;
-    case 'number':
-      break;
-    case 'boolean':
-      break;
-    case 'date':
-      break;
-    case 'email':
-      break;
-    case 'url':
-      break;
-    case 'select':
-      staticComponent = <SelectDisplay>{value}</SelectDisplay>;
-      updateComponent = (
-        <Select
-          value={value}
-          setValue={setValue}
-          options={column.options.options}
-          handleUpdate={handleUpdate}
-          setEditing={setEditing}
-        />
-      );
-      break;
-    case 'json':
-      break;
-    case 'relation':
-      break;
-    default:
-      break;
-  }
+  useEffect(() => {
+    setValue(row[column.name]);
+  }, [column.name, row]);
 
   return (
     <div className="td size">
-      {editing ? (
-        <Panel
-          setIsOpen={setEditing}
-          action={handleUpdate}
-          inline={column.type !== 'select'}
-        >
-          {updateComponent}
-        </Panel>
+      {value === null ? (
+        ''
+      ) : column.type === 'pk' ? (
+        <PK id={row.id} />
       ) : (
-        <div
-          className="static size"
-          onClick={() => {
-            console.log('clicked on: ', column.name);
-            if (
-              column.type === 'pk' ||
-              column.name === 'created_at' ||
-              column.name === 'upated_at'
-            ) {
-              return;
-            }
-            setEditing(true);
+        <Field
+          type={column.type}
+          value={value}
+          onChange={(val) => setValue(val)}
+          handleSubmit={handleUpdate}
+          onClose={handleUpdate}
+          config={{
+            inline: true,
+            options: column.type === 'select' ? column.options.options : [],
           }}
-        >
-          {staticComponent || row[column.name]}
-        </div>
+        />
       )}
     </div>
   );

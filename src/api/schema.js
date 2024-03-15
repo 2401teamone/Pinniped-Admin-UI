@@ -12,3 +12,8 @@ export const editTable = async (tableId, data) => {
   );
   return res.data;
 };
+
+export const dropTable = async (tableId) => {
+  const res = await axios.delete(`http://localhost:3000/api/schema/${tableId}`);
+  return res.data;
+};

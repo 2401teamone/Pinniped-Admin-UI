@@ -24,19 +24,24 @@ export default function ApiRules({ schema, dispatch }) {
   return (
     <div className="api-rules">
       <div className="get-all-rule">
-        Get All Rule: {rule('getAllRule', schema.getAllRule)}
+        <span className="method-for-rule">Get All Rule:</span>{' '}
+        {rule('getAllRule', schema.getAllRule)}
       </div>
       <div className="get-one-rule">
-        Get One Rule: {rule('getOneRule', schema.getOneRule)}
+        <span className="method-for-rule">Get One Rule:</span>{' '}
+        {rule('getOneRule', schema.getOneRule)}
       </div>
       <div className="create-rule">
-        Create Rule: {rule('createRule', schema.createRule)}
+        <span className="method-for-rule">Create Rule:</span>{' '}
+        {rule('createRule', schema.createRule)}
       </div>
       <div className="update-rule">
-        Update Rule: {rule('updateRule', schema.updateRule)}
+        <span className="method-for-rule">Update Rule:</span>{' '}
+        {rule('updateRule', schema.updateRule)}
       </div>
       <div className="delete-rule">
-        Delete Rule: {rule('deleteRule', schema.deleteRule)}
+        <span className="method-for-rule">Delete Rule:</span>{' '}
+        {rule('deleteRule', schema.deleteRule)}
       </div>
     </div>
   );
