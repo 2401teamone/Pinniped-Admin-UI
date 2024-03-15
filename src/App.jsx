@@ -18,6 +18,7 @@ import { useNotificationContext } from './hooks/useNotifications';
 import { LINKS, MODAL_CONTENT } from './constants/constants';
 
 function App() {
+  console.log('app');
   const {
     modalState: { isOpen, component, data },
     actionCreators,
@@ -42,6 +43,7 @@ function App() {
     case MODAL_CONTENT.addTable:
       modalContent = (
         <TableForm
+          tables={data.tables}
           setTables={data.setTables}
           closeModal={actionCreators.close}
         />
@@ -50,6 +52,7 @@ function App() {
     case MODAL_CONTENT.editTable:
       modalContent = (
         <TableForm
+          tables={data.tables}
           setTables={data.setTables}
           closeModal={actionCreators.close}
           currentSchema={data.currentSchema}
@@ -81,7 +84,9 @@ function App() {
       <div>
         {notificationState.showing && (
           <Notification type={notificationState.type}>
-            {notificationState.message}
+            {Array.isArray(notificationState.message)
+              ? notificationState.message.map((msg, i) => <p key={i}>{msg}</p>)
+              : notificationState.message}
           </Notification>
         )}
       </div>

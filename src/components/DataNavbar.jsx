@@ -18,11 +18,16 @@ export default function DataNavbar({
   return (
     <SubNavbar>
       <div className="data-page-navbar">
-        <Button type="primary" onClick={() => addTable({ setTables })}>
+        <Button type="primary" onClick={() => addTable({ tables, setTables })}>
           + New Table
         </Button>
-        <Delim />
         <div className="nav-rows">
+          <NavRow
+            active={currentTable === 'users'}
+            // onClick={() => chooseTable('users')}
+          >
+            Users
+          </NavRow>
           {tables.length &&
             tables.map((table) => {
               return (

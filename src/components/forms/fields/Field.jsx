@@ -93,14 +93,16 @@ export default function Field({
       );
       break;
     case 'date':
-      displayComponent = <span>{format(value, 'PP')}</span>;
+      displayComponent = <span>{value && format(value, 'PP')}</span>;
       editComponent = (
-        <Calendar value={value} onChange={onChange} setEditing={setEditing} />
+        <Calendar
+          value={value}
+          onChange={onChange}
+          handleSubmit={handleSubmit}
+          setEditing={setEditing}
+          handleValidation={handleValidation}
+        />
       );
-      break;
-    case 'bool':
-      displayComponent = <span>{value ? 'True' : 'False'}</span>;
-      editComponent = <Bool value={value} onChange={onChange} />;
       break;
     case 'relation':
       displayComponent = <span>{value}</span>;
@@ -137,12 +139,20 @@ export default function Field({
           {config.required && <span className="required">*</span>}
         </label>
         <div className="content">
-          {editing && (
-            <div className="content-edit">
-              <Panel setIsOpen={setEditing} onClose={onClose}>
-                {editComponent}
-              </Panel>
-            </div>
+          {type === 'bool' ? (
+            <Bool
+              value={value}
+              onChange={onChange}
+              handleSubmit={handleSubmit}
+            />
+          ) : (
+            editing && (
+              <div className="content-edit">
+                <Panel setIsOpen={setEditing} onClose={onClose}>
+                  {editComponent}
+                </Panel>
+              </div>
+            )
           )}
           {(!editing ||
             type === 'select' ||

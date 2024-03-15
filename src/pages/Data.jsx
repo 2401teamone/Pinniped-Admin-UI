@@ -63,34 +63,48 @@ export default function Data() {
       />
 
       <div className="data-page-content">
-        <PageHeader>
-          <div className="left">
-            <Crumbs crumbs={['Data', `${tableName}`]} />
-            <div className="data-page-action-icons">
-              <ActionIcon
-                onClick={() =>
-                  editTable({ setTables, currentSchema: getTable(tableName) })
-                }
-              >
-                <i className="fa-sharp fa-regular fa-gear"></i>
-              </ActionIcon>
-              <ActionIcon>
-                <i className="fa-light fa-arrows-rotate"></i>
-              </ActionIcon>
-            </div>
-          </div>
-          <div className="right">
-            <Button
-              type="confirm"
-              onClick={() => addRecord({ table: getTable(tableName), setRows })}
-            >
-              <i className="fa-regular fa-plus"></i> Add Row
-            </Button>
-          </div>
-        </PageHeader>
-        <SearchBar />
         {tableName && (
-          <Table table={getTable(tableName)} rows={rows} setRows={setRows} />
+          <div>
+            <PageHeader>
+              <div className="left">
+                <Crumbs crumbs={['Data', `${tableName}`]} />
+                <div className="data-page-action-icons">
+                  <ActionIcon
+                    onClick={() =>
+                      editTable({
+                        tables,
+                        setTables,
+                        currentSchema: getTable(tableName),
+                      })
+                    }
+                  >
+                    <i className="fa-sharp fa-regular fa-gear"></i>
+                  </ActionIcon>
+                  <ActionIcon>
+                    <i className="fa-light fa-arrows-rotate"></i>
+                  </ActionIcon>
+                </div>
+              </div>
+              <div className="right">
+                <Button
+                  type="confirm"
+                  onClick={() =>
+                    addRecord({ table: getTable(tableName), setRows })
+                  }
+                >
+                  <i className="fa-regular fa-plus"></i> Add Row
+                </Button>
+              </div>
+            </PageHeader>
+            <SearchBar />
+            {tableName && (
+              <Table
+                table={getTable(tableName)}
+                rows={rows}
+                setRows={setRows}
+              />
+            )}
+          </div>
         )}
         <Footer>Total Found: {rows.length}</Footer>
       </div>

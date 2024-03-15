@@ -1,15 +1,18 @@
 import { useState, useEffect, useReducer, useCallback } from 'react';
 
+import { useLocation } from 'wouter';
+
+import { createTable, editTable } from '../../api/schema.js';
+
+import { useNotificationContext } from '../../hooks/useNotifications';
+
 import AddColumnBar from './AddColumnBar.jsx';
 import ColumnInput from './ColumnInput.jsx';
 import Field from './fields/Field.jsx';
 import Button from '../utils/Button.jsx';
 import ApiRules from './ApiRules.jsx';
 import EditTableSettings from './misc/EditTableSettings.jsx';
-
-import { createTable, editTable } from '../../api/schema.js';
-
-import { useNotificationContext } from '../../hooks/useNotifications';
+import FormFooter from './misc/FormFooter.jsx';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -37,6 +40,7 @@ const reducer = (state, action) => {
 };
 
 export default function TableForm({
+  tables,
   setTables,
   closeModal,
   currentSchema = {
@@ -53,6 +57,8 @@ export default function TableForm({
   const [chosenInterface, setChosenInterface] = useState('columns');
 
   const [schema, dispatch] = useReducer(reducer, currentSchema);
+
+  const [_, setLocation] = useLocation();
 
   const {
     actionCreators: { showStatus, showError },
@@ -78,6 +84,85 @@ export default function TableForm({
     return existingId === undefined;
   }, [existingId]);
 
+  const handleSubmit = async (e) => {
+    const validate = (schema) => {
+      const errors = [];
+      if (!schema.name.length) {
+        errors.push('Table name is required.');
+      }
+      if (!schema.name.match(/^[a-zA-Z0-9_]+$/)) {
+        errors.push('Table name must be alphanumeric and contain no spaces.');
+      }
+      if (schema.name.length > 20) {
+        errors.push('Table name must be 20 characters or less.');
+      }
+
+      if (
+        tables.some((table) => {
+          if (isNew() && table.name === schema.name) {
+            return true;
+          } else if (
+            !isNew() &&
+            table.name === schema.name &&
+            table.id !== existingId
+          ) {
+            return true;
+          }
+        })
+      ) {
+        errors.push('Table name must be unique.');
+      }
+
+      if (!schema.columns.length) {
+        errors.push('At least one column is required.');
+      }
+      if (!schema.columns.every((column) => column.name.length)) {
+        errors.push('All columns must have a name.');
+      }
+      if (!schema.columns.every((column) => column.type)) {
+        errors.push('All columns must have a type.');
+      }
+
+      let colNames = schema.columns.map((column) => column.name);
+      if (colNames.length !== new Set(colNames).size) {
+        errors.push('Column names must be unique.');
+      }
+
+      return errors;
+    };
+
+    e.preventDefault();
+    const clone = { ...schema };
+    console.log(clone);
+
+    const errors = validate(clone);
+    if (errors.length) {
+      showError(errors);
+      return;
+    }
+
+    removeTempIds(clone.columns);
+
+    try {
+      if (isNew()) {
+        const createdTable = await createTable(clone);
+        setTables((prev) => [...prev, createdTable]);
+      } else {
+        const editedTable = await editTable(currentSchema.id, clone);
+        setTables((prev) => {
+          return prev.map((table) =>
+            table.id === editedTable.id ? editedTable : table
+          );
+        });
+      }
+      showStatus(`Table successfully ${isNew() ? 'created' : 'edited'}`);
+      closeModal();
+      setLocation(`/data?table=${clone.name}`);
+    } catch (err) {
+      showError(err.message);
+    }
+  };
+
   useEffect(() => {
     console.log('SETTING TEMP IDS');
     if (!isNew()) {
@@ -88,8 +173,6 @@ export default function TableForm({
 
   return (
     <div className="table-form-container">
-      <div onClick={() => showStatus('status')}>test notification</div>
-      <div onClick={() => showError('errorrrr')}>test error</div>
       <div className="table-form-header-container">
         <h2 className="table-form-header">
           {`${isNew() ? 'New' : `Edit ${tableName}`} Table`}
@@ -113,55 +196,7 @@ export default function TableForm({
                 dispatch({ type: 'UPDATE_NAME', payload: val })
               }
               config={{ required: true, preventSpaces: true }}
-              isValid={(val) => {
-                if (val.length < 3) {
-                  return 'Name must be at least 3 characters';
-                }
-                return '';
-              }}
             />
-            {/* <Field
-              // label="Table Type"
-              type="select"
-              value={schema.name}
-              onChange={(option) =>
-                dispatch({ type: 'UPDATE_NAME', payload: option })
-              }
-              config={{ options: ['abc', 'def'], inline: true }}
-            />
-            <Field
-              // label="Table Date"
-              type="date"
-              value={schema.date || Date.now()}
-              onChange={
-                (date) => console.log(date)
-                // dispatch({ type: 'UPDATE_NAME', payload: date })
-              }
-              config={{ inline: true }}
-            />
-            <Field
-              // label="Table Date"
-              type="bool"
-              value={schema.bool}
-              onChange={
-                (val) => console.log(val)
-                // dispatch({ type: 'UPDATE_NAME', payload: date })
-              }
-              config={{ inline: true }}
-            />
-            <Field
-              label="Table Relation"
-              type="relation"
-              value={schema.relation}
-              onChange={(newRel) => console.log(newRel)}
-              config={{ tableId: 'be2d98d4-175c-44b9-a806-fb068c4eca7b' }}
-            />
-            <Field
-              label="Table Json"
-              type="json"
-              value={schema.json}
-              onChange={(json) => console.log(json)}
-            /> */}
           </div>
           <div className="table-form-navbar">
             <div
@@ -203,34 +238,8 @@ export default function TableForm({
           </div>
         </form>
       )}
-      <div className="table-form-footer">
-        <Button
-          type="confirm"
-          onClick={async (e) => {
-            e.preventDefault();
-            const clone = { ...schema };
-            removeTempIds(clone.columns);
-            console.log(clone);
-
-            if (isNew()) {
-              createTable(clone).then((newTable) => {
-                console.log('new table', newTable);
-                setTables((prev) => [...prev, newTable]);
-                closeModal();
-              });
-            } else {
-              const editedTable = await editTable(currentSchema.id, clone);
-
-              setTables((prev) => {
-                console.log('setting table state');
-                return prev.map((table) =>
-                  table.id === editedTable.id ? editedTable : table
-                );
-              });
-              closeModal();
-            }
-          }}
-        >
+      <FormFooter>
+        <Button type="confirm" onClick={handleSubmit}>
           {`${isNew() ? 'Add' : 'Edit'} Table`}
         </Button>
         <Button
@@ -243,7 +252,7 @@ export default function TableForm({
         >
           Cancel
         </Button>
-      </div>
+      </FormFooter>
     </div>
   );
 }

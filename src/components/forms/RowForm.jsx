@@ -2,6 +2,7 @@ import { createOne } from '../../api/crud.js';
 
 import Field from './fields/Field.jsx';
 import Button from '../utils/Button.jsx';
+import FormFooter from './misc/FormFooter.jsx';
 
 import getValidator from '../../utils/validators';
 
@@ -13,7 +14,12 @@ export default function RowForm({ table, setRows, closeModal, row }) {
   const initialState =
     row ||
     table.columns.reduce((acc, column) => {
-      acc[column.name] = '';
+      acc[column.name] =
+        column.type === 'number' || column.type === 'bool'
+          ? 0
+          : column.type === 'select'
+          ? ''
+          : '';
       return acc;
     }, {});
   const { formState, onChange, setError, clearError } =
@@ -41,14 +47,14 @@ export default function RowForm({ table, setRows, closeModal, row }) {
   };
 
   return (
-    <div className="add-row-form-container">
-      <h2 className="add-row-form-header">
+    <div className="row-form-container">
+      <h2 className="row-form-header">
         New <span>{table.name}</span> Row
       </h2>
-      <form className="add-row-form">
+      <form className="row-form">
         {table.columns.map((column) => {
           return (
-            <div className="add-row-form-field" key={column.name}>
+            <div className="row-form-field" key={column.name}>
               <Field
                 label={column.name}
                 type={column.type}
@@ -73,10 +79,22 @@ export default function RowForm({ table, setRows, closeModal, row }) {
             </div>
           );
         })}
+      </form>
+      <FormFooter>
         <Button type="confirm" onClick={handleSubmit}>
           Add Row
         </Button>
-      </form>
+        <Button
+          type="primary"
+          onClick={(e) => {
+            e.preventDefault();
+            console.log('closing');
+            closeModal();
+          }}
+        >
+          Cancel
+        </Button>
+      </FormFooter>
     </div>
   );
 }

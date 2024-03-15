@@ -13,10 +13,11 @@ export default function Select({
         className={`field-select-option ${value === option ? 'active' : ''}`}
         onClick={() => {
           const selection = [option];
+          console.log(selection);
           if (handleValidation && handleValidation(selection)) {
             onChange(selection);
 
-            if (handleSubmit) handleSubmit(JSON.stringify(selection)); // handle this on backend
+            if (handleSubmit) handleSubmit(selection); // handle this on backend
           }
           setEditing(false);
         }}

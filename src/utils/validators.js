@@ -30,12 +30,8 @@ export const validateBool = (val) => {
 };
 
 export const validateSelect = (val, { maxSelect, options }) => {
-  console.log(val, 'IN SELECT');
-  if (!Array.isArray(val)) {
-    return 'Invalid selection.  Must be an array.';
-  }
   if (val.length > maxSelect) {
-    return `Must select at most ${maxSelect} options`;
+    return `Must select at most ${maxSelect} option(s)`;
   }
   if (val.some((v) => !options.includes(v))) {
     return 'Invalid option selected';
@@ -78,9 +74,9 @@ export const validateUrl = (val) => {
   return '';
 };
 
-export const validateRelation = (val, { tableId }) => {
-  return '';
-};
+// export const validateRelation = (val, { tableId }) => {
+//   return '';
+// };
 
 export default function getValidator(type) {
   switch (type) {
@@ -100,8 +96,8 @@ export default function getValidator(type) {
       return validateEmail;
     case 'url':
       return validateUrl;
-    case 'relation':
-      return validateRelation;
+    // case 'relation':
+    //   return validateRelation;
     default:
       throw new Error('Invalid type');
   }

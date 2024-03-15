@@ -40,10 +40,11 @@ export default function Input({
       className="field-input"
       type={type}
       value={value}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={(e) =>
+        onChange(type === 'number' ? Number(e.target.value) : e.target.value)
+      }
       onBlur={(e) => {
         if (handleValidation) handleValidation(e.target.value);
-        return;
         if (handleSubmit) {
           console.log('submitting', e.target.value);
           handleSubmit(e.target.value);

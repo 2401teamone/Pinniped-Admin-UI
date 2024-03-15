@@ -44,10 +44,20 @@ export const NotificationProvider = ({ children }) => {
       console.log('closing notification');
       notificationDispatch({ type: 'CLOSE' });
     },
-    showStatus: (message) =>
-      notificationDispatch({ type: NOTIFICATION_TYPES.status, message }),
-    showError: (message) =>
-      notificationDispatch({ type: NOTIFICATION_TYPES.error, message }),
+    showStatus: (message) => {
+      console.log(message);
+      notificationDispatch({
+        type: NOTIFICATION_TYPES.status,
+        message: message,
+      });
+    },
+    showError: (message) => {
+      console.log(message);
+      notificationDispatch({
+        type: NOTIFICATION_TYPES.error,
+        message: message,
+      });
+    },
   };
 
   return (

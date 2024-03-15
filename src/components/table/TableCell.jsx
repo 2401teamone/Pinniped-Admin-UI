@@ -5,6 +5,8 @@ import PK from './PK.jsx';
 
 import { updateOne } from '../../api/crud.js';
 
+import { format } from 'date-fns';
+
 export default function TableCell({ table, column, row }) {
   const [value, setValue] = useState(null);
 
@@ -20,13 +22,17 @@ export default function TableCell({ table, column, row }) {
     setValue(row[column.name]);
   }, [column.name, row]);
 
-  return (
-    <div className="td size">
-      {value === null ? (
-        ''
-      ) : column.type === 'pk' ? (
-        <PK id={row.id} />
-      ) : (
+  let component;
+  switch (column.type) {
+    case 'pk':
+      component = <PK id={row.id} />;
+      break;
+    case 'created_at':
+    case 'updated_at':
+      component = <span>{value && format(value, 'PP')}</span>;
+      break;
+    default:
+      component = (
         <Field
           type={column.type}
           value={value}
@@ -38,7 +44,8 @@ export default function TableCell({ table, column, row }) {
             options: column.type === 'select' ? column.options.options : [],
           }}
         />
-      )}
-    </div>
-  );
+      );
+  }
+
+  return <div className="td size">{value === null ? '' : component}</div>;
 }
