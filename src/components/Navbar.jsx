@@ -4,6 +4,8 @@ import { Link, useLocation } from 'wouter';
 
 import { LINKS } from '../constants/constants.js';
 
+import pinnipedIcon from '../assets/images/pinniped_icon.png';
+
 export default function Navbar() {
   const [hovering, setHovering] = useState('');
 
@@ -12,8 +14,8 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="icon">
-        <i className="fa-regular fa-house"></i>
+      <div className="brand-icon">
+        <img src={pinnipedIcon} alt="logo" width="45px" height="45px" />
       </div>
       <Link
         to="/data"

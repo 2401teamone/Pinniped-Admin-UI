@@ -1,5 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+
+import api from '../api/api';
+
+import { useModalContext } from '../hooks/useModal';
+import { useNotificationContext } from '../hooks/useNotifications';
+
+import { useLocation, useSearch } from 'wouter';
 
 import PageHeader from '../components/utils/PageHeader';
 import Crumbs from '../components/utils/Crumbs';
@@ -7,20 +13,20 @@ import Button from '../components/utils/Button';
 import ActionIcon from '../components/utils/ActionIcon';
 import SearchBar from '../components/utils/SearchBar';
 import DataNavbar from '../components/DataNavbar';
-import Table from '../components/Table';
-
-// import { schema } from '../api';
-
-import { useModalContext } from '../hooks/useModal';
-
-import { useLocation, useSearch } from 'wouter';
+import Table from '../components/table/Table';
+import Footer from '../components/utils/Footer';
 
 export default function Data() {
   const [tables, setTables] = useState([]);
+  const [rows, setRows] = useState([]);
 
   const {
-    actionCreators: { addRecord, editRecord },
+    actionCreators: { addRecord, editTable },
   } = useModalContext();
+
+  const {
+    actionCreators: { showError },
+  } = useNotificationContext();
 
   const [, setLocation] = useLocation();
 
@@ -41,41 +47,74 @@ export default function Data() {
   };
 
   useEffect(() => {
+    console.log('getting tables');
     async function getTables() {
-      const { data } = await axios.get('http://localhost:3000/api/schema');
+      const data = await api.getTables();
       return data;
     }
-    getTables().then((res) => {
-      console.log(res);
-      setTables(res);
-    });
-  }, []);
+    getTables()
+      .then((data) => {
+        setTables(data);
+      })
+      .catch(() => {
+        showError('Error fetching tables');
+      });
+  }, [showError]);
 
   return (
     <div className="data-page">
-      <DataNavbar tables={tables} chooseTable={chooseTable} />
+      <DataNavbar
+        tables={tables}
+        chooseTable={chooseTable}
+        setTables={setTables}
+        currentTable={tableName}
+      />
 
       <div className="data-page-content">
-        <PageHeader>
-          <div className="left">
-            <Crumbs crumbs={['Data', `${tableName}`]} />
-            <div className="data-page-action-icons">
-              <ActionIcon onClick={() => editRecord({ name: 'my table' })}>
-                <i className="fa-sharp fa-regular fa-gear"></i>
-              </ActionIcon>
-              <ActionIcon>
-                <i className="fa-light fa-arrows-rotate"></i>
-              </ActionIcon>
-            </div>
+        {tableName && (
+          <div>
+            <PageHeader>
+              <div className="left">
+                <Crumbs crumbs={['Data', `${tableName}`]} />
+                <div className="data-page-action-icons">
+                  <ActionIcon
+                    onClick={() =>
+                      editTable({
+                        tables,
+                        setTables,
+                        currentSchema: getTable(tableName),
+                      })
+                    }
+                  >
+                    <i className="fa-sharp fa-regular fa-gear"></i>
+                  </ActionIcon>
+                  <ActionIcon>
+                    <i className="fa-light fa-arrows-rotate"></i>
+                  </ActionIcon>
+                </div>
+              </div>
+              <div className="right">
+                <Button
+                  type="confirm"
+                  onClick={() =>
+                    addRecord({ table: getTable(tableName), setRows })
+                  }
+                >
+                  <i className="fa-regular fa-plus"></i> Add Row
+                </Button>
+              </div>
+            </PageHeader>
+            <SearchBar />
+            {tableName && (
+              <Table
+                table={getTable(tableName)}
+                rows={rows}
+                setRows={setRows}
+              />
+            )}
           </div>
-          <div className="right">
-            <Button type="confirm" onClick={() => addRecord()}>
-              <i className="fa-regular fa-plus"></i> Add Record
-            </Button>
-          </div>
-        </PageHeader>
-        <SearchBar />
-        {tableName && <Table table={getTable(tableName)} />}
+        )}
+        <Footer>Total Found: {rows.length}</Footer>
       </div>
     </div>
   );

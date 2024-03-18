@@ -1,7 +1,6 @@
 const ICONS = {
   pk: 'key',
   text: 'text',
-  password: 'lock',
   number: 'hashtag',
   bool: 'check-square',
   date: 'calendar',
@@ -12,18 +11,15 @@ const ICONS = {
   json: 'code',
 };
 
-export default function Type({ type, error, children }) {
+export default function Icon({ column }) {
   let icon;
 
-  switch (type) {
+  switch (column.type) {
     case 'pk':
       icon = <i className={`fa-light fa-${ICONS.pk}`}></i>;
       break;
     case 'text':
       icon = <i className={`fa-light fa-${ICONS.text}`}></i>;
-      break;
-    case 'password':
-      icon = <i className={`fa-light fa-${ICONS.password}`}></i>;
       break;
     case 'number':
       icon = <i className={`fa-light fa-${ICONS.number}`}></i>;
@@ -53,10 +49,5 @@ export default function Type({ type, error, children }) {
       icon = <div></div>;
   }
 
-  return (
-    <div className={`type ${error && 'error'}`}>
-      <span className="type-icon">{icon}</span>
-      <span className="type-name">{children}</span>
-    </div>
-  );
+  return <>{icon}</>;
 }

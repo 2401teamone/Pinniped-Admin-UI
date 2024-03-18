@@ -11,3 +11,19 @@ export const MODAL_CONTENT = {
   editTable: 'EDIT_TABLE',
   viewLog: 'VIEW_LOG',
 };
+
+export const TYPES = {
+  // pk: 'pk',
+  text: 'text',
+  number: 'number',
+  bool: 'bool',
+  date: 'date',
+  email: 'email',
+  url: 'url',
+  select: 'select',
+};
+
+export const NOTIFICATION_TYPES = {
+  status: 'status',
+  error: 'error',
+};

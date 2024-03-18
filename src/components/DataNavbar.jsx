@@ -1,13 +1,15 @@
 import NavRow from './utils/NavRow';
 import Button from './utils/Button';
-import Delim from './utils/Delim';
 import SubNavbar from './utils/SubNavbar';
-
-import { useLocation, useSearch } from 'wouter';
 
 import { useModalContext } from '../hooks/useModal';
 
-export default function DataNavbar({ tables, chooseTable }) {
+export default function DataNavbar({
+  tables,
+  chooseTable,
+  setTables,
+  currentTable,
+}) {
   const {
     actionCreators: { addTable },
   } = useModalContext();
@@ -15,18 +17,22 @@ export default function DataNavbar({ tables, chooseTable }) {
   return (
     <SubNavbar>
       <div className="data-page-navbar">
-        <Button type="primary" onClick={() => addTable()}>
-          + New Collection
+        <Button type="primary" onClick={() => addTable({ tables, setTables })}>
+          + New Table
         </Button>
-        <Delim />
         <div className="nav-rows">
+          <NavRow
+            active={currentTable === 'users'}
+            // onClick={() => chooseTable('users')}
+          >
+            Users
+          </NavRow>
           {tables.length &&
             tables.map((table) => {
               return (
                 <NavRow
                   key={table.name}
-                  // active={table.name === currentTable}
-
+                  active={table.name === currentTable}
                   onClick={() => chooseTable(table.name)}
                 >
                   {table.name}

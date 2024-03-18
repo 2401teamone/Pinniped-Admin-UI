@@ -1,7 +1,7 @@
 export default function ActionIcon({ children, ...props }) {
   return (
-    <button className={`action-icon`} {...props}>
+    <div className={`action-icon`} {...props}>
       {children}
-    </button>
+    </div>
   );
 }
