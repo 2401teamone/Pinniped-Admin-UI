@@ -30,6 +30,9 @@ export const validateBool = (val) => {
 };
 
 export const validateSelect = (val, { maxSelect, options }) => {
+  if (!Array.isArray(val)) {
+    return 'Option is not in correct format';
+  }
   if (val.length > maxSelect) {
     return `Must select at most ${maxSelect} option(s)`;
   }

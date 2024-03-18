@@ -1,6 +1,5 @@
 import NavRow from './utils/NavRow';
 import Button from './utils/Button';
-import Delim from './utils/Delim';
 import SubNavbar from './utils/SubNavbar';
 
 import { useModalContext } from '../hooks/useModal';

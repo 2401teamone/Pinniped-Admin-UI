@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 
-import axios from 'axios';
+import api from '../api/api';
 
 import { useModalContext } from '../hooks/useModal';
+import { useNotificationContext } from '../hooks/useNotifications';
 
 import { useLocation, useSearch } from 'wouter';
 
@@ -22,6 +23,10 @@ export default function Data() {
   const {
     actionCreators: { addRecord, editTable },
   } = useModalContext();
+
+  const {
+    actionCreators: { showError },
+  } = useNotificationContext();
 
   const [, setLocation] = useLocation();
 
@@ -44,14 +49,17 @@ export default function Data() {
   useEffect(() => {
     console.log('getting tables');
     async function getTables() {
-      const { data } = await axios.get('http://localhost:3000/api/schema');
+      const data = await api.getTables();
       return data;
     }
-    getTables().then((res) => {
-      console.log(res);
-      setTables(res);
-    });
-  }, []);
+    getTables()
+      .then((data) => {
+        setTables(data);
+      })
+      .catch(() => {
+        showError('Error fetching tables');
+      });
+  }, [showError]);
 
   return (
     <div className="data-page">

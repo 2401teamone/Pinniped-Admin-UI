@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import { getAll } from '../../../api/crud';
+import api from '../../../api/api';
 
-export default function Relation({ value, onChange, tableId }) {
+export default function Relation({ value, onChange, handleSubmit, tableId }) {
   const [rows, setRows] = useState([]);
   console.log();
   useEffect(() => {
-    getAll(tableId).then((res) => {
-      console.log(res.data);
-      setRows(res.data.rows);
+    api.getAll(tableId).then((data) => {
+      setRows(data.rows);
     });
   }, [tableId]);
 
@@ -24,6 +23,7 @@ export default function Relation({ value, onChange, tableId }) {
               }`}
               onClick={() => {
                 onChange(row.id);
+                if (handleSubmit) handleSubmit(row.id); // handle this on backend
               }}
             >
               {row.id}

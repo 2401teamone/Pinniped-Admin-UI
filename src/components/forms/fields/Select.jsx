@@ -11,7 +11,8 @@ export default function Select({
       <div
         key={option}
         className={`field-select-option ${value === option ? 'active' : ''}`}
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           const selection = [option];
           console.log(selection);
           if (handleValidation && handleValidation(selection)) {
@@ -19,6 +20,7 @@ export default function Select({
 
             if (handleSubmit) handleSubmit(selection); // handle this on backend
           }
+          console.log('closing');
           setEditing(false);
         }}
       >

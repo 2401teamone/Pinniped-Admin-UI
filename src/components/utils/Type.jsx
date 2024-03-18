@@ -1,6 +1,7 @@
 const ICONS = {
   pk: 'key',
   text: 'text',
+  password: 'lock',
   number: 'hashtag',
   bool: 'check-square',
   date: 'calendar',
@@ -20,6 +21,9 @@ export default function Type({ type, error, children }) {
       break;
     case 'text':
       icon = <i className={`fa-light fa-${ICONS.text}`}></i>;
+      break;
+    case 'password':
+      icon = <i className={`fa-light fa-${ICONS.password}`}></i>;
       break;
     case 'number':
       icon = <i className={`fa-light fa-${ICONS.number}`}></i>;

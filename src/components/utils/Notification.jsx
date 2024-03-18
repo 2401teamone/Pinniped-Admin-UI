@@ -9,14 +9,16 @@ export default function Notification({ type, children }) {
   } = useNotificationContext();
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      closeNotification();
-    }, 4000);
+    if (type === 'error' || type === 'status') {
+      const timeoutId = setTimeout(() => {
+        closeNotification();
+      }, 4000);
 
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [closeNotification]);
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
+  }, [type, closeNotification]);
 
   const notification = (
     <div className={`notification ${type}`}>

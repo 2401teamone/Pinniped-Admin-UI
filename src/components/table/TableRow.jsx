@@ -1,16 +1,27 @@
 import TableCell from './TableCell';
-import { deleteOne } from '../../api/crud.js';
+import Checkbox from '../utils/Checkbox.jsx';
 
-export default function TableRow({ table, row, setRows }) {
-  const handleDelete = () => {
-    deleteOne(table.id, row.id).then(() => {
-      setRows((prev) => prev.filter((r) => r.id !== row.id));
-    });
-  };
-
+export default function TableRow({
+  table,
+  row,
+  setRows,
+  selectedRow,
+  setSelectedRow,
+}) {
   return (
     table && (
       <div className="tr">
+        <div className="select-row">
+          <Checkbox
+            checked={selectedRow === row.id}
+            onChange={() => {
+              setSelectedRow((prev) => {
+                if (prev === row.id) return null;
+                return row.id;
+              });
+            }}
+          />
+        </div>
         <TableCell
           table={table}
           column={{ type: 'pk', name: 'id' }}
@@ -37,9 +48,6 @@ export default function TableRow({ table, row, setRows }) {
           column={{ type: 'updated_at', name: 'updated_at' }}
           row={row}
         />
-        <div onClick={handleDelete} className="row-delete">
-          <i className="fa-regular fa-trash"></i>
-        </div>
       </div>
     )
   );

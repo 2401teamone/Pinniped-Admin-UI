@@ -7,6 +7,7 @@ export default function Input({
   onChange,
   handleValidation,
   handleSubmit,
+  validateOnBlur,
 }) {
   const inputRef = useRef();
 
@@ -40,14 +41,18 @@ export default function Input({
       className="field-input"
       type={type}
       value={value}
-      onChange={(e) =>
-        onChange(type === 'number' ? Number(e.target.value) : e.target.value)
-      }
+      onChange={(e) => {
+        let formattedVal =
+          type === 'number' ? Number(e.target.value) : e.target.value;
+        onChange(formattedVal);
+      }}
       onBlur={(e) => {
-        if (handleValidation) handleValidation(e.target.value);
+        let formattedVal =
+          type === 'number' ? Number(e.target.value) : e.target.value;
+        if (handleValidation && validateOnBlur) handleValidation(formattedVal);
         if (handleSubmit) {
           console.log('submitting', e.target.value);
-          handleSubmit(e.target.value);
+          handleSubmit(formattedVal);
         }
       }}
     />

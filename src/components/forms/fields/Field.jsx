@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import { format } from 'date-fns';
 
@@ -21,6 +21,9 @@ export default function Field({
   handleSubmit,
   onClose,
   validator,
+  triggerValidation,
+  setTriggerValidation,
+  validateOnBlur = true,
   config = {
     required: false,
     inline: false,
@@ -36,24 +39,38 @@ export default function Field({
   let displayComponent = null;
   let editComponent = null;
 
-  const handleValidation = (val) => {
-    if (validator) {
-      const errorMessage = validator(val);
-      if (errorMessage) {
-        setError(errorMessage);
-        return false;
+  const handleValidation = useCallback(
+    (val) => {
+      if (validator) {
+        const errorMessage = validator(val);
+        if (errorMessage) {
+          setError(errorMessage);
+          return false;
+        }
       }
+      setError('');
+      return true;
+    },
+    [validator]
+  );
+
+  useEffect(() => {
+    if (triggerValidation) {
+      console.log('validating due to external action');
+      handleValidation(value);
+      setTriggerValidation(false);
     }
-    setError('');
-    return true;
-  };
+  }, [triggerValidation, value, handleValidation, setTriggerValidation]);
 
   switch (type) {
     case 'text':
     case 'number':
+    case 'password':
     case 'email':
     case 'url':
-      displayComponent = <span>{value}</span>;
+      displayComponent = (
+        <span>{type === 'password' ? '*'.repeat(value.length) : value}</span>
+      );
       editComponent = (
         <Input
           type={type}
@@ -62,6 +79,7 @@ export default function Field({
           onChange={onChange}
           handleSubmit={handleSubmit}
           handleValidation={handleValidation}
+          validateOnBlur={validateOnBlur}
         />
       );
       break;
@@ -124,7 +142,7 @@ export default function Field({
   }
 
   return (
-    <div className="field-container">
+    <div className="field-container" onClick={() => setEditing(true)}>
       <div
         className={`field ${config.inline === true && 'inline'} ${
           editing && 'editing'

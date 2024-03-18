@@ -2,12 +2,18 @@ import { useState } from 'react';
 
 import Panel from '../../utils/Panel.jsx';
 
-import { dropTable } from '../../../api/schema.js';
+import api from '../../../api/api.js';
+
+import { useNotificationContext } from '../../../hooks/useNotifications';
 
 import { useLocation } from 'wouter';
 
 export default function EditTableSettings({ tableId, setTables, closeModal }) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const {
+    actionCreators: { showError },
+  } = useNotificationContext();
 
   const [, setLocation] = useLocation();
 
@@ -25,11 +31,18 @@ export default function EditTableSettings({ tableId, setTables, closeModal }) {
             <div
               className="drop-table"
               onClick={() => {
-                dropTable(tableId).then(() => {
-                  setTables((prev) => prev.filter((t) => t.id !== tableId));
-                  setLocation('/data');
-                  closeModal();
-                });
+                api
+                  .dropTable(tableId)
+                  .then(() => {
+                    setTables((prev) => prev.filter((t) => t.id !== tableId));
+                    setLocation('/data');
+                    closeModal();
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                    showError(err.response.data.message);
+                    setIsOpen(false);
+                  });
               }}
             >
               <i className="fa-regular fa-trash"></i> <span>Drop</span>

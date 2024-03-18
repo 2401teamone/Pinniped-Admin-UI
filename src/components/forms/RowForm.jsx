@@ -1,4 +1,4 @@
-import { createOne } from '../../api/crud.js';
+import api from '../../api/api.js';
 
 import Field from './fields/Field.jsx';
 import Button from '../utils/Button.jsx';
@@ -8,81 +8,79 @@ import getValidator from '../../utils/validators';
 
 import { useNotificationContext } from '../../hooks/useNotifications';
 
-import useRowFormReducer from '../../hooks/useRowFormReducer';
+import useFieldsAsForm from '../../hooks/useFieldsAsForm';
+
+const generateInitialState = (columns) => {
+  return columns.reduce((acc, column) => {
+    acc[column.name] =
+      column.type === 'number' || column.type === 'bool'
+        ? 0
+        : column.type === 'select'
+        ? ''
+        : '';
+    return acc;
+  }, {});
+};
 
 export default function RowForm({ table, setRows, closeModal, row }) {
-  const initialState =
-    row ||
-    table.columns.reduce((acc, column) => {
-      acc[column.name] =
-        column.type === 'number' || column.type === 'bool'
-          ? 0
-          : column.type === 'select'
-          ? ''
-          : '';
-      return acc;
-    }, {});
-  const { formState, onChange, setError, clearError } =
-    useRowFormReducer(initialState);
-  console.log('formState: ', formState);
-
+  const isNewRow = row === null;
   const {
-    actionCreators: { showError },
+    actionCreators: { showError, showStatus },
   } = useNotificationContext();
+  const initialState = isNewRow ? generateInitialState(table.columns) : {};
+  const { register, handleSubmit } = useFieldsAsForm(initialState);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Submitting: ', formState);
-    if (formState.error) {
+  const onSubmit = (formState, errors) => {
+    console.log(formState, errors, 'SUBMITTING');
+    if (errors.length) {
       showError('Invalid form inputs');
+      console.log('error: ', errors);
       return;
     }
 
-    delete formState.error;
-    createOne(table.id, formState).then((res) => {
-      console.log('Received ', res.data, 'upon create row');
-      setRows((prev) => [...prev, res.data.row]);
-      closeModal();
-    });
+    if (isNewRow) {
+      api
+        .createOne(table.id, formState)
+        .then((data) => {
+          console.log('Received ', data, 'upon create row');
+          setRows((prev) => [...prev, data.row]);
+          showStatus('Row added successfully');
+          closeModal();
+        })
+        .catch(() => {
+          showError('Invalid form inputs');
+        });
+    } else {
+      //update one
+    }
   };
 
   return (
     <div className="row-form-container">
       <h2 className="row-form-header">
-        New <span>{table.name}</span> Row
+        {isNewRow ? 'New' : 'Edit'} <span>{table.name}</span> Row
       </h2>
       <form className="row-form">
         {table.columns.map((column) => {
           return (
             <div className="row-form-field" key={column.name}>
               <Field
-                label={column.name}
-                type={column.type}
-                value={formState[column.name]}
                 config={{
                   options:
                     column.type === 'select' ? column.options.options : [],
                 }}
-                onChange={(val) => onChange(column.name, val)}
-                validator={(val) => {
+                {...register(column.name, column.type, (val) => {
                   const validatorFn = getValidator(column.type);
-                  const err = validatorFn(val, column.options);
-                  if (err) {
-                    setError(err);
-                    return err;
-                  } else {
-                    clearError();
-                    return '';
-                  }
-                }}
+                  return validatorFn(val, column.options);
+                })}
               />
             </div>
           );
         })}
       </form>
       <FormFooter>
-        <Button type="confirm" onClick={handleSubmit}>
-          Add Row
+        <Button type="confirm" onClick={handleSubmit(onSubmit)}>
+          {isNewRow ? 'Add Row' : 'Save Changes'}
         </Button>
         <Button
           type="primary"

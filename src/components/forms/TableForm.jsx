@@ -2,7 +2,7 @@ import { useState, useEffect, useReducer, useCallback } from 'react';
 
 import { useLocation } from 'wouter';
 
-import { createTable, editTable } from '../../api/schema.js';
+import api from '../../api/api.js';
 
 import { useNotificationContext } from '../../hooks/useNotifications';
 
@@ -58,7 +58,7 @@ export default function TableForm({
 
   const [schema, dispatch] = useReducer(reducer, currentSchema);
 
-  const [_, setLocation] = useLocation();
+  const [, setLocation] = useLocation();
 
   const {
     actionCreators: { showStatus, showError },
@@ -145,10 +145,15 @@ export default function TableForm({
 
     try {
       if (isNew()) {
-        const createdTable = await createTable(clone);
+        const { table: createdTable } = await api.createTable(clone);
+
         setTables((prev) => [...prev, createdTable]);
       } else {
-        const editedTable = await editTable(currentSchema.id, clone);
+        const { table: editedTable } = await api.editTable(
+          currentSchema.id,
+          clone
+        );
+        console.log(editedTable, 'edited table');
         setTables((prev) => {
           return prev.map((table) =>
             table.id === editedTable.id ? editedTable : table

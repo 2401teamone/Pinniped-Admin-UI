@@ -5,17 +5,25 @@ import Navbar from './components/Navbar';
 import Data from './pages/Data';
 import Observability from './pages/Observability';
 import Settings from './pages/Settings';
+// import Auth from './pages/Auth';
+
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+
 import SideModal from './components/utils/SideModal';
 import Notification from './components/utils/Notification';
-import EditRowForm from './components/forms/EditRowForm';
+
 import TableForm from './components/forms/TableForm';
 import RowForm from './components/forms/RowForm';
 import LogView from './components/LogView';
 
 import { useModalContext } from './hooks/useModal';
 import { useNotificationContext } from './hooks/useNotifications';
+import useAuth from './hooks/useAuth';
 
 import { LINKS, MODAL_CONTENT } from './constants/constants';
+
+import { useLocation } from 'wouter';
 
 function App() {
   console.log('app');
@@ -26,19 +34,29 @@ function App() {
 
   const { notificationState } = useNotificationContext();
 
+  const { admin, adminRegistered } = useAuth();
+
   let modalContent = null;
   switch (component) {
     case MODAL_CONTENT.addRecord:
       modalContent = (
         <RowForm
           table={data.table}
+          row={null}
           setRows={data.setRows}
           closeModal={actionCreators.close}
         />
       );
       break;
     case MODAL_CONTENT.editRecord:
-      modalContent = <EditRowForm row={data} />;
+      modalContent = (
+        <RowForm
+          table={data.table}
+          row={data.row}
+          setRows={data.setRows}
+          closeModal={actionCreators.close}
+        />
+      );
       break;
     case MODAL_CONTENT.addTable:
       modalContent = (
@@ -68,18 +86,29 @@ function App() {
 
   return (
     <div id="app">
-      <Navbar />
-      <div className="page">
-        <Switch>
-          <Route path={`/${LINKS.data}`} component={Data} />
-          <Route path={`/${LINKS.observability}`} component={Observability} />
-          <Route path={`/${LINKS.settings}`} component={Settings} />
-        </Switch>
-      </div>
+      <Route path={`/login`} component={Login} />
+      <Route path={`/register`} component={Register} />
       <div>
-        {isOpen && (
-          <SideModal onClose={actionCreators.close}>{modalContent}</SideModal>
+        {admin && (
+          <div>
+            <Navbar />
+            <div className="page">
+              <Switch>
+                <Route path={`/${LINKS.data}`} component={Data} />
+                <Route
+                  path={`/${LINKS.observability}`}
+                  component={Observability}
+                />
+                <Route path={`/${LINKS.settings}`} component={Settings} />
+              </Switch>
+            </div>
+          </div>
         )}
+        <div>
+          {isOpen && (
+            <SideModal onClose={actionCreators.close}>{modalContent}</SideModal>
+          )}
+        </div>
       </div>
       <div>
         {notificationState.showing && (
