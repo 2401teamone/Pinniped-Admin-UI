@@ -1,1 +1,1 @@
-Homebase Admin UI
+Admin UI for Pinniped BaaS
