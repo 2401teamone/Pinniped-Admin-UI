@@ -146,7 +146,7 @@ export default function TableForm({
     try {
       if (isNew()) {
         const { table: createdTable } = await api.createTable(clone);
-
+        console.log(createdTable, 'created table');
         setTables((prev) => [...prev, createdTable]);
       } else {
         const { table: editedTable } = await api.editTable(

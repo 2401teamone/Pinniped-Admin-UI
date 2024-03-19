@@ -2,6 +2,10 @@ import { useState } from 'react';
 
 import { Link, useLocation } from 'wouter';
 
+import { useAuthContext } from '../hooks/useAuth';
+
+import ActionIcon from './utils/ActionIcon';
+
 import { LINKS } from '../constants/constants.js';
 
 import pinnipedIcon from '../assets/images/pinniped_icon.png';
@@ -11,6 +15,8 @@ export default function Navbar() {
 
   const location = useLocation();
   const baseLocation = [...location][0].split('/')[1];
+
+  const { logout } = useAuthContext();
 
   return (
     <nav className="navbar">
@@ -65,6 +71,12 @@ export default function Navbar() {
       >
         <i className="fa-regular fa-gear"></i>
       </Link>
+
+      <div className="logout" onClick={logout}>
+        <ActionIcon>
+          <i className="fa-regular fa-sign-out"></i>
+        </ActionIcon>
+      </div>
     </nav>
   );
 }

@@ -4,7 +4,7 @@ import api from '../../../api/api';
 
 export default function Relation({ value, onChange, handleSubmit, tableId }) {
   const [rows, setRows] = useState([]);
-  console.log();
+
   useEffect(() => {
     api.getAll(tableId).then((data) => {
       setRows(data.rows);

@@ -23,6 +23,7 @@ const generateInitialState = (columns) => {
 };
 
 export default function RowForm({ table, setRows, closeModal, row }) {
+  console.log('rowform');
   const isNewRow = row === null;
   const {
     actionCreators: { showError, showStatus },

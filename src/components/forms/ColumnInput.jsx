@@ -19,6 +19,16 @@ export default function ColumnInput({ column, dispatch }) {
     dispatch({ type: 'REMOVE_COLUMN', payload: column.tempId });
   };
 
+  const columnOptions = null;
+
+  switch (column.type) {
+    case 'text':
+      // columnOptions = (
+
+      // );
+      break;
+  }
+
   return (
     <div className={`column-container ${showOptions && 'show-border'}`}>
       <div className="column-input-container">
@@ -35,7 +45,9 @@ export default function ColumnInput({ column, dispatch }) {
         </ActionIcon>
         <DeleteBtn action={removeColumn} />
       </div>
-      {showOptions && <ColumnOptions column={column} dispatch={dispatch} />}
+      {showOptions && (
+        <ColumnOptions column={column} dispatch={dispatch}></ColumnOptions>
+      )}
     </div>
   );
 }

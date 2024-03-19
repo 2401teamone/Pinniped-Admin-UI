@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 import { format } from 'date-fns';
 
@@ -32,9 +32,14 @@ export default function Field({
     tableId: '',
   },
   children,
+  indexes = [],
+  currentIdx = 0,
+  setCurrentIdx = null,
 }) {
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState('');
+
+  const fieldRef = useRef();
 
   let displayComponent = null;
   let editComponent = null;
@@ -61,6 +66,34 @@ export default function Field({
       setTriggerValidation(false);
     }
   }, [triggerValidation, value, handleValidation, setTriggerValidation]);
+
+  useEffect(() => {
+    const fieldRefHold = fieldRef.current;
+
+    const handleTab = (e) => {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        setCurrentIdx((currentIdx + 1) % indexes.length);
+      }
+    };
+
+    if (fieldRefHold) {
+      fieldRefHold.addEventListener('keydown', handleTab);
+    }
+
+    console.log(indexes, currentIdx, 'ooplah');
+
+    if (currentIdx === indexes.indexOf(label)) {
+      console.log('focusing on ', label);
+      // fieldRefHold && fieldRefHold.click();
+    }
+
+    return () => {
+      if (fieldRefHold) {
+        fieldRefHold.removeEventListener('keydown', handleTab);
+      }
+    };
+  }, [currentIdx, indexes, setCurrentIdx, label]);
 
   switch (type) {
     case 'text':
@@ -142,7 +175,11 @@ export default function Field({
   }
 
   return (
-    <div className="field-container" onClick={() => setEditing(true)}>
+    <div
+      className="field-container"
+      onClick={() => setEditing(true)}
+      ref={fieldRef}
+    >
       <div
         className={`field ${config.inline === true && 'inline'} ${
           editing && 'editing'

@@ -83,9 +83,6 @@ input[type='number']::-webkit-outer-spin-button {
 
     border-right: 1px solid var(--light-gray);
 
-    & .brand-icon {
-    }
-
     & .link {
       font-size: 1.5rem;
       padding: 12px;
@@ -103,6 +100,11 @@ input[type='number']::-webkit-outer-spin-button {
         border: 2px solid var(--black);
       }
     }
+  }
+
+  & .logout {
+    padding-top: 20px;
+    border-top: 1px solid var(--light-gray);
   }
 
   & .auth {
@@ -434,23 +436,12 @@ input[type='number']::-webkit-outer-spin-button {
 
 @keyframes slideInActionBox {
   from {
-    bottom: -100px;
+    /* bottom: -100px; */
     opacity: 0;
   }
   to {
     bottom: 40px;
-    opacity: 1;
-  }
-}
-
-@keyframes slideOutActionBox {
-  from {
-    bottom: 40px;
-    opacity: 1;
-  }
-  to {
-    bottom: -100px;
-    opacity: 0;
+    /* opacity: 1; */
   }
 }
 
@@ -707,6 +698,7 @@ input[type='number']::-webkit-outer-spin-button {
 
 /* forms */
 .row-form-container {
+  height: max-content;
   & .row-form-header {
     margin: 20px 0 30px 0;
     padding: 0 var(--modal-padding);
@@ -717,6 +709,7 @@ input[type='number']::-webkit-outer-spin-button {
     }
   }
   & .row-form {
+    overflow: scroll;
     padding: 0 var(--modal-padding);
     & .row-form-field {
       margin: 20px 0;
@@ -1137,6 +1130,8 @@ input[type='number']::-webkit-outer-spin-button {
   padding: 20px;
   width: calc(100% - var(--subnavbar-width) - var(--navbar-width));
   cursor: default;
+  background-color: inherit;
+  /* z-index: 1000000; */
 
   & .content {
     font-weight: 600;
@@ -1285,21 +1280,12 @@ input[type='number']::-webkit-outer-spin-button {
   display: flex;
 
   align-items: center;
+  animation: slideInActionBox 200ms ease;
 
   & div {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  &.slide-in {
-    animation: slideInActionBox 200ms ease;
-  }
-
-  &.slide-out {
-    animation: slideOutActionBox 200ms ease;
-    bottom: -100px;
-    /* display: none; */
   }
 
   & .left {
