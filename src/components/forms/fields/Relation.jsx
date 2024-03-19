@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react';
 
 import api from '../../../api/api';
+import Panel from '../../utils/Panel';
 
-export default function Relation({ value, onChange, handleSubmit, tableId }) {
+export default function Relation({ value, onChange, handleSubmit, options }) {
   const [rows, setRows] = useState([]);
 
+  const [showContext, setShowContext] = useState(undefined);
+
+  console.log(options, 'OP{TIONS');
+
   useEffect(() => {
-    api.getAll(tableId).then((data) => {
+    api.getAll(options.tableId).then((data) => {
       setRows(data.rows);
     });
-  }, [tableId]);
+  }, [options.tableId]);
 
   return (
     <div className="field-relation">
@@ -26,7 +31,19 @@ export default function Relation({ value, onChange, handleSubmit, tableId }) {
                 if (handleSubmit) handleSubmit(row.id); // handle this on backend
               }}
             >
-              {row.id}
+              <span
+                className="row-context"
+                onMouseOver={() => setShowContext(row.id)}
+                onMouseOut={() => setShowContext(undefined)}
+              >
+                <i className="fa-sharp fa-thin fa-circle-info"></i>
+                {showContext === row.id && (
+                  <div className="row-context-dropdown">
+                    <pre>{JSON.stringify(row, null, 2)}</pre>
+                  </div>
+                )}
+              </span>
+              <span className="row-id">{row.id}</span>
             </div>
           );
         })}

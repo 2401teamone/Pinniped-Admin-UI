@@ -5,7 +5,7 @@ import Icon from '../utils/Icon';
 import ActionIcon from '../utils/ActionIcon';
 import ColumnOptions from './ColumnOptions';
 
-export default function ColumnInput({ column, dispatch }) {
+export default function ColumnInput({ column, dispatch, tables }) {
   const [showOptions, setShowOptions] = useState(false);
 
   const updateColumn = (field, value) => {
@@ -18,16 +18,6 @@ export default function ColumnInput({ column, dispatch }) {
   const removeColumn = () => {
     dispatch({ type: 'REMOVE_COLUMN', payload: column.tempId });
   };
-
-  const columnOptions = null;
-
-  switch (column.type) {
-    case 'text':
-      // columnOptions = (
-
-      // );
-      break;
-  }
 
   return (
     <div className={`column-container ${showOptions && 'show-border'}`}>
@@ -46,7 +36,7 @@ export default function ColumnInput({ column, dispatch }) {
         <DeleteBtn action={removeColumn} />
       </div>
       {showOptions && (
-        <ColumnOptions column={column} dispatch={dispatch}></ColumnOptions>
+        <ColumnOptions column={column} dispatch={dispatch} tables={tables} />
       )}
     </div>
   );

@@ -35,7 +35,7 @@
 
   --navbar-width: 70px;
   --subnavbar-width: 200px;
-  --side-modal-width: 500px;
+  --side-modal-width: 600px;
 
   --content-padding: 40px;
   --modal-padding: 30px;
@@ -198,13 +198,13 @@ input[type='number']::-webkit-outer-spin-button {
           & .table-container {
             & .table {
               max-width: 100%;
-              overflow: auto;
+              /* overflow: auto; */
               position: relative;
 
               & .thead {
                 /* position: sticky; */
                 top: 0;
-                z-index: 50;
+
                 display: flex;
                 align-items: center;
                 height: 30px;
@@ -219,7 +219,7 @@ input[type='number']::-webkit-outer-spin-button {
                   display: flex;
                   flex-direction: row;
                   gap: 10px;
-                  white-space: nowrap;
+
                   color: var(--text-color);
                   font-weight: 600;
                 }
@@ -243,7 +243,6 @@ input[type='number']::-webkit-outer-spin-button {
                   }
 
                   & .td {
-                    white-space: nowrap;
                     position: relative;
                     width: inherit;
                     height: inherit;
@@ -402,6 +401,15 @@ input[type='number']::-webkit-outer-spin-button {
         background-color: rgba(0, 0, 0, 0.7);
       }
     }
+  }
+}
+
+@keyframes toggle {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
@@ -698,7 +706,9 @@ input[type='number']::-webkit-outer-spin-button {
 
 /* forms */
 .row-form-container {
-  height: max-content;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   & .row-form-header {
     margin: 20px 0 30px 0;
     padding: 0 var(--modal-padding);
@@ -709,8 +719,12 @@ input[type='number']::-webkit-outer-spin-button {
     }
   }
   & .row-form {
-    overflow: scroll;
     padding: 0 var(--modal-padding);
+    margin-bottom: 50px;
+    flex-grow: 1;
+    overflow-y: scroll;
+    height: inherit;
+
     & .row-form-field {
       margin: 20px 0;
     }
@@ -767,6 +781,8 @@ input[type='number']::-webkit-outer-spin-button {
   }
 
   & .table-form {
+    display: flex;
+    flex-direction: column;
     & .table-form-name {
       padding: 0 30px;
       margin-bottom: 30px;
@@ -777,7 +793,23 @@ input[type='number']::-webkit-outer-spin-button {
       height: calc(100vh - 200px);
       border-top: 1px solid var(--light-gray);
 
+      flex-grow: 1;
+      overflow-y: scroll;
+
       & .columns-interface {
+        & .system-fields {
+          display: flex;
+          align-items: center;
+          gap: 3px;
+          margin: 15px 0;
+          /* font-weight: 600; */
+
+          & .system-field {
+            padding: 2px 5px;
+            background-color: var(--pk);
+            border-radius: 5px;
+          }
+        }
         & .actual-columns {
           overflow-y: scroll;
         }
@@ -864,6 +896,7 @@ input[type='number']::-webkit-outer-spin-button {
       & .add-column-btn {
         font-size: 1.2rem;
         border-radius: 5px;
+        border: 1px solid var(--light-gray);
         color: var(--text-color);
         padding: 5px 10px;
         cursor: pointer;
@@ -871,7 +904,7 @@ input[type='number']::-webkit-outer-spin-button {
         transition: all 0.3s ease;
 
         &:hover {
-          background-color: var(--green-light);
+          background-color: var(--green);
         }
 
         &:active {
@@ -934,7 +967,13 @@ input[type='number']::-webkit-outer-spin-button {
     box-shadow: var(--shadow-1);
     border: 1px solid var(--light-gray);
     width: 100%;
-    padding: 10px;
+    padding: 15px;
+
+    & div {
+      display: flex;
+      flex-grow: 1;
+      gap: 10px;
+    }
   }
 }
 
@@ -950,13 +989,18 @@ input[type='number']::-webkit-outer-spin-button {
   }
   .field {
     display: flex;
-    flex-grow: 1;
     flex-direction: column;
-    padding: 5px;
-    border-radius: 2px;
+    justify-content: start;
+    flex-grow: 1;
     gap: 3px;
-    width: 100%;
+
+    width: inherit;
+
+    padding: 5px;
+
     border: 1px solid var(--light-gray);
+    border-radius: 2px;
+
     background-color: var(--secondary-background);
 
     &.editing {
@@ -976,7 +1020,7 @@ input[type='number']::-webkit-outer-spin-button {
     & .content {
       display: flex;
       align-items: center;
-      min-height: 20px;
+      min-height: 22px;
       min-width: 100%;
 
       & .content-display {
@@ -1001,24 +1045,50 @@ input[type='number']::-webkit-outer-spin-button {
       & .field-bool {
         width: inherit;
         height: inherit;
-        & .field-bool-checkbox {
+        & .field-bool-toggle {
+          position: relative;
           border: 1px solid var(--light-gray);
-          min-width: 15px;
-          min-height: 15px;
+          width: 35px;
+          height: 20px;
           padding: 3px;
-          border-radius: 3px;
+          border-radius: 20px;
+          background-color: white;
+
+          &.active {
+            background-color: var(--green);
+          }
+
+          & .field-bool-toggle-circle {
+            position: absolute;
+            width: 13px;
+            height: 75%;
+            border-radius: 50%;
+            border: 1px solid var(--light-gray);
+            background-color: white;
+            padding: 5px;
+
+            top: 2px;
+            left: 3px;
+            transition: left 0.2s ease;
+
+            &.on {
+              left: 18px;
+            }
+          }
         }
       }
 
       & .content-edit {
         position: absolute;
         display: flex;
+        flex-direction: column;
         align-items: center;
+        justify-content: left;
         min-height: inherit;
         min-width: inherit;
         background-color: inherit;
         z-index: 23423423423;
-        padding: 3px;
+        padding: 5px;
 
         & .field-input {
           font-size: 1rem;
@@ -1028,8 +1098,11 @@ input[type='number']::-webkit-outer-spin-button {
         }
 
         & .field-select {
+          display: flex;
+          flex-direction: column;
           position: absolute;
-          top: 0px;
+          width: inherit;
+          top: 15px;
           box-shadow: var(--shadow-1);
           border: 1px solid var(--light-gray);
           z-index: 10000;
@@ -1039,7 +1112,7 @@ input[type='number']::-webkit-outer-spin-button {
 
           & .field-select-option {
             cursor: pointer;
-            padding: 5px 40px 5px 3px;
+            padding: 10px;
             border-radius: var(--min-radius);
 
             &.active {
@@ -1047,7 +1120,7 @@ input[type='number']::-webkit-outer-spin-button {
             }
 
             &:hover {
-              background-color: var(--hover);
+              background-color: var(--secondary-background);
             }
           }
         }
@@ -1065,8 +1138,9 @@ input[type='number']::-webkit-outer-spin-button {
 
         & .field-relation {
           position: absolute;
-          width: 300px;
-          top: 0px;
+          width: inherit;
+          min-width: min-content;
+          top: 15px;
           box-shadow: var(--shadow-1);
           border: 1px solid var(--light-gray);
           z-index: 10000;
@@ -1076,6 +1150,51 @@ input[type='number']::-webkit-outer-spin-button {
 
           &.active {
             color: var(--blue);
+            font-weight: 600;
+          }
+
+          & .field-relation-option {
+            display: flex;
+            gap: 10px;
+            cursor: pointer;
+            padding: 5px 40px 5px 3px;
+            border-radius: var(--min-radius);
+            position: relative;
+            border-bottom: 1px solid var(--pk);
+
+            &:last-child {
+              border-bottom: none;
+            }
+
+            &.active {
+              color: var(--blue);
+            }
+
+            &:hover {
+              background-color: var(--hover);
+            }
+
+            & .row-context {
+              & .row-context-dropdown {
+                width: max-content;
+                height: max-content;
+                position: absolute;
+                left: 20px;
+                top: 20px;
+                z-index: 100000000000000;
+                background-color: var(--blue);
+                color: white;
+                font-weight: 600;
+
+                box-shadow: var(--shadow-3);
+                border: 1px solid var(--light-gray);
+                padding: 10px;
+
+                & pre {
+                  line-height: 1.5;
+                }
+              }
+            }
           }
         }
 

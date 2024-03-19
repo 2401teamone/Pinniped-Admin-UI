@@ -39,6 +39,8 @@ export default function RowForm({ table, setRows, closeModal, row }) {
       return;
     }
 
+    console.log(formState, 'FORMSTATE');
+
     if (isNewRow) {
       api
         .createOne(table.id, formState)
@@ -48,7 +50,8 @@ export default function RowForm({ table, setRows, closeModal, row }) {
           showStatus('Row added successfully');
           closeModal();
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err);
           showError('Invalid form inputs');
         });
     } else {
@@ -66,10 +69,7 @@ export default function RowForm({ table, setRows, closeModal, row }) {
           return (
             <div className="row-form-field" key={column.name}>
               <Field
-                config={{
-                  options:
-                    column.type === 'select' ? column.options.options : [],
-                }}
+                options={column.options}
                 {...register(column.name, column.type, (val) => {
                   const validatorFn = getValidator(column.type);
                   return validatorFn(val, column.options);

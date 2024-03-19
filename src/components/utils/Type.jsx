@@ -10,6 +10,7 @@ const ICONS = {
   select: 'list',
   relation: 'arrows-repeat',
   json: 'code',
+  csv: 'file-csv',
 };
 
 export default function Type({ type, error, children }) {
@@ -48,6 +49,9 @@ export default function Type({ type, error, children }) {
       break;
     case 'json':
       icon = <i className={`fa-light fa-${ICONS.json}`}></i>;
+      break;
+    case 'csv':
+      icon = <i className={`fa-light fa-${ICONS.csv}`}></i>;
       break;
     default:
       icon = <div></div>;

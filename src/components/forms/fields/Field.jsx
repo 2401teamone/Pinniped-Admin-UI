@@ -28,9 +28,8 @@ export default function Field({
     required: false,
     inline: false,
     preventSpaces: false,
-    options: [],
-    tableId: '',
   },
+  options,
   children,
   indexes = [],
   currentIdx = 0,
@@ -101,9 +100,17 @@ export default function Field({
     case 'password':
     case 'email':
     case 'url':
-      displayComponent = (
-        <span>{type === 'password' ? '*'.repeat(value.length) : value}</span>
-      );
+    case 'csv':
+      switch (type) {
+        case 'password':
+          displayComponent = <span>{'*'.repeat(value.length)}</span>;
+          break;
+        case 'csv':
+          displayComponent = <span>{value.join(', ')}</span>;
+          break;
+        default:
+          displayComponent = <span>{value}</span>;
+      }
       editComponent = (
         <Input
           type={type}
@@ -133,13 +140,13 @@ export default function Field({
       );
       editComponent = (
         <Select
-          options={config.options}
           value={value}
           onChange={onChange}
           setEditing={setEditing}
           handleSubmit={handleSubmit}
           handleValidation={handleValidation}
           onClose={onClose}
+          options={options}
         />
       );
       break;
@@ -162,7 +169,7 @@ export default function Field({
           value={value}
           onChange={onChange}
           setEditing={setEditing}
-          tableId={config.tableId}
+          options={options}
         />
       );
       break;
@@ -177,7 +184,7 @@ export default function Field({
   return (
     <div
       className="field-container"
-      onClick={() => setEditing(true)}
+      onClick={() => type !== 'bool' && setEditing(true)}
       ref={fieldRef}
     >
       <div

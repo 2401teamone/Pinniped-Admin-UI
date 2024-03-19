@@ -77,9 +77,13 @@ export const validateUrl = (val) => {
   return '';
 };
 
-// export const validateRelation = (val, { tableId }) => {
-//   return '';
-// };
+export const validateRelation = (val, { tableId, cascadeDelete }) => {
+  if (typeof val !== 'string') {
+    return 'Invalid input';
+  }
+
+  return '';
+};
 
 export default function getValidator(type) {
   switch (type) {
@@ -89,18 +93,18 @@ export default function getValidator(type) {
       return validateNumber;
     case 'bool':
       return validateBool;
-    case 'select':
-      return validateSelect;
-    case 'json':
-      return validateJson;
     case 'date':
       return validateDate;
     case 'email':
       return validateEmail;
     case 'url':
       return validateUrl;
-    // case 'relation':
-    //   return validateRelation;
+    case 'select':
+      return validateSelect;
+    case 'json':
+      return validateJson;
+    case 'relation':
+      return validateRelation;
     default:
       throw new Error('Invalid type');
   }

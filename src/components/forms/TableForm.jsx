@@ -164,6 +164,7 @@ export default function TableForm({
       closeModal();
       setLocation(`/data?table=${clone.name}`);
     } catch (err) {
+      console.log(err);
       showError(err.message);
     }
   };
@@ -224,6 +225,12 @@ export default function TableForm({
           <div className="interface">
             {chosenInterface === 'columns' ? (
               <div className="columns-interface">
+                <p className="system-fields">
+                  <span>System fields</span>
+                  <span className="system-field">id</span>,
+                  <span className="system-field">created_at</span>,
+                  <span className="system-field">updated_at</span>.
+                </p>
                 <AddColumnBar dispatch={dispatch} />
                 <div className="actual-columns">
                   {schema.columns.map((column) => {
@@ -232,6 +239,7 @@ export default function TableForm({
                         key={column.tempId}
                         column={column}
                         dispatch={dispatch}
+                        tables={tables}
                       />
                     );
                   })}

@@ -1,5 +1,22 @@
 import { useEffect, useRef } from 'react';
 
+const formatVal = (val, type) => {
+  let formattedVal;
+  switch (type) {
+    case 'number':
+      formattedVal = Number(val);
+      break;
+    case 'csv':
+      formattedVal = val.split(',');
+      break;
+    default:
+      formattedVal = val;
+      break;
+  }
+
+  return formattedVal;
+};
+
 export default function Input({
   type,
   config,
@@ -42,13 +59,10 @@ export default function Input({
       type={type}
       value={value}
       onChange={(e) => {
-        let formattedVal =
-          type === 'number' ? Number(e.target.value) : e.target.value;
-        onChange(formattedVal);
+        onChange(formatVal(e.target.value, type));
       }}
       onBlur={(e) => {
-        let formattedVal =
-          type === 'number' ? Number(e.target.value) : e.target.value;
+        let formattedVal = formatVal(e.target.value, type);
         if (handleValidation && validateOnBlur) handleValidation(formattedVal);
         if (handleSubmit) {
           console.log('submitting', e.target.value);

@@ -6,7 +6,7 @@ export default function Select({
   handleValidation,
   setEditing,
 }) {
-  const renderedOptions = options.map((option) => {
+  const renderedOptions = options.options.map((option) => {
     return (
       <div
         key={option}
