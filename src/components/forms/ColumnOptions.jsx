@@ -1,6 +1,10 @@
+import Settings from '../utils/Settings';
 import Field from './fields/Field.jsx';
 
 export default function ColumnOptions({ column, dispatch, tables }) {
+  const removeColumn = () => {
+    dispatch({ type: 'REMOVE_COLUMN', payload: column.tempId });
+  };
   let columnOptions = null;
 
   switch (column.type) {
@@ -166,9 +170,8 @@ export default function ColumnOptions({ column, dispatch, tables }) {
             }
             config={{
               required: true,
-              // inline: false,
             }}
-            options={{ options: tables.map((table) => table.id) }}
+            options={{ options: tables.map((table) => table.id), maxSelect: 1 }}
           />
           <Field
             label="cascadeDelete"
@@ -190,5 +193,34 @@ export default function ColumnOptions({ column, dispatch, tables }) {
       break;
   }
 
-  return <div className="column-options">{columnOptions}</div>;
+  return (
+    <div className="column-options">
+      <div className="column-options-custom">
+        <div>{columnOptions}</div>
+      </div>
+      <div className="column-options-standard">
+        <Field
+          label="required"
+          type="bool"
+          config={{ inline: true }}
+          value={column.required}
+          onChange={(val) => {
+            dispatch({
+              type: 'EDIT_COLUMN',
+              payload: {
+                ...column,
+                required: val,
+              },
+            });
+          }}
+        />
+
+        <Settings>
+          <div className="settings-item" onClick={removeColumn}>
+            Remove
+          </div>
+        </Settings>
+      </div>
+    </div>
+  );
 }

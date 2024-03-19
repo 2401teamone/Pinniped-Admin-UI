@@ -165,7 +165,8 @@ export default function TableForm({
       setLocation(`/data?table=${clone.name}`);
     } catch (err) {
       console.log(err);
-      showError(err.message);
+      showError(`Invalid inputs: ${err.response.data.message}`);
+      addTempIds(schema.columns);
     }
   };
 

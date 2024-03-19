@@ -42,6 +42,7 @@ export default function TableCell({ table, column, row }) {
             inline: true,
           }}
           options={column.options}
+          tabIndex={false}
         />
       );
   }

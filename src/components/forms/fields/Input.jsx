@@ -25,6 +25,7 @@ export default function Input({
   handleValidation,
   handleSubmit,
   validateOnBlur,
+  editing,
 }) {
   const inputRef = useRef();
 
@@ -43,23 +44,32 @@ export default function Input({
       refVar.addEventListener('keydown', handler);
     }
 
-    refVar.focus();
+    if (editing) inputRef.current.focus();
 
     return () => {
       if (config.preventSpaces) {
         refVar.removeEventListener('keydown', handler);
       }
     };
-  }, [config.preventSpaces]);
+  }, [config.preventSpaces, editing]);
 
   return (
     <input
       ref={inputRef}
       className="field-input"
-      type={type}
-      value={value}
+      type="text"
+      value={typeof value === 'number' ? value.toString() : value}
       onChange={(e) => {
-        onChange(formatVal(e.target.value, type));
+        console.log(e.target.value, 'number check');
+        console.log(type, 'type', !/^\d+$/g.test(e.target.value));
+        if (type === 'number' && e.target.value === '') {
+          onChange('');
+        } else if (type === 'number' && !/^\d+$/.test(e.target.value)) {
+          console.log('preventing');
+          return;
+        } else {
+          onChange(formatVal(e.target.value, type));
+        }
       }}
       onBlur={(e) => {
         let formattedVal = formatVal(e.target.value, type);

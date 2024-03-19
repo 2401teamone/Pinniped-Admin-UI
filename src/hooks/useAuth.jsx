@@ -36,6 +36,7 @@ export const AuthProvider = ({ children }) => {
     const res = await api.login(data);
     console.log(res, 'logged in');
     setAdmin(res.admin);
+    setLocation('/data');
   };
 
   const logout = async () => {

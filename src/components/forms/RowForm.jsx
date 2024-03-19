@@ -12,12 +12,7 @@ import useFieldsAsForm from '../../hooks/useFieldsAsForm';
 
 const generateInitialState = (columns) => {
   return columns.reduce((acc, column) => {
-    acc[column.name] =
-      column.type === 'number' || column.type === 'bool'
-        ? 0
-        : column.type === 'select'
-        ? ''
-        : '';
+    acc[column.name] = column.type === 'bool' ? 0 : '';
     return acc;
   }, {});
 };
@@ -65,7 +60,7 @@ export default function RowForm({ table, setRows, closeModal, row }) {
         {isNewRow ? 'New' : 'Edit'} <span>{table.name}</span> Row
       </h2>
       <form className="row-form">
-        {table.columns.map((column) => {
+        {table.columns.map((column, idx) => {
           return (
             <div className="row-form-field" key={column.name}>
               <Field
@@ -74,13 +69,15 @@ export default function RowForm({ table, setRows, closeModal, row }) {
                   const validatorFn = getValidator(column.type);
                   return validatorFn(val, column.options);
                 })}
+                tabIndex={true}
+                focusOnMount={idx === 0}
               />
             </div>
           );
         })}
       </form>
       <FormFooter>
-        <Button type="confirm" onClick={handleSubmit(onSubmit)}>
+        <Button type="confirm" onClick={handleSubmit(onSubmit)} tabIndex="-1">
           {isNewRow ? 'Add Row' : 'Save Changes'}
         </Button>
         <Button
@@ -90,6 +87,7 @@ export default function RowForm({ table, setRows, closeModal, row }) {
             console.log('closing');
             closeModal();
           }}
+          tabIndex="-1"
         >
           Cancel
         </Button>

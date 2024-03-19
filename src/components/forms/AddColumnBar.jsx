@@ -36,6 +36,7 @@ export default function AddColumnBar({ dispatch }) {
       tempId: generateID(),
       name: '',
       type,
+      required: 0,
       options: determineOptions(type),
     };
 

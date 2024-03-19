@@ -13,6 +13,9 @@ export const validateText = (val, { minLength, maxLength }) => {
 };
 
 export const validateNumber = (val, { min, max }) => {
+  if (isNaN(val)) {
+    return 'Must be a number';
+  }
   if (val < min) {
     return `Must be at least ${min}`;
   }
@@ -34,7 +37,7 @@ export const validateSelect = (val, { maxSelect, options }) => {
     return 'Option is not in correct format';
   }
   if (val.length > maxSelect) {
-    return `Must select at most ${maxSelect} option(s)`;
+    return `Can select at most ${maxSelect} option(s)`;
   }
   if (val.some((v) => !options.includes(v))) {
     return 'Invalid option selected';

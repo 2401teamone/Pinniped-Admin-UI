@@ -25,8 +25,6 @@ export default function useRouteOnAuth() {
           });
         }
       });
-    } else {
-      setLocation('/data');
     }
   }, [admin, adminInStorage, adminHasRegistered, setAdmin, setLocation]);
 

@@ -1,20 +1,11 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function useFieldsAsForm(initialState = {}) {
   const [formState, setFormState] = useState(initialState);
   const [errors, setErrors] = useState([]);
   const [triggerValidation, setTriggerValidation] = useState(false);
 
-  const indexes = useRef([]);
-  const [currentIdx, setCurrentIdx] = useState(0);
-
-  indexes.current = [];
-
-  console.log(indexes.current, 'indexes.current');
-
   const register = (label, type, validator) => {
-    indexes.current = [...indexes.current, label];
-    console.log(indexes.current, 'indexes');
     return {
       label,
       type,
@@ -33,13 +24,18 @@ export default function useFieldsAsForm(initialState = {}) {
         setErrors(errors.filter((error) => error.label !== label));
         return '';
       },
-      indexes: indexes.current,
-      currentIdx,
-      setCurrentIdx,
     };
   };
 
   const handleSubmit = (callback) => {
+    document.onkeydown = (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        setTriggerValidation(true);
+        callback(formState, errors);
+      }
+    };
+
     return (e) => {
       e.preventDefault();
       setTriggerValidation(true);

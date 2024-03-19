@@ -31,14 +31,16 @@ export default function Field({
   },
   options,
   children,
-  indexes = [],
-  currentIdx = 0,
-  setCurrentIdx = null,
+  disable = false,
+  tabIndex = true,
+  focusOnMount = false,
 }) {
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState('');
 
   const fieldRef = useRef();
+
+  console.log('RENDERED');
 
   let displayComponent = null;
   let editComponent = null;
@@ -59,40 +61,31 @@ export default function Field({
   );
 
   useEffect(() => {
+    const handler = (e) => {
+      console.log(e.key);
+      if (
+        e.key.toLowerCase() === 'tab' &&
+        document.activeElement === fieldRef.current
+      ) {
+        e.stopPropagation();
+        setEditing(false);
+      }
+    };
+
+    document.addEventListener('keydown', handler);
+
+    return () => {
+      document.removeEventListener('keydown', handler);
+    };
+  }, []);
+
+  useEffect(() => {
     if (triggerValidation) {
       console.log('validating due to external action');
       handleValidation(value);
       setTriggerValidation(false);
     }
   }, [triggerValidation, value, handleValidation, setTriggerValidation]);
-
-  useEffect(() => {
-    const fieldRefHold = fieldRef.current;
-
-    const handleTab = (e) => {
-      if (e.key === 'Tab') {
-        e.preventDefault();
-        setCurrentIdx((currentIdx + 1) % indexes.length);
-      }
-    };
-
-    if (fieldRefHold) {
-      fieldRefHold.addEventListener('keydown', handleTab);
-    }
-
-    console.log(indexes, currentIdx, 'ooplah');
-
-    if (currentIdx === indexes.indexOf(label)) {
-      console.log('focusing on ', label);
-      // fieldRefHold && fieldRefHold.click();
-    }
-
-    return () => {
-      if (fieldRefHold) {
-        fieldRefHold.removeEventListener('keydown', handleTab);
-      }
-    };
-  }, [currentIdx, indexes, setCurrentIdx, label]);
 
   switch (type) {
     case 'text':
@@ -120,6 +113,7 @@ export default function Field({
           handleSubmit={handleSubmit}
           handleValidation={handleValidation}
           validateOnBlur={validateOnBlur}
+          editing={editing}
         />
       );
       break;
@@ -184,13 +178,20 @@ export default function Field({
   return (
     <div
       className="field-container"
-      onClick={() => type !== 'bool' && setEditing(true)}
       ref={fieldRef}
+      tabIndex={tabIndex ? '0' : '-1'}
+      onClick={(e) => {
+        e.stopPropagation();
+        console.log('clicking', editing);
+        if (type !== 'bool' && !disable && !editing) setEditing(true);
+      }}
     >
       <div
         className={`field ${config.inline === true && 'inline'} ${
-          editing && 'editing'
-        } ${!label && 'cell'}`}
+          document.activeElement === fieldRef.current
+            ? 'editing'
+            : editing && 'editing'
+        } ${!label && 'cell'} ${type === 'bool' && 'bool-it'}`}
       >
         <label className="field-label" htmlFor={label}>
           {label !== undefined && (
@@ -210,20 +211,17 @@ export default function Field({
           ) : (
             editing && (
               <div className="content-edit">
-                <Panel setIsOpen={setEditing} onClose={onClose}>
-                  {editComponent}
-                </Panel>
+                <Panel setIsOpen={setEditing}>{editComponent}</Panel>
               </div>
             )
           )}
           {(!editing ||
             type === 'select' ||
             type === 'relation' ||
-            type === 'date') && (
-            <div className="content-display" onClick={() => setEditing(true)}>
-              {displayComponent}
-            </div>
-          )}
+            type === 'date') &&
+            type !== 'bool' && (
+              <div className="content-display">{displayComponent}</div>
+            )}
         </div>
         {children}
       </div>

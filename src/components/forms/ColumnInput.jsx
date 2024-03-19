@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import DeleteBtn from '../utils/Delete';
 import Icon from '../utils/Icon';
 import ActionIcon from '../utils/ActionIcon';
 import ColumnOptions from './ColumnOptions';
@@ -13,10 +12,6 @@ export default function ColumnInput({ column, dispatch, tables }) {
       type: 'EDIT_COLUMN',
       payload: { ...column, [field]: value },
     });
-  };
-
-  const removeColumn = () => {
-    dispatch({ type: 'REMOVE_COLUMN', payload: column.tempId });
   };
 
   return (
@@ -33,10 +28,11 @@ export default function ColumnInput({ column, dispatch, tables }) {
         <ActionIcon onClick={() => setShowOptions((prev) => !prev)}>
           <i className="fa-sharp fa-regular fa-gear"></i>
         </ActionIcon>
-        <DeleteBtn action={removeColumn} />
       </div>
       {showOptions && (
-        <ColumnOptions column={column} dispatch={dispatch} tables={tables} />
+        <div>
+          <ColumnOptions column={column} dispatch={dispatch} tables={tables} />
+        </div>
       )}
     </div>
   );

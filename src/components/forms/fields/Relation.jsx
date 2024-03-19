@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
 
 import api from '../../../api/api';
-import Panel from '../../utils/Panel';
 
 export default function Relation({ value, onChange, handleSubmit, options }) {
+  const [showContext, setShowContext] = useState(undefined);
   const [rows, setRows] = useState([]);
 
-  const [showContext, setShowContext] = useState(undefined);
-
-  console.log(options, 'OP{TIONS');
+  console.log('opening relation', { value, options }, rows);
 
   useEffect(() => {
+    console.log('fetching related records');
     api.getAll(options.tableId).then((data) => {
       setRows(data.rows);
     });
@@ -28,7 +27,7 @@ export default function Relation({ value, onChange, handleSubmit, options }) {
               }`}
               onClick={() => {
                 onChange(row.id);
-                if (handleSubmit) handleSubmit(row.id); // handle this on backend
+                if (handleSubmit) handleSubmit(row.id);
               }}
             >
               <span

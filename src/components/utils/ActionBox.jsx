@@ -18,16 +18,14 @@ export default function ActionBox({
 
   const actionBox = selectedRow && (
     <div className="action-box">
-      <div>
-        <div className="left">
-          <span>Row Selected</span>
-          <span className="reset" onClick={() => setSelectedRow(null)}>
-            Reset
-          </span>
-        </div>
-        <div onClick={handleDelete} className="row-delete right">
-          <i className="fa-regular fa-trash"></i>
-        </div>
+      <div className="left">
+        <span>Row Selected</span>
+        <span className="reset" onClick={() => setSelectedRow(null)}>
+          Reset
+        </span>
+      </div>
+      <div onClick={handleDelete} className="row-delete right">
+        <i className="fa-regular fa-trash"></i>
       </div>
     </div>
   );
