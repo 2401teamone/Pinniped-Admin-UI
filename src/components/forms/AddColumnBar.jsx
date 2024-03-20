@@ -20,7 +20,7 @@ const determineOptions = (type) => {
     case 'json':
       return { maxSize: 20000 };
     case 'relation':
-      return { tableId: '' };
+      return { tableId: '', tableName: '' };
     case 'select':
       return { maxSelect: 1, options: [] };
     default:

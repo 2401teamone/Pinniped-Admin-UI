@@ -40,7 +40,7 @@ export default function Field({
 
   const fieldRef = useRef();
 
-  console.log('RENDERED');
+  console.log('RENDERED', label, type, value);
 
   let displayComponent = null;
   let editComponent = null;

@@ -14,6 +14,7 @@ export default function Table({ table, rows, setRows }) {
   useEffect(() => {
     async function getRows() {
       const data = await api.getAll(table.id);
+      console.log(data.rows)
       setRows(data.rows);
     }
     if (table) {

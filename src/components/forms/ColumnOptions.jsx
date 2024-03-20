@@ -176,6 +176,24 @@ export default function ColumnOptions({ column, dispatch, tables }) {
             options={{ options: tables.map((table) => table.id), maxSelect: 1 }}
           />
           <Field
+            label="tableName"
+            value={column.options.tableName}
+            type="select"
+            onChange={(val) =>
+              dispatch({
+                type: 'EDIT_COLUMN',
+                payload: {
+                  ...column,
+                  options: { ...column.options, tableName: val[0] },
+                },
+              })
+            }
+            config={{
+              required: true,
+            }}
+            options={{ options: tables.map((table) => table.name), maxSelect: 1 }}
+          />
+          <Field
             label="cascadeDelete"
             value={column.options.cascadeDelete}
             type="bool"

@@ -54,7 +54,7 @@ class Api {
   async checkForAdmin() {
     const res = await this.axios.get('/auth/');
     const { user } = res.data;
-    if (user.role === 'admin') return user;
+    if (user?.role === 'admin') return user;
     return null;
   }
 
