@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await api.checkForAdmin();
       console.log(res, 'admin in storage');
-      return res.admin;
+      return res
     } catch (err) {
       return false;
     }

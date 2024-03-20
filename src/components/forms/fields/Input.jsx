@@ -62,7 +62,7 @@ export default function Input({
     <input
       ref={inputRef}
       className="field-input"
-      type="text"
+      type={type === 'password' ? 'password' : 'text'}
       value={typeof value === 'number' ? value.toString() : value}
       onChange={(e) => {
         console.log(e.target.value, 'number check');

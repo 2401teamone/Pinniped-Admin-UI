@@ -52,13 +52,15 @@ class Api {
   }
 
   async checkForAdmin() {
-    const res = await this.axios.get('/admin/');
-    console.log(res, 'in APOI');
-    return res.data;
+    const res = await this.axios.get('/auth/');
+    const { user } = res.data;
+    if (user.role === 'admin') return user;
+    return null;
   }
 
   async checkIfAdminHasRegistered() {
-    const res = await this.axios.get('/admin/registered');
+    const res = await this.axios.get('/auth/admin/registered');
+    console.log(res, "HEREEE")
     return res.data;
   }
 
