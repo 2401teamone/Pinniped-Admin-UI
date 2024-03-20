@@ -62,12 +62,42 @@ export default function Field({
 
   useEffect(() => {
     const handler = (e) => {
-      console.log(e.key);
+      // e.stopPropagation();
+      if (fieldRef.current && fieldRef.current.contains(e.target)) {
+        console.log('clicking inside');
+        setEditing(true);
+      }
+    };
+
+    document.addEventListener('click', handler);
+
+    return () => {
+      document.removeEventListener('click', handler);
+    };
+  }, [editing]);
+
+  useEffect(() => {
+    const handler = (e) => {
+      e.stopPropagation();
+
+      if (e.key.toLowerCase() === 'tab' && editing) {
+        setEditing(false);
+      }
+
       if (
-        e.key.toLowerCase() === 'tab' &&
+        e.key === 'Enter' &&
+        !e.metaKey &&
         document.activeElement === fieldRef.current
       ) {
-        e.stopPropagation();
+        if (type === 'bool') {
+          // onChange();
+          console.log('boolio');
+        } else {
+          setEditing(true);
+        }
+      }
+
+      if (e.key === 'Escape') {
         setEditing(false);
       }
     };
@@ -77,7 +107,7 @@ export default function Field({
     return () => {
       document.removeEventListener('keydown', handler);
     };
-  }, []);
+  }, [editing]);
 
   useEffect(() => {
     if (triggerValidation) {
@@ -180,17 +210,10 @@ export default function Field({
       className="field-container"
       ref={fieldRef}
       tabIndex={tabIndex ? '0' : '-1'}
-      onClick={(e) => {
-        e.stopPropagation();
-        console.log('clicking', editing);
-        if (type !== 'bool' && !disable && !editing) setEditing(true);
-      }}
     >
       <div
         className={`field ${config.inline === true && 'inline'} ${
-          document.activeElement === fieldRef.current
-            ? 'editing'
-            : editing && 'editing'
+          editing && 'editing'
         } ${!label && 'cell'} ${type === 'bool' && 'bool-it'}`}
       >
         <label className="field-label" htmlFor={label}>

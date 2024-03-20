@@ -7,10 +7,12 @@ export default function ColumnOptions({ column, dispatch, tables }) {
   };
   let columnOptions = null;
 
+  console.log(column);
+
   switch (column.type) {
     case 'text':
       columnOptions = (
-        <div>
+        <div className="column-options-custom-row">
           <Field
             label="minLength"
             value={column.options.minLength}
@@ -46,7 +48,7 @@ export default function ColumnOptions({ column, dispatch, tables }) {
       break;
     case 'number':
       columnOptions = (
-        <div>
+        <div className="column-options-custom-row">
           <Field
             label="min"
             value={column.options.min}
@@ -82,7 +84,7 @@ export default function ColumnOptions({ column, dispatch, tables }) {
       break;
     case 'select':
       columnOptions = (
-        <div>
+        <div className="column-options-custom-row">
           <Field
             label="maxSelect"
             value={column.options.maxSelect}
@@ -118,7 +120,7 @@ export default function ColumnOptions({ column, dispatch, tables }) {
       break;
     case 'date':
       columnOptions = (
-        <div>
+        <div className="column-options-custom-row">
           <Field
             label="min"
             value={column.options.min}
@@ -154,7 +156,7 @@ export default function ColumnOptions({ column, dispatch, tables }) {
       break;
     case 'relation':
       columnOptions = (
-        <div>
+        <div className="column-options-custom-row">
           <Field
             label="tableId"
             value={column.options.tableId}

@@ -65,6 +65,7 @@ export default function RowForm({ table, setRows, closeModal, row }) {
             <div className="row-form-field" key={column.name}>
               <Field
                 options={column.options}
+                required={column.required}
                 {...register(column.name, column.type, (val) => {
                   const validatorFn = getValidator(column.type);
                   return validatorFn(val, column.options);
@@ -77,7 +78,7 @@ export default function RowForm({ table, setRows, closeModal, row }) {
         })}
       </form>
       <FormFooter>
-        <Button type="confirm" onClick={handleSubmit(onSubmit)} tabIndex="-1">
+        <Button type="confirm" onClick={handleSubmit(onSubmit)}>
           {isNewRow ? 'Add Row' : 'Save Changes'}
         </Button>
         <Button
@@ -87,7 +88,6 @@ export default function RowForm({ table, setRows, closeModal, row }) {
             console.log('closing');
             closeModal();
           }}
-          tabIndex="-1"
         >
           Cancel
         </Button>

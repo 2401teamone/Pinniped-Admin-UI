@@ -2,7 +2,13 @@ import { useEffect, useState } from 'react';
 
 import api from '../../../api/api';
 
-export default function Relation({ value, onChange, handleSubmit, options }) {
+export default function Relation({
+  value,
+  onChange,
+  handleSubmit,
+  options,
+  setEditing,
+}) {
   const [showContext, setShowContext] = useState(undefined);
   const [rows, setRows] = useState([]);
 
@@ -28,6 +34,7 @@ export default function Relation({ value, onChange, handleSubmit, options }) {
               onClick={() => {
                 onChange(row.id);
                 if (handleSubmit) handleSubmit(row.id);
+                setEditing(false);
               }}
             >
               <span

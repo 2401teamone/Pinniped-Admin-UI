@@ -34,6 +34,11 @@ export default function Input({
 
     const handler = (e) => {
       console.log(e.key, 'KEY');
+      if (e.key === 'Enter') {
+        console.log('entering');
+        e.preventDefault();
+        return;
+      }
       if (e.key === ' ') {
         e.preventDefault();
         e.target.value += '_';
