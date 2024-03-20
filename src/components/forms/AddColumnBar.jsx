@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { TYPES } from '../../constants/constants';
 import Icon from '../utils/Icon.jsx';
 
@@ -18,7 +20,7 @@ const determineOptions = (type) => {
     case 'json':
       return { maxSize: 20000 };
     case 'relation':
-      return { tableId: '' };
+      return { tableId: '', tableName: '' };
     case 'select':
       return { maxSelect: 1, options: [] };
     default:
@@ -27,6 +29,7 @@ const determineOptions = (type) => {
 };
 
 export default function AddColumnBar({ dispatch }) {
+  const [showContext, setShowContext] = useState('');
   const addColumn = (type) => {
     const generateID = () => {
       return Math.random().toString(36).substring(7);
@@ -36,6 +39,7 @@ export default function AddColumnBar({ dispatch }) {
       tempId: generateID(),
       name: '',
       type,
+      required: 0,
       options: determineOptions(type),
     };
 
@@ -48,8 +52,11 @@ export default function AddColumnBar({ dispatch }) {
         key={type}
         className="add-column-btn"
         onClick={() => addColumn(type)}
+        onMouseOver={() => setShowContext(type)}
+        onMouseLeave={() => setShowContext('')}
       >
         <Icon column={{ type }} />
+        {showContext === type && <span className="context">{type}</span>}
       </span>
     );
   });

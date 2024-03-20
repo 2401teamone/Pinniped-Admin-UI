@@ -1,16 +1,18 @@
-import { useState } from 'react';
-
 import Auth from './Auth.jsx';
 import Field from '../forms/fields/Field.jsx';
 import Button from '../utils/Button.jsx';
 
 import useFieldsAsForm from '../../hooks/useFieldsAsForm';
 
+import { useAuthContext } from '../../hooks/useAuth';
+
 export default function Register() {
   const { register, handleSubmit } = useFieldsAsForm({
     username: '',
     password: '',
   });
+
+  const { register: signup } = useAuthContext();
 
   return (
     <Auth>
@@ -38,8 +40,8 @@ export default function Register() {
 
         <Button
           type="primary"
-          onClick={handleSubmit((formState) => {
-            console.log(formState);
+          onClick={handleSubmit(async (formState) => {
+            await signup(formState);
           })}
         >
           Register

@@ -35,7 +35,7 @@
 
   --navbar-width: 70px;
   --subnavbar-width: 200px;
-  --side-modal-width: 500px;
+  --side-modal-width: 600px;
 
   --content-padding: 40px;
   --modal-padding: 30px;
@@ -83,9 +83,6 @@ input[type='number']::-webkit-outer-spin-button {
 
     border-right: 1px solid var(--light-gray);
 
-    & .brand-icon {
-    }
-
     & .link {
       font-size: 1.5rem;
       padding: 12px;
@@ -103,6 +100,11 @@ input[type='number']::-webkit-outer-spin-button {
         border: 2px solid var(--black);
       }
     }
+  }
+
+  & .logout {
+    padding-top: 20px;
+    border-top: 1px solid var(--light-gray);
   }
 
   & .auth {
@@ -196,13 +198,13 @@ input[type='number']::-webkit-outer-spin-button {
           & .table-container {
             & .table {
               max-width: 100%;
-              overflow: auto;
+              /* overflow: auto; */
               position: relative;
 
               & .thead {
                 /* position: sticky; */
                 top: 0;
-                z-index: 50;
+
                 display: flex;
                 align-items: center;
                 height: 30px;
@@ -217,7 +219,7 @@ input[type='number']::-webkit-outer-spin-button {
                   display: flex;
                   flex-direction: row;
                   gap: 10px;
-                  white-space: nowrap;
+
                   color: var(--text-color);
                   font-weight: 600;
                 }
@@ -231,17 +233,17 @@ input[type='number']::-webkit-outer-spin-button {
                   display: flex;
                   align-items: center;
                   border-bottom: 1px solid var(--pk);
+                  height: 50px;
 
                   & .select-row {
                     padding: 4px;
                     cursor: pointer;
                     & input {
-                      cursor: pointer;
+                      /* cursor: pointer; */
                     }
                   }
 
                   & .td {
-                    white-space: nowrap;
                     position: relative;
                     width: inherit;
                     height: inherit;
@@ -375,13 +377,12 @@ input[type='number']::-webkit-outer-spin-button {
     top: 0;
     bottom: 0;
     right: 0;
-    /* padding: 40px; */
     width: var(--side-modal-width);
     height: 100vh;
 
     box-shadow: var(--shadow-1);
     background-color: white;
-    z-index: 2;
+    z-index: 2340982332;
 
     animation: slideIn 150ms ease;
 
@@ -400,6 +401,15 @@ input[type='number']::-webkit-outer-spin-button {
         background-color: rgba(0, 0, 0, 0.7);
       }
     }
+  }
+}
+
+@keyframes toggle {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
 
@@ -434,23 +444,12 @@ input[type='number']::-webkit-outer-spin-button {
 
 @keyframes slideInActionBox {
   from {
-    bottom: -100px;
+    /* bottom: -100px; */
     opacity: 0;
   }
   to {
     bottom: 40px;
-    opacity: 1;
-  }
-}
-
-@keyframes slideOutActionBox {
-  from {
-    bottom: 40px;
-    opacity: 1;
-  }
-  to {
-    bottom: -100px;
-    opacity: 0;
+    /* opacity: 1; */
   }
 }
 
@@ -683,6 +682,7 @@ input[type='number']::-webkit-outer-spin-button {
 
   &.right {
     left: -40px;
+    top: 20px;
   }
 }
 
@@ -707,6 +707,9 @@ input[type='number']::-webkit-outer-spin-button {
 
 /* forms */
 .row-form-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
   & .row-form-header {
     margin: 20px 0 30px 0;
     padding: 0 var(--modal-padding);
@@ -718,6 +721,11 @@ input[type='number']::-webkit-outer-spin-button {
   }
   & .row-form {
     padding: 0 var(--modal-padding);
+    margin-bottom: 50px;
+    flex-grow: 1;
+    overflow-y: scroll;
+    height: inherit;
+
     & .row-form-field {
       margin: 20px 0;
     }
@@ -738,42 +746,11 @@ input[type='number']::-webkit-outer-spin-button {
       font-size: 1.3rem;
       font-weight: 800;
     }
-
-    & .table-form-settings-container {
-      position: relative;
-      & .table-form-settings-btn {
-        cursor: pointer;
-        padding: 10px;
-        border-radius: var(--min-radius);
-        &:hover {
-          background-color: var(--hover);
-        }
-      }
-      & .table-form-settings {
-        background-color: white;
-        width: 70px;
-        padding: 2px;
-        border-radius: var(--min-radius);
-        font-weight: 600;
-        box-shadow: var(--shadow-3);
-
-        & .drop-table {
-          color: var(--red);
-          padding: 5px;
-          cursor: pointer;
-          font-size: 1.2rem;
-          display: flex;
-          gap: 10px;
-
-          &:hover {
-            background-color: var(--hover);
-          }
-        }
-      }
-    }
   }
 
   & .table-form {
+    display: flex;
+    flex-direction: column;
     & .table-form-name {
       padding: 0 30px;
       margin-bottom: 30px;
@@ -784,9 +761,25 @@ input[type='number']::-webkit-outer-spin-button {
       height: calc(100vh - 200px);
       border-top: 1px solid var(--light-gray);
 
+      flex-grow: 1;
+      overflow-y: scroll;
+
       & .columns-interface {
+        & .system-fields {
+          display: flex;
+          align-items: center;
+          gap: 3px;
+          margin: 15px 0;
+          /* font-weight: 600; */
+
+          & .system-field {
+            padding: 2px 5px;
+            background-color: var(--pk);
+            border-radius: 5px;
+          }
+        }
         & .actual-columns {
-          overflow-y: scroll;
+          /* overflow-y: scroll; */
         }
       }
 
@@ -833,7 +826,10 @@ input[type='number']::-webkit-outer-spin-button {
       display: flex;
       justify-content: space-around;
 
-      & div {
+      & .columns-btn,
+      .rules-btn {
+        position: relative;
+        margin-bottom: -0.8px;
         width: 150px;
         border-radius: 2px;
         padding: 10px 30px;
@@ -843,7 +839,6 @@ input[type='number']::-webkit-outer-spin-button {
 
         &.active {
           font-weight: 600;
-          /* color: black; */
           background-color: white;
           border-left: 1px solid var(--light-gray);
           border-top: 1px solid var(--light-gray);
@@ -869,8 +864,10 @@ input[type='number']::-webkit-outer-spin-button {
       border-top: 2px dashed var(--pk);
       border-bottom: 2px dashed var(--pk);
       & .add-column-btn {
+        position: relative;
         font-size: 1.2rem;
         border-radius: 5px;
+        border: 1px solid var(--light-gray);
         color: var(--text-color);
         padding: 5px 10px;
         cursor: pointer;
@@ -878,11 +875,21 @@ input[type='number']::-webkit-outer-spin-button {
         transition: all 0.3s ease;
 
         &:hover {
-          background-color: var(--green-light);
+          background-color: var(--green);
         }
 
         &:active {
           transform: scale(0.9);
+        }
+
+        & .context {
+          position: absolute;
+          top: 115%;
+          left: 0;
+          background-color: white;
+          padding: 4px 10px;
+          border: 1px solid var(--light-gray);
+          border-radius: 5px;
         }
       }
     }
@@ -936,12 +943,30 @@ input[type='number']::-webkit-outer-spin-button {
   }
   & .column-options {
     display: flex;
-    gap: 30px;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: space-around;
     box-shadow: var(--shadow-1);
     border: 1px solid var(--light-gray);
     width: 100%;
-    padding: 10px;
+    padding: 15px;
+
+    & .column-options-custom {
+      & .column-options-custom-row {
+        display: flex;
+        flex-grow: 1;
+        gap: 25px;
+      }
+    }
+
+    & .column-options-custom {
+      margin-bottom: 10px;
+    }
+
+    & .column-options-standard {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
   }
 }
 
@@ -952,22 +977,56 @@ input[type='number']::-webkit-outer-spin-button {
   display: flex;
   flex-direction: column;
 
+  &:focus {
+    border: none;
+    outline: none;
+
+    & .field {
+      background-color: var(--editing-background);
+
+      & .field-bool {
+        outline: 1px solid var(--light-gray);
+        padding: 5px;
+      }
+    }
+
+    /* &:first-child {
+      background-color: var(--editing-background);
+    } */
+  }
+
   & * {
     cursor: pointer;
   }
   .field {
     display: flex;
-    flex-grow: 1;
     flex-direction: column;
-    padding: 5px;
-    border-radius: 2px;
+    justify-content: start;
+    flex-grow: 1;
     gap: 3px;
-    width: 100%;
+
+    width: inherit;
+
+    padding: 5px;
+
     border: 1px solid var(--light-gray);
+    border-radius: 2px;
+
     background-color: var(--secondary-background);
+
+    &.inline {
+      display: inline-block;
+      /* width: max-content; */
+      /* width: 100px; */
+    }
 
     &.editing {
       background-color: var(--editing-background);
+    }
+    &.bool-it {
+      background-color: white;
+      width: max-content;
+      border: none;
     }
 
     &.cell {
@@ -983,17 +1042,20 @@ input[type='number']::-webkit-outer-spin-button {
     & .content {
       display: flex;
       align-items: center;
-      min-height: 20px;
+      min-height: 22px;
       min-width: 100%;
 
       & .content-display {
         position: relative;
         min-height: inherit;
         min-width: inherit;
+
         display: flex;
         align-items: center;
 
         & .content-display-select {
+          display: flex;
+          gap: 10px;
           & .content-display-selection {
             display: flex;
             align-items: center;
@@ -1008,24 +1070,51 @@ input[type='number']::-webkit-outer-spin-button {
       & .field-bool {
         width: inherit;
         height: inherit;
-        & .field-bool-checkbox {
+        & .field-bool-toggle {
+          position: relative;
           border: 1px solid var(--light-gray);
-          min-width: 15px;
-          min-height: 15px;
+          width: 35px;
+          max-width: 35px;
+          height: 20px;
           padding: 3px;
-          border-radius: 3px;
+          border-radius: 20px;
+          background-color: var(--secondary-background);
+
+          &.active {
+            background-color: var(--green);
+          }
+
+          & .field-bool-toggle-circle {
+            position: absolute;
+            width: 14px;
+            height: 80%;
+            border-radius: 50%;
+            border: 1px solid var(--light-gray);
+            background-color: white;
+            padding: 5px;
+
+            top: 2px;
+            left: 3px;
+            transition: left 0.2s ease;
+
+            &.on {
+              left: 18px;
+            }
+          }
         }
       }
 
       & .content-edit {
         position: absolute;
         display: flex;
+        flex-direction: column;
         align-items: center;
+        justify-content: left;
         min-height: inherit;
         min-width: inherit;
         background-color: inherit;
         z-index: 23423423423;
-        padding: 3px;
+        padding: 5px;
 
         & .field-input {
           font-size: 1rem;
@@ -1035,8 +1124,11 @@ input[type='number']::-webkit-outer-spin-button {
         }
 
         & .field-select {
+          display: flex;
+          flex-direction: column;
           position: absolute;
-          top: 0px;
+          width: inherit;
+          top: 15px;
           box-shadow: var(--shadow-1);
           border: 1px solid var(--light-gray);
           z-index: 10000;
@@ -1046,22 +1138,27 @@ input[type='number']::-webkit-outer-spin-button {
 
           & .field-select-option {
             cursor: pointer;
-            padding: 5px 40px 5px 3px;
+            padding: 10px;
             border-radius: var(--min-radius);
 
             &.active {
               color: var(--blue);
+              font-weight: 600;
+            }
+
+            &.highlight {
+              background-color: var(--hover);
             }
 
             &:hover {
-              background-color: var(--hover);
+              background-color: var(--secondary-background);
             }
           }
         }
 
         & .field-calendar {
           position: absolute;
-          top: 0px;
+          top: 20px;
           box-shadow: var(--shadow-1);
           border: 1px solid var(--light-gray);
           z-index: 10000;
@@ -1072,8 +1169,9 @@ input[type='number']::-webkit-outer-spin-button {
 
         & .field-relation {
           position: absolute;
-          width: 300px;
-          top: 0px;
+          width: inherit;
+          min-width: max-content;
+          top: 15px;
           box-shadow: var(--shadow-1);
           border: 1px solid var(--light-gray);
           z-index: 10000;
@@ -1083,6 +1181,51 @@ input[type='number']::-webkit-outer-spin-button {
 
           &.active {
             color: var(--blue);
+            font-weight: 600;
+          }
+
+          & .field-relation-option {
+            display: flex;
+            gap: 10px;
+            cursor: pointer;
+            padding: 5px 40px 5px 3px;
+            border-radius: var(--min-radius);
+            position: relative;
+            border-bottom: 1px solid var(--pk);
+
+            &:last-child {
+              border-bottom: none;
+            }
+
+            &.active {
+              color: var(--blue);
+            }
+
+            &:hover {
+              background-color: var(--hover);
+            }
+
+            & .row-context {
+              & .row-context-dropdown {
+                width: max-content;
+                height: max-content;
+                position: absolute;
+                left: 20px;
+                top: 20px;
+                z-index: 100000000000000;
+                background-color: var(--blue);
+                color: white;
+                font-weight: 600;
+
+                box-shadow: var(--shadow-3);
+                border: 1px solid var(--light-gray);
+                padding: 10px;
+
+                & pre {
+                  line-height: 1.5;
+                }
+              }
+            }
           }
         }
 
@@ -1097,10 +1240,6 @@ input[type='number']::-webkit-outer-spin-button {
           border-radius: var(--min-radius);
         }
       }
-    }
-
-    &.inline {
-      display: inline-block;
     }
 
     &:active {
@@ -1137,6 +1276,8 @@ input[type='number']::-webkit-outer-spin-button {
   padding: 20px;
   width: calc(100% - var(--subnavbar-width) - var(--navbar-width));
   cursor: default;
+  background-color: inherit;
+  /* z-index: 1000000; */
 
   & .content {
     font-weight: 600;
@@ -1151,37 +1292,49 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 & .notification {
-  position: relative;
+  position: absolute;
+  bottom: 30px;
+  left: 40%;
+
   display: flex;
   align-items: center;
-  /* justify-content: space-between; */
+  justify-content: space-between;
   gap: 10px;
-  width: 300px;
-  overflow: wrap;
+
+  min-width: 300px;
   min-height: 50px;
+
   z-index: 1000000000;
+
   background-color: white;
-  position: absolute;
+
   padding: 10px;
-  bottom: 30px;
-  right: 40%;
+
   box-shadow: var(--shadow-3);
   border: 1px solid var(--light-gray);
   border-radius: var(--min-radius);
 
-  & .icon {
-    font-size: 1.5rem;
-  }
+  & .left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    & .icon {
+      font-size: 1.5rem;
+    }
 
-  & .message {
-    padding-left: 10px;
-    border-left: 1px solid var(--light-gray);
-    font-size: 1.1rem;
+    & .message {
+      padding-left: 10px;
+      border-left: 1px solid var(--light-gray);
+      font-size: 1.1rem;
+      flex-grow: 1;
+      max-width: 300px;
+      flex-wrap: wrap;
+    }
   }
 
   & .clear {
-    position: absolute;
-    right: 15px;
+    /* position: absolute; */
+    /* right: 15px; */
     border-radius: 50%;
     padding: 5px;
     cursor: pointer;
@@ -1282,24 +1435,21 @@ input[type='number']::-webkit-outer-spin-button {
   border-radius: 20px;
   box-shadow: var(--shadow-3);
   padding: 0 20px;
-  display: flex;
 
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+
+  /* animation: slideInActionBox 200ms ease; */
+
+  &.above-notification {
+    bottom: 100px;
+  }
 
   & div {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  &.slide-in {
-    animation: slideInActionBox 200ms ease;
-  }
-
-  &.slide-out {
-    animation: slideOutActionBox 200ms ease;
-    bottom: -100px;
-    /* display: none; */
   }
 
   & .left {
@@ -1330,6 +1480,43 @@ input[type='number']::-webkit-outer-spin-button {
       font-size: 1.2rem;
       border-radius: 50%;
       background-color: var(--red-light);
+    }
+  }
+}
+
+& .settings-container {
+  position: relative;
+  height: 20px;
+  display: flex;
+  align-items: center;
+
+  & .settings-btn {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: var(--min-radius);
+    &:hover {
+      background-color: var(--hover);
+    }
+  }
+  & .settings {
+    background-color: white;
+    width: 70px;
+    padding: 2px;
+    border-radius: var(--min-radius);
+    font-weight: 600;
+    box-shadow: var(--shadow-3);
+
+    & .settings-item {
+      color: var(--red);
+      padding: 5px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      gap: 10px;
+
+      &:hover {
+        background-color: var(--hover);
+      }
     }
   }
 }

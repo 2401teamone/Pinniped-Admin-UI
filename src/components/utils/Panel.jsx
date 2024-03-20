@@ -1,11 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export default function Panel({
-  setIsOpen,
-  position = 'left',
-  onClose = undefined,
-  children,
-}) {
+export default function Panel({ setIsOpen, position = 'left', children }) {
   const panelRef = useRef();
 
   useEffect(() => {
@@ -13,15 +8,15 @@ export default function Panel({
       if (panelRef.current && !panelRef.current.contains(e.target)) {
         console.log('closing panel');
         setIsOpen(false);
-        // onClose && typeof onClose === 'function' && onClose();
       }
     };
     document.addEventListener('click', handler, true);
 
     return () => {
+      setIsOpen(false);
       document.removeEventListener('click', handler);
     };
-  }, [setIsOpen, onClose]);
+  }, [setIsOpen]);
 
   return (
     <div className={`panel ${position}`} ref={panelRef}>

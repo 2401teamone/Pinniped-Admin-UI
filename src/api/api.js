@@ -4,6 +4,7 @@ class Api {
   constructor() {
     this.axios = axios.create({
       baseURL: 'http://localhost:3000/api',
+      withCredentials: true,
     });
   }
 
@@ -47,6 +48,34 @@ class Api {
 
   async dropTable(tableId) {
     const res = await this.axios.delete(`/schema/${tableId}`);
+    return res.data;
+  }
+
+  async checkForAdmin() {
+    const res = await this.axios.get('/auth/');
+    const { user } = res.data;
+    if (user?.role === 'admin') return user;
+    return null;
+  }
+
+  async checkIfAdminHasRegistered() {
+    const res = await this.axios.get('/auth/admin/registered');
+    console.log(res, "HEREEE")
+    return res.data;
+  }
+
+  async register(data) {
+    const res = await this.axios.post('/auth/admin/register', data);
+    return res.data;
+  }
+
+  async login(data) {
+    const res = await this.axios.post('/auth/admin/login', data);
+    return res.data;
+  }
+
+  async logout() {
+    const res = await this.axios.post('/auth/logout');
     return res.data;
   }
 }

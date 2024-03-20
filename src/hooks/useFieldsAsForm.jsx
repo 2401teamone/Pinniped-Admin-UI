@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function useFieldsAsForm(initialState = {}) {
   const [formState, setFormState] = useState(initialState);
@@ -28,6 +28,14 @@ export default function useFieldsAsForm(initialState = {}) {
   };
 
   const handleSubmit = (callback) => {
+    document.onkeydown = (e) => {
+      if (e.metaKey && e.key === 'Enter') {
+        e.preventDefault();
+        setTriggerValidation(true);
+        callback(formState, errors);
+      }
+    };
+
     return (e) => {
       e.preventDefault();
       setTriggerValidation(true);

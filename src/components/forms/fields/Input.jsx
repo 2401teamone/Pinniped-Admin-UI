@@ -1,5 +1,22 @@
 import { useEffect, useRef } from 'react';
 
+const formatVal = (val, type) => {
+  let formattedVal;
+  switch (type) {
+    case 'number':
+      formattedVal = Number(val);
+      break;
+    case 'csv':
+      formattedVal = val.split(',');
+      break;
+    default:
+      formattedVal = val;
+      break;
+  }
+
+  return formattedVal;
+};
+
 export default function Input({
   type,
   config,
@@ -8,6 +25,7 @@ export default function Input({
   handleValidation,
   handleSubmit,
   validateOnBlur,
+  editing,
 }) {
   const inputRef = useRef();
 
@@ -16,6 +34,11 @@ export default function Input({
 
     const handler = (e) => {
       console.log(e.key, 'KEY');
+      if (e.key === 'Enter') {
+        console.log('entering');
+        e.preventDefault();
+        return;
+      }
       if (e.key === ' ') {
         e.preventDefault();
         e.target.value += '_';
@@ -26,29 +49,35 @@ export default function Input({
       refVar.addEventListener('keydown', handler);
     }
 
-    refVar.focus();
+    if (editing) inputRef.current.focus();
 
     return () => {
       if (config.preventSpaces) {
         refVar.removeEventListener('keydown', handler);
       }
     };
-  }, [config.preventSpaces]);
+  }, [config.preventSpaces, editing]);
 
   return (
     <input
       ref={inputRef}
       className="field-input"
-      type={type}
-      value={value}
+      type={type === 'password' ? 'password' : 'text'}
+      value={typeof value === 'number' ? value.toString() : value}
       onChange={(e) => {
-        let formattedVal =
-          type === 'number' ? Number(e.target.value) : e.target.value;
-        onChange(formattedVal);
+        console.log(e.target.value, 'number check');
+        console.log(type, 'type', !/^\d+$/g.test(e.target.value));
+        if (type === 'number' && e.target.value === '') {
+          onChange('');
+        } else if (type === 'number' && !/^\d+$/.test(e.target.value)) {
+          console.log('preventing');
+          return;
+        } else {
+          onChange(formatVal(e.target.value, type));
+        }
       }}
       onBlur={(e) => {
-        let formattedVal =
-          type === 'number' ? Number(e.target.value) : e.target.value;
+        let formattedVal = formatVal(e.target.value, type);
         if (handleValidation && validateOnBlur) handleValidation(formattedVal);
         if (handleSubmit) {
           console.log('submitting', e.target.value);

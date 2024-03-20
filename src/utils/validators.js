@@ -13,6 +13,9 @@ export const validateText = (val, { minLength, maxLength }) => {
 };
 
 export const validateNumber = (val, { min, max }) => {
+  if (isNaN(val)) {
+    return 'Must be a number';
+  }
   if (val < min) {
     return `Must be at least ${min}`;
   }
@@ -34,7 +37,7 @@ export const validateSelect = (val, { maxSelect, options }) => {
     return 'Option is not in correct format';
   }
   if (val.length > maxSelect) {
-    return `Must select at most ${maxSelect} option(s)`;
+    return `Can select at most ${maxSelect} option(s)`;
   }
   if (val.some((v) => !options.includes(v))) {
     return 'Invalid option selected';
@@ -77,9 +80,13 @@ export const validateUrl = (val) => {
   return '';
 };
 
-// export const validateRelation = (val, { tableId }) => {
-//   return '';
-// };
+export const validateRelation = (val, { tableId, cascadeDelete }) => {
+  if (typeof val !== 'string') {
+    return 'Invalid input';
+  }
+
+  return '';
+};
 
 export default function getValidator(type) {
   switch (type) {
@@ -89,18 +96,18 @@ export default function getValidator(type) {
       return validateNumber;
     case 'bool':
       return validateBool;
-    case 'select':
-      return validateSelect;
-    case 'json':
-      return validateJson;
     case 'date':
       return validateDate;
     case 'email':
       return validateEmail;
     case 'url':
       return validateUrl;
-    // case 'relation':
-    //   return validateRelation;
+    case 'select':
+      return validateSelect;
+    case 'json':
+      return validateJson;
+    case 'relation':
+      return validateRelation;
     default:
       throw new Error('Invalid type');
   }

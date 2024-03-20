@@ -2,14 +2,24 @@ import { useEffect, useState } from 'react';
 
 import api from '../../../api/api';
 
-export default function Relation({ value, onChange, handleSubmit, tableId }) {
+export default function Relation({
+  value,
+  onChange,
+  handleSubmit,
+  options,
+  setEditing,
+}) {
+  const [showContext, setShowContext] = useState(undefined);
   const [rows, setRows] = useState([]);
-  console.log();
+
+  console.log('opening relation', { value, options }, rows);
+
   useEffect(() => {
-    api.getAll(tableId).then((data) => {
+    console.log('fetching related records');
+    api.getAll(options.tableId).then((data) => {
       setRows(data.rows);
     });
-  }, [tableId]);
+  }, [options.tableId]);
 
   return (
     <div className="field-relation">
@@ -23,10 +33,23 @@ export default function Relation({ value, onChange, handleSubmit, tableId }) {
               }`}
               onClick={() => {
                 onChange(row.id);
-                if (handleSubmit) handleSubmit(row.id); // handle this on backend
+                if (handleSubmit) handleSubmit(row.id);
+                setEditing(false);
               }}
             >
-              {row.id}
+              <span
+                className="row-context"
+                onMouseOver={() => setShowContext(row.id)}
+                onMouseOut={() => setShowContext(undefined)}
+              >
+                <i className="fa-sharp fa-thin fa-circle-info"></i>
+                {showContext === row.id && (
+                  <div className="row-context-dropdown">
+                    <pre>{JSON.stringify(row, null, 2)}</pre>
+                  </div>
+                )}
+              </span>
+              <span className="row-id">{row.id}</span>
             </div>
           );
         })}

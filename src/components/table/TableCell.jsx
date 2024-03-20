@@ -38,11 +38,11 @@ export default function TableCell({ table, column, row }) {
           value={value}
           onChange={(val) => setValue(val)}
           handleSubmit={handleUpdate}
-          // onClose={handleUpdate}
           config={{
             inline: true,
-            options: column.type === 'select' ? column.options.options : [],
           }}
+          options={column.options}
+          tabIndex={false}
         />
       );
   }

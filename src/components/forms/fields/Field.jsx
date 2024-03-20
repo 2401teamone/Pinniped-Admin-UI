@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 import { format } from 'date-fns';
 
@@ -28,13 +28,19 @@ export default function Field({
     required: false,
     inline: false,
     preventSpaces: false,
-    options: [],
-    tableId: '',
   },
+  options,
   children,
+  disable = false,
+  tabIndex = true,
+  focusOnMount = false,
 }) {
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState('');
+
+  const fieldRef = useRef();
+
+  console.log('RENDERED', label, type, value);
 
   let displayComponent = null;
   let editComponent = null;
@@ -55,6 +61,55 @@ export default function Field({
   );
 
   useEffect(() => {
+    const handler = (e) => {
+      // e.stopPropagation();
+      if (fieldRef.current && fieldRef.current.contains(e.target)) {
+        console.log('clicking inside');
+        setEditing(true);
+      }
+    };
+
+    document.addEventListener('click', handler);
+
+    return () => {
+      document.removeEventListener('click', handler);
+    };
+  }, [editing]);
+
+  useEffect(() => {
+    const handler = (e) => {
+      e.stopPropagation();
+
+      if (e.key.toLowerCase() === 'tab' && editing) {
+        setEditing(false);
+      }
+
+      if (
+        e.key === 'Enter' &&
+        !e.metaKey &&
+        document.activeElement === fieldRef.current
+      ) {
+        if (type === 'bool') {
+          // onChange();
+          console.log('boolio');
+        } else {
+          setEditing(true);
+        }
+      }
+
+      if (e.key === 'Escape') {
+        setEditing(false);
+      }
+    };
+
+    document.addEventListener('keydown', handler);
+
+    return () => {
+      document.removeEventListener('keydown', handler);
+    };
+  }, [editing]);
+
+  useEffect(() => {
     if (triggerValidation) {
       console.log('validating due to external action');
       handleValidation(value);
@@ -68,9 +123,17 @@ export default function Field({
     case 'password':
     case 'email':
     case 'url':
-      displayComponent = (
-        <span>{type === 'password' ? '*'.repeat(value.length) : value}</span>
-      );
+    case 'csv':
+      switch (type) {
+        case 'password':
+          displayComponent = <span>{'*'.repeat(value.length)}</span>;
+          break;
+        case 'csv':
+          displayComponent = <span>{value.join(', ')}</span>;
+          break;
+        default:
+          displayComponent = <span>{value}</span>;
+      }
       editComponent = (
         <Input
           type={type}
@@ -80,6 +143,7 @@ export default function Field({
           handleSubmit={handleSubmit}
           handleValidation={handleValidation}
           validateOnBlur={validateOnBlur}
+          editing={editing}
         />
       );
       break;
@@ -100,13 +164,13 @@ export default function Field({
       );
       editComponent = (
         <Select
-          options={config.options}
           value={value}
           onChange={onChange}
           setEditing={setEditing}
           handleSubmit={handleSubmit}
           handleValidation={handleValidation}
           onClose={onClose}
+          options={options}
         />
       );
       break;
@@ -129,7 +193,7 @@ export default function Field({
           value={value}
           onChange={onChange}
           setEditing={setEditing}
-          tableId={config.tableId}
+          options={options}
         />
       );
       break;
@@ -142,11 +206,15 @@ export default function Field({
   }
 
   return (
-    <div className="field-container" onClick={() => setEditing(true)}>
+    <div
+      className="field-container"
+      ref={fieldRef}
+      tabIndex={tabIndex ? '0' : '-1'}
+    >
       <div
         className={`field ${config.inline === true && 'inline'} ${
           editing && 'editing'
-        } ${!label && 'cell'}`}
+        } ${!label && 'cell'} ${type === 'bool' && 'bool-it'}`}
       >
         <label className="field-label" htmlFor={label}>
           {label !== undefined && (
@@ -166,20 +234,17 @@ export default function Field({
           ) : (
             editing && (
               <div className="content-edit">
-                <Panel setIsOpen={setEditing} onClose={onClose}>
-                  {editComponent}
-                </Panel>
+                <Panel setIsOpen={setEditing}>{editComponent}</Panel>
               </div>
             )
           )}
           {(!editing ||
             type === 'select' ||
             type === 'relation' ||
-            type === 'date') && (
-            <div className="content-display" onClick={() => setEditing(true)}>
-              {displayComponent}
-            </div>
-          )}
+            type === 'date') &&
+            type !== 'bool' && (
+              <div className="content-display">{displayComponent}</div>
+            )}
         </div>
         {children}
       </div>

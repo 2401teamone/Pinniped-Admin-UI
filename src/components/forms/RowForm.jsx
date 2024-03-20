@@ -12,17 +12,13 @@ import useFieldsAsForm from '../../hooks/useFieldsAsForm';
 
 const generateInitialState = (columns) => {
   return columns.reduce((acc, column) => {
-    acc[column.name] =
-      column.type === 'number' || column.type === 'bool'
-        ? 0
-        : column.type === 'select'
-        ? ''
-        : '';
+    acc[column.name] = column.type === 'bool' ? 0 : '';
     return acc;
   }, {});
 };
 
 export default function RowForm({ table, setRows, closeModal, row }) {
+  console.log('rowform');
   const isNewRow = row === null;
   const {
     actionCreators: { showError, showStatus },
@@ -38,6 +34,8 @@ export default function RowForm({ table, setRows, closeModal, row }) {
       return;
     }
 
+    console.log(formState, 'FORMSTATE');
+
     if (isNewRow) {
       api
         .createOne(table.id, formState)
@@ -47,7 +45,8 @@ export default function RowForm({ table, setRows, closeModal, row }) {
           showStatus('Row added successfully');
           closeModal();
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err);
           showError('Invalid form inputs');
         });
     } else {
@@ -61,18 +60,18 @@ export default function RowForm({ table, setRows, closeModal, row }) {
         {isNewRow ? 'New' : 'Edit'} <span>{table.name}</span> Row
       </h2>
       <form className="row-form">
-        {table.columns.map((column) => {
+        {table.columns.map((column, idx) => {
           return (
             <div className="row-form-field" key={column.name}>
               <Field
-                config={{
-                  options:
-                    column.type === 'select' ? column.options.options : [],
-                }}
+                options={column.options}
+                required={column.required}
                 {...register(column.name, column.type, (val) => {
                   const validatorFn = getValidator(column.type);
                   return validatorFn(val, column.options);
                 })}
+                tabIndex={true}
+                focusOnMount={idx === 0}
               />
             </div>
           );

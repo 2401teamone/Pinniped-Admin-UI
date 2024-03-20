@@ -22,14 +22,16 @@ export default function Notification({ type, children }) {
 
   const notification = (
     <div className={`notification ${type}`}>
-      <div className="icon">
-        {type === 'error' ? (
-          <i className="fa-regular fa-circle-exclamation"></i>
-        ) : (
-          <i className="fa-sharp fa-regular fa-check"></i>
-        )}
+      <div className="left">
+        <div className="icon">
+          {type === 'error' ? (
+            <i className="fa-regular fa-circle-exclamation"></i>
+          ) : (
+            <i className="fa-sharp fa-regular fa-check"></i>
+          )}
+        </div>
+        <div className="message">{children}</div>
       </div>
-      <div className="message">{children}</div>
       <div className="clear" onClick={closeNotification}>
         X
       </div>

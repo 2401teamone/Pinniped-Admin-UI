@@ -21,6 +21,7 @@ export const TYPES = {
   email: 'email',
   url: 'url',
   select: 'select',
+  relation: 'relation',
 };
 
 export const NOTIFICATION_TYPES = {

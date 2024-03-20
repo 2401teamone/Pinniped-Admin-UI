@@ -50,7 +50,7 @@ export default function Data() {
     console.log('getting tables');
     async function getTables() {
       const data = await api.getTables();
-      return data;
+      return data.tables;
     }
     getTables()
       .then((data) => {

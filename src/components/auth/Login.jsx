@@ -4,6 +4,8 @@ import Auth from './Auth.jsx';
 import Field from '../forms/fields/Field.jsx';
 import Button from '../utils/Button.jsx';
 
+import { useAuthContext } from '../../hooks/useAuth';
+
 export default function Login() {
   const [credentials, setCredentials] = useState({
     username: '',
@@ -12,9 +14,12 @@ export default function Login() {
 
   const [triggerValidation, setTriggerValidation] = useState(false);
 
-  const handleSubmit = () => {
-    console.log('submitting', credentials);
+  const { login } = useAuthContext();
+
+  const handleSubmit = async () => {
+    console.log('logging in', credentials);
     setTriggerValidation(true);
+    await login(credentials);
   };
 
   return (
