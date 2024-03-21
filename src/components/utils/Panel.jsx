@@ -1,22 +1,30 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
-export default function Panel({ setIsOpen, position = 'left', children }) {
-  const panelRef = useRef();
-
+export default function Panel({
+  setIsOpen,
+  position = "left",
+  children,
+  excludeClicksOn,
+}) {
+  const panelRef = useRef(null);
+  console.log("panel rendered");
   useEffect(() => {
     const handler = (e) => {
       if (panelRef.current && !panelRef.current.contains(e.target)) {
-        console.log('closing panel');
+        if (excludeClicksOn && excludeClicksOn.contains(e.target)) {
+          return;
+        }
+
+        console.log("closing panel");
         setIsOpen(false);
       }
     };
-    document.addEventListener('click', handler, true);
+    document.addEventListener("click", handler, true);
 
     return () => {
-      setIsOpen(false);
-      document.removeEventListener('click', handler);
+      document.removeEventListener("click", handler, true);
     };
-  }, [setIsOpen]);
+  }, [setIsOpen, excludeClicksOn]);
 
   return (
     <div className={`panel ${position}`} ref={panelRef}>

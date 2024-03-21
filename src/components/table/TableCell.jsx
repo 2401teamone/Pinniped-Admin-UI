@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-import Field from '../forms/fields/Field.jsx';
-import PK from './PK.jsx';
+import Field from "../forms/fields/Field.jsx";
+import PK from "./PK.jsx";
 
-import api from '../../api/api.js';
+import api from "../../api/api.js";
 
-import { format } from 'date-fns';
+import { format } from "date-fns";
 
 export default function TableCell({ table, column, row }) {
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState(undefined);
 
   const handleUpdate = async (updatedVal) => {
-    console.log('update', updatedVal);
+    console.log("update", updatedVal);
     const data = await api.updateOne(table.id, row.id, {
       [column.name]: updatedVal,
     });
@@ -24,12 +24,12 @@ export default function TableCell({ table, column, row }) {
 
   let component;
   switch (column.type) {
-    case 'pk':
+    case "pk":
       component = <PK id={row.id} />;
       break;
-    case 'created_at':
-    case 'updated_at':
-      component = <span>{value && format(value, 'PP')}</span>;
+    case "created_at":
+    case "updated_at":
+      component = <span>{value && format(value, "PP")}</span>;
       break;
     default:
       component = (
@@ -47,5 +47,5 @@ export default function TableCell({ table, column, row }) {
       );
   }
 
-  return <div className="td size">{value === null ? '' : component}</div>;
+  return <div className="td size">{value === undefined ? "" : component}</div>;
 }

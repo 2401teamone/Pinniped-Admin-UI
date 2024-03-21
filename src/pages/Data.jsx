@@ -1,20 +1,20 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
-import api from '../api/api';
+import api from "../api/api";
 
-import { useModalContext } from '../hooks/useModal';
-import { useNotificationContext } from '../hooks/useNotifications';
+import { useModalContext } from "../hooks/useModal";
+import { useNotificationContext } from "../hooks/useNotifications";
 
-import { useLocation, useSearch } from 'wouter';
+import { useLocation, useSearch } from "wouter";
 
-import PageHeader from '../components/utils/PageHeader';
-import Crumbs from '../components/utils/Crumbs';
-import Button from '../components/utils/Button';
-import ActionIcon from '../components/utils/ActionIcon';
-import SearchBar from '../components/utils/SearchBar';
-import DataNavbar from '../components/DataNavbar';
-import Table from '../components/table/Table';
-import Footer from '../components/utils/Footer';
+import PageHeader from "../components/utils/PageHeader";
+import Crumbs from "../components/utils/Crumbs";
+import Button from "../components/utils/Button";
+import ActionIcon from "../components/utils/ActionIcon";
+import SearchBar from "../components/utils/SearchBar";
+import DataNavbar from "../components/DataNavbar";
+import Table from "../components/table/Table";
+import Footer from "../components/utils/Footer";
 
 export default function Data() {
   const [tables, setTables] = useState([]);
@@ -32,7 +32,7 @@ export default function Data() {
 
   const getTableFromQueryString = useCallback((queryString) => {
     const params = new URLSearchParams(queryString);
-    return params.get('table');
+    return params.get("table");
   }, []);
 
   const queryString = useSearch();
@@ -47,7 +47,7 @@ export default function Data() {
   };
 
   useEffect(() => {
-    console.log('getting tables');
+    console.log("getting tables");
     async function getTables() {
       const data = await api.getTables();
       return data.tables;
@@ -57,7 +57,7 @@ export default function Data() {
         setTables(data);
       })
       .catch(() => {
-        showError('Error fetching tables');
+        showError("Error fetching tables");
       });
   }, [showError]);
 
@@ -75,7 +75,7 @@ export default function Data() {
           <div>
             <PageHeader>
               <div className="left">
-                <Crumbs crumbs={['Data', `${tableName}`]} />
+                <Crumbs crumbs={["Data", `${tableName}`]} />
                 <div className="data-page-action-icons">
                   <ActionIcon
                     onClick={() =>
@@ -88,8 +88,28 @@ export default function Data() {
                   >
                     <i className="fa-sharp fa-regular fa-gear"></i>
                   </ActionIcon>
-                  <ActionIcon>
+                  <ActionIcon
+                    onClick={async () => {
+                      await api
+                        .getAll(getTable(tableName).id)
+                        .then((data) => {
+                          setRows(data.rows);
+                        })
+                        .catch(() => {
+                          showError(`Error fetching rows for ${tableName}`);
+                        });
+                    }}
+                  >
                     <i className="fa-light fa-arrows-rotate"></i>
+                  </ActionIcon>
+                  <ActionIcon
+                    onClick={() => {
+                      window.navigator.clipboard.writeText(
+                        getTable(tableName).id
+                      );
+                    }}
+                  >
+                    <i className="fa-light fa-copy copy-btn" />
                   </ActionIcon>
                 </div>
               </div>

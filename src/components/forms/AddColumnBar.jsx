@@ -1,35 +1,35 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { TYPES } from '../../constants/constants';
-import Icon from '../utils/Icon.jsx';
+import { TYPES } from "../../constants/constants";
+import Icon from "../utils/Icon.jsx";
 
 const determineOptions = (type) => {
   switch (type) {
-    case 'text':
+    case "text":
       return { minLength: 0, maxLength: 255 };
-    case 'number':
+    case "number":
       return { min: 0, max: 1000 };
-    case 'date':
-      return { min: '2021-01-01', max: '2022-01-01' };
-    case 'bool':
+    case "date":
+      return { min: "2021-01-01", max: "2022-01-01" };
+    case "bool":
       return {};
-    case 'email':
+    case "email":
       return {};
-    case 'url':
+    case "url":
       return {};
-    case 'json':
+    case "json":
       return { maxSize: 20000 };
-    case 'relation':
-      return { tableId: '', tableName: '' };
-    case 'select':
+    case "relation":
+      return { tableId: "", cascadeDelete: 0 };
+    case "select":
       return { maxSelect: 1, options: [] };
     default:
-      throw new Error('invalid type');
+      throw new Error("invalid type");
   }
 };
 
 export default function AddColumnBar({ dispatch }) {
-  const [showContext, setShowContext] = useState('');
+  const [showContext, setShowContext] = useState("");
   const addColumn = (type) => {
     const generateID = () => {
       return Math.random().toString(36).substring(7);
@@ -37,13 +37,13 @@ export default function AddColumnBar({ dispatch }) {
 
     const newField = {
       tempId: generateID(),
-      name: '',
+      name: "",
       type,
       required: 0,
       options: determineOptions(type),
     };
 
-    dispatch({ type: 'ADD_COLUMN', payload: newField });
+    dispatch({ type: "ADD_COLUMN", payload: newField });
   };
 
   const addColumnBar = Object.values(TYPES).map((type) => {
@@ -53,7 +53,7 @@ export default function AddColumnBar({ dispatch }) {
         className="add-column-btn"
         onClick={() => addColumn(type)}
         onMouseOver={() => setShowContext(type)}
-        onMouseLeave={() => setShowContext('')}
+        onMouseLeave={() => setShowContext("")}
       >
         <Icon column={{ type }} />
         {showContext === type && <span className="context">{type}</span>}

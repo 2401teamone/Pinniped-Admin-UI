@@ -1,8 +1,8 @@
-import NavRow from './utils/NavRow';
-import Button from './utils/Button';
-import SubNavbar from './utils/SubNavbar';
+import NavRow from "./utils/NavRow";
+import Button from "./utils/Button";
+import SubNavbar from "./utils/SubNavbar";
 
-import { useModalContext } from '../hooks/useModal';
+import { useModalContext } from "../hooks/useModal";
 
 export default function DataNavbar({
   tables,
@@ -21,12 +21,6 @@ export default function DataNavbar({
           + New Table
         </Button>
         <div className="nav-rows">
-          <NavRow
-            active={currentTable === 'users'}
-            // onClick={() => chooseTable('users')}
-          >
-            Users
-          </NavRow>
           {tables.length &&
             tables.map((table) => {
               return (
