@@ -155,6 +155,8 @@ input[type="number"]::-webkit-outer-spin-button {
 
         & .crumb {
           color: var(--light-gray);
+          flex-grow: 1;
+          flex-wrap: no-wrap;
         }
         & .crumb-separator {
           margin: 0 8px;
@@ -164,11 +166,11 @@ input[type="number"]::-webkit-outer-spin-button {
           color: var(--black);
         }
       }
-
-      & .actions {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    }
+    @media (max-width: 800px) {
+      & .page-header {
+        flex-direction: column;
+        align-items: start;
       }
     }
 
@@ -456,6 +458,10 @@ input[type="number"]::-webkit-outer-spin-button {
   transition: scale 300ms ease;
   font-size: 1.1rem;
   font-weight: 600;
+  display: flex;
+  flex-wrap: no-wrap;
+  min-width: 115px;
+  height: 30px;
 
   &:active {
     transform: scale(0.95);
