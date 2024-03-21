@@ -1,13 +1,13 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 const formatVal = (val, type) => {
   let formattedVal;
   switch (type) {
-    case 'number':
+    case "number":
       formattedVal = Number(val);
       break;
-    case 'csv':
-      formattedVal = val.split(',');
+    case "csv":
+      formattedVal = val.split(",");
       break;
     default:
       formattedVal = val;
@@ -33,44 +33,47 @@ export default function Input({
     const refVar = inputRef.current;
 
     const handler = (e) => {
-      console.log(e.key, 'KEY');
-      if (e.key === 'Enter') {
-        console.log('entering');
+      console.log(e.key, "KEY");
+      if (e.key === "Enter") {
+        console.log("entering");
         e.preventDefault();
         return;
       }
-      if (e.key === ' ') {
+      if (e.key === " ") {
         e.preventDefault();
-        e.target.value += '_';
+        e.target.value += "_";
       }
     };
 
     if (config.preventSpaces) {
-      refVar.addEventListener('keydown', handler);
+      refVar.addEventListener("keydown", handler);
     }
 
-    if (editing) inputRef.current.focus();
+    if (editing) {
+      console.log("focusing input");
+      inputRef.current.focus();
+    }
 
     return () => {
       if (config.preventSpaces) {
-        refVar.removeEventListener('keydown', handler);
+        refVar.removeEventListener("keydown", handler);
       }
     };
-  }, [config.preventSpaces, editing]);
+  });
 
   return (
     <input
       ref={inputRef}
       className="field-input"
-      type={type === 'password' ? 'password' : 'text'}
-      value={typeof value === 'number' ? value.toString() : value}
+      type={type === "password" ? "password" : "text"}
+      value={typeof value === "number" ? value.toString() : value}
       onChange={(e) => {
-        console.log(e.target.value, 'number check');
-        console.log(type, 'type', !/^\d+$/g.test(e.target.value));
-        if (type === 'number' && e.target.value === '') {
-          onChange('');
-        } else if (type === 'number' && !/^\d+$/.test(e.target.value)) {
-          console.log('preventing');
+        console.log(e.target.value, "number check");
+        console.log(type, "type", !/^\d+$/g.test(e.target.value));
+        if (type === "number" && e.target.value === "") {
+          onChange("");
+        } else if (type === "number" && !/^\d+$/.test(e.target.value)) {
+          console.log("preventing");
           return;
         } else {
           onChange(formatVal(e.target.value, type));
@@ -80,7 +83,7 @@ export default function Input({
         let formattedVal = formatVal(e.target.value, type);
         if (handleValidation && validateOnBlur) handleValidation(formattedVal);
         if (handleSubmit) {
-          console.log('submitting', e.target.value);
+          console.log("submitting", e.target.value);
           handleSubmit(formattedVal);
         }
       }}
