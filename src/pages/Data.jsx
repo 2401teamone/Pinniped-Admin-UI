@@ -20,6 +20,8 @@ export default function Data() {
   const [tables, setTables] = useState([]);
   const [rows, setRows] = useState([]);
 
+  const [footerOverlapping, setFooterOverlapping] = useState(false);
+
   const {
     actionCreators: { addRecord, editTable },
   } = useModalContext();
@@ -61,6 +63,33 @@ export default function Data() {
       });
   }, [showError]);
 
+  useEffect(() => {
+    if (tableName) {
+      const footerIsOverlapping = () => {
+        const table = document
+          .querySelector(".table-wrapper")
+          .getBoundingClientRect();
+        const footer = document
+          .querySelector(".footer")
+          .getBoundingClientRect();
+
+        const overlapping = !(footer.top > table.bottom);
+        console.log(overlapping);
+
+        if (overlapping) {
+          setFooterOverlapping(true);
+        } else setFooterOverlapping(false);
+      };
+
+      footerIsOverlapping();
+
+      window.addEventListener("resize", footerIsOverlapping);
+      return () => {
+        window.removeEventListener("resize", footerIsOverlapping);
+      };
+    }
+  }, [tableName]);
+
   return (
     <div className="data-page">
       <DataNavbar
@@ -70,72 +99,66 @@ export default function Data() {
         currentTable={tableName}
       />
 
-      <div className="data-page-content">
-        {tableName && (
-          <div>
-            <PageHeader>
-              <div className="left">
-                <Crumbs crumbs={["Data", `${tableName}`]} />
-                <div className="data-page-action-icons">
-                  <ActionIcon
-                    onClick={() =>
-                      editTable({
-                        tables,
-                        setTables,
-                        currentSchema: getTable(tableName),
-                      })
-                    }
-                  >
-                    <i className="fa-sharp fa-regular fa-gear"></i>
-                  </ActionIcon>
-                  <ActionIcon
-                    onClick={async () => {
-                      await api
-                        .getAll(getTable(tableName).id)
-                        .then((data) => {
-                          setRows(data.rows);
-                        })
-                        .catch(() => {
-                          showError(`Error fetching rows for ${tableName}`);
-                        });
-                    }}
-                  >
-                    <i className="fa-light fa-arrows-rotate"></i>
-                  </ActionIcon>
-                  <ActionIcon
-                    onClick={() => {
-                      window.navigator.clipboard.writeText(
-                        getTable(tableName).id
-                      );
-                    }}
-                  >
-                    <i className="fa-light fa-copy copy-btn" />
-                  </ActionIcon>
-                </div>
-              </div>
-              <div className="right">
-                <Button
-                  type="confirm"
+      {tableName && (
+        <div className="data-page-content">
+          <PageHeader>
+            <div className="left">
+              <Crumbs crumbs={["Data", `${tableName}`]} />
+              <div className="data-page-action-icons">
+                <ActionIcon
                   onClick={() =>
-                    addRecord({ table: getTable(tableName), setRows })
+                    editTable({
+                      tables,
+                      setTables,
+                      currentSchema: getTable(tableName),
+                    })
                   }
                 >
-                  <i className="fa-regular fa-plus"></i> Add Row
-                </Button>
+                  <i className="fa-sharp fa-regular fa-gear"></i>
+                </ActionIcon>
+                <ActionIcon
+                  onClick={async () => {
+                    await api
+                      .getAll(getTable(tableName).id)
+                      .then((data) => {
+                        setRows(data.rows);
+                      })
+                      .catch(() => {
+                        showError(`Error fetching rows for ${tableName}`);
+                      });
+                  }}
+                >
+                  <i className="fa-light fa-arrows-rotate"></i>
+                </ActionIcon>
+                <ActionIcon
+                  onClick={() => {
+                    window.navigator.clipboard.writeText(
+                      getTable(tableName).id
+                    );
+                  }}
+                >
+                  <i className="fa-light fa-copy copy-btn" />
+                </ActionIcon>
               </div>
-            </PageHeader>
-            <SearchBar />
-            {tableName && (
-              <Table
-                table={getTable(tableName)}
-                rows={rows}
-                setRows={setRows}
-              />
-            )}
-          </div>
-        )}
-        <Footer>Total Found: {rows.length}</Footer>
-      </div>
+            </div>
+            <div className="right">
+              <Button
+                type="confirm"
+                onClick={() =>
+                  addRecord({ table: getTable(tableName), setRows })
+                }
+              >
+                <i className="fa-regular fa-plus"></i> Add Row
+              </Button>
+            </div>
+          </PageHeader>
+          <SearchBar />
+          <Table table={getTable(tableName)} rows={rows} setRows={setRows} />
+          <Footer overlapping={footerOverlapping}>
+            Total Found: {rows.length}
+          </Footer>
+        </div>
+      )}
     </div>
   );
 }
