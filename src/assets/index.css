@@ -400,6 +400,52 @@ input[type="number"]::-webkit-outer-spin-button {
   text-align: center;
 }
 
+& .modal-container {
+  & .modal-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--side-modal-background);
+
+    z-index: 110;
+  }
+
+  & .modal {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+
+    box-shadow: var(--shadow-1);
+    background-color: white;
+    z-index: 120;
+
+    & .message {
+      font-size: 1.3rem;
+      letter-spacing: 0.5px;
+      padding: 15px;
+      padding-bottom: none;
+    }
+
+    .btns {
+      border-top: 1px solid var(--pk);
+      display: flex;
+      gap: 20px;
+      justify-content: flex-end;
+      padding-top: 10px;
+      background-color: var(--background);
+      padding: 10px;
+    }
+  }
+}
+
 /* Side modal for handling all sorts of functionality */
 & .side-modal-container {
   & .side-modal-background {
@@ -410,7 +456,7 @@ input[type="number"]::-webkit-outer-spin-button {
     bottom: 0;
     background-color: var(--side-modal-background);
 
-    z-index: 1;
+    z-index: 80;
 
     animation: showModal 200ms ease;
   }
@@ -424,7 +470,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
     box-shadow: var(--shadow-1);
     background-color: white;
-    z-index: 2340982332;
+    z-index: 90;
 
     animation: slideIn 150ms ease;
 
@@ -495,9 +541,9 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 }
 
-.errors {
+/* .errors {
   z-index: 3;
-}
+} */
 
 /* Util components */
 
@@ -510,7 +556,7 @@ input[type="number"]::-webkit-outer-spin-button {
   font-weight: 600;
   display: flex;
   flex-wrap: no-wrap;
-  min-width: 115px;
+  /* min-width: 115px; */
   height: 30px;
 
   &:active {
@@ -541,8 +587,16 @@ input[type="number"]::-webkit-outer-spin-button {
     }
   }
 
+  &.inherit {
+    background-color: inherit;
+
+    &:hover {
+      background-color: var(--hover);
+    }
+  }
+
   &.danger {
-    background-color: var(--red-light);
+    background-color: var(--red);
     color: white;
     border: 1px solid var(--red);
     &:hover {
@@ -724,7 +778,7 @@ input[type="number"]::-webkit-outer-spin-button {
 .panel {
   position: absolute;
   width: 100%;
-  z-index: 999999999;
+  z-index: 70;
   background-color: inherit;
 
   &.left {
@@ -1105,7 +1159,7 @@ input[type="number"]::-webkit-outer-spin-button {
             display: flex;
             align-items: center;
             border-radius: 4px;
-            padding: 2px 5px;
+            padding: 4px 8px;
             border: 1px solid var(--light-gray);
             background-color: white;
           }
@@ -1158,7 +1212,7 @@ input[type="number"]::-webkit-outer-spin-button {
         min-height: inherit;
         min-width: inherit;
         background-color: inherit;
-        z-index: 23423423423;
+        z-index: 10;
         padding: 5px;
 
         & .field-input {
@@ -1176,7 +1230,6 @@ input[type="number"]::-webkit-outer-spin-button {
           top: 15px;
           box-shadow: var(--shadow-1);
           border: 1px solid var(--light-gray);
-          z-index: 10000;
           background-color: white;
           padding: 5px;
           border-radius: var(--min-radius);
@@ -1324,7 +1377,7 @@ input[type="number"]::-webkit-outer-spin-button {
   max-height: 50px;
   position: absolute;
   background-color: var(--background);
-  z-index: 10000000000;
+  z-index: 60;
 
   &.overlapping {
     border-top: 1px solid var(--pk);
@@ -1355,11 +1408,13 @@ input[type="number"]::-webkit-outer-spin-button {
   min-width: 300px;
   min-height: 50px;
 
-  z-index: 1000000000;
+  z-index: 100;
 
   background-color: white;
 
   padding: 10px;
+
+  letter-spacing: 0.5px;
 
   box-shadow: var(--shadow-3);
   border: 1px solid var(--light-gray);

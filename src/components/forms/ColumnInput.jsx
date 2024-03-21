@@ -4,7 +4,7 @@ import Icon from "../utils/Icon";
 import ActionIcon from "../utils/ActionIcon";
 import ColumnOptions from "./ColumnOptions";
 
-export default function ColumnInput({ column, dispatch, tables }) {
+export default function ColumnInput({ schema, column, dispatch, tables }) {
   const [showOptions, setShowOptions] = useState(false);
 
   const updateColumn = (field, value) => {
@@ -32,7 +32,12 @@ export default function ColumnInput({ column, dispatch, tables }) {
       </div>
       {showOptions && (
         <div>
-          <ColumnOptions column={column} dispatch={dispatch} tables={tables} />
+          <ColumnOptions
+            schema={schema}
+            column={column}
+            dispatch={dispatch}
+            tables={tables}
+          />
         </div>
       )}
     </div>

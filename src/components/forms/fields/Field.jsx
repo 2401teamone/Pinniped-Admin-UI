@@ -216,6 +216,10 @@ export default function Field({
         <Json value={value} onChange={onChange} onClose={onClose} />
       );
       break;
+    case "creator":
+      displayComponent = <span>{value}</span>;
+      editComponent = <span>{value}</span>;
+      break;
   }
 
   return (

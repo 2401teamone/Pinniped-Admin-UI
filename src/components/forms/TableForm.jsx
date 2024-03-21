@@ -239,6 +239,7 @@ export default function TableForm({
                     return (
                       <ColumnInput
                         key={column.tempId}
+                        schema={schema}
                         column={column}
                         dispatch={dispatch}
                         tables={tables}

@@ -11,26 +11,28 @@ import { useNotificationContext } from "../../hooks/useNotifications";
 import useFieldsAsForm from "../../hooks/useFieldsAsForm";
 
 const generateInitialState = (columns) => {
-  return columns.reduce((acc, column) => {
-    switch (column.type) {
-      case "bool":
-        acc[column.name] = false;
-        break;
-      case "date":
-        acc[column.name] = new Date().toISOString().split("T")[0];
-        break;
-      case "relation":
-        acc[column.name] = null;
-        break;
-      case "select":
-        acc[column.name] = [];
-        break;
-      default:
-        acc[column.name] = "";
-    }
+  return columns
+    .filter((column) => !column.system)
+    .reduce((acc, column) => {
+      switch (column.type) {
+        case "bool":
+          acc[column.name] = false;
+          break;
+        case "date":
+          acc[column.name] = new Date().toISOString().split("T")[0];
+          break;
+        case "relation":
+          acc[column.name] = null;
+          break;
+        case "select":
+          acc[column.name] = [];
+          break;
+        default:
+          acc[column.name] = "";
+      }
 
-    return acc;
-  }, {});
+      return acc;
+    }, {});
 };
 
 export default function RowForm({ table, setRows, closeModal, row }) {
@@ -77,6 +79,7 @@ export default function RowForm({ table, setRows, closeModal, row }) {
       </h2>
       <form className="row-form">
         {table.columns.map((column, idx) => {
+          if (column.system) return null;
           return (
             <div className="row-form-field" key={column.name}>
               <Field
