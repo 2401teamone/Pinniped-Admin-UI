@@ -16,8 +16,11 @@ export default function Select({
     (optionSelected) => {
       if (options.maxSelect === 1) {
         optionSelected = [optionSelected];
-        console.log(optionSelected, "OPTION SELECTED");
+
         if (handleValidation && handleValidation(optionSelected)) {
+          if (value[0] === optionSelected[0]) {
+            optionSelected = [];
+          }
           onChange(optionSelected);
           if (handleSubmit) handleSubmit(optionSelected);
         }

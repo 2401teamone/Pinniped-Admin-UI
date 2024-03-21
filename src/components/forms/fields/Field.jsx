@@ -159,14 +159,16 @@ export default function Field({
       displayComponent = (
         <span className="content-display-select">
           {Array.isArray(value)
-            ? value
-                .join(", ")
-                .split(", ")
-                .map((selection) => (
-                  <span key={selection} className="content-display-selection">
-                    {selection}
-                  </span>
-                ))
+            ? !value.length
+              ? "Select an option"
+              : value
+                  .join(", ")
+                  .split(", ")
+                  .map((selection) => (
+                    <span key={selection} className="content-display-selection">
+                      {selection}
+                    </span>
+                  ))
             : typeof options.options[0] === "object"
             ? handleSelectFormatting(options.options)
             : value}
