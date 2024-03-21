@@ -43,6 +43,13 @@ export default function Field({
   let displayComponent = null;
   let editComponent = null;
 
+  console.log("rendering field");
+
+  const handleSelectFormatting = (options) => {
+    const option = options.find((option) => option.val === value);
+    return option ? option.label : value;
+  };
+
   const handleValidation = useCallback(
     (val) => {
       if (validator) {
@@ -160,6 +167,8 @@ export default function Field({
                     {selection}
                   </span>
                 ))
+            : typeof options.options[0] === "object"
+            ? handleSelectFormatting(options.options)
             : value}
         </span>
       );
@@ -244,10 +253,9 @@ export default function Field({
             editing && (
               <div className="content-edit">
                 <Panel
-                  excludeClicksOn={fieldRef.current}
-                  label={label}
                   isOpen={editing}
                   setIsOpen={setEditing}
+                  excludeClicksOn={fieldRef.current}
                 >
                   {editComponent}
                 </Panel>

@@ -1,40 +1,40 @@
-import { useState, useEffect, useReducer, useCallback } from 'react';
+import { useState, useEffect, useReducer, useCallback } from "react";
 
-import { useLocation } from 'wouter';
+import { useLocation } from "wouter";
 
-import api from '../../api/api.js';
+import api from "../../api/api.js";
 
-import { useNotificationContext } from '../../hooks/useNotifications';
+import { useNotificationContext } from "../../hooks/useNotifications";
 
-import AddColumnBar from './AddColumnBar.jsx';
-import ColumnInput from './ColumnInput.jsx';
-import Field from './fields/Field.jsx';
-import Button from '../utils/Button.jsx';
-import ApiRules from './ApiRules.jsx';
-import EditTableSettings from './misc/EditTableSettings.jsx';
-import FormFooter from './misc/FormFooter.jsx';
+import AddColumnBar from "./AddColumnBar.jsx";
+import ColumnInput from "./ColumnInput.jsx";
+import Field from "./fields/Field.jsx";
+import Button from "../utils/Button.jsx";
+import ApiRules from "./ApiRules.jsx";
+import EditTableSettings from "./misc/EditTableSettings.jsx";
+import FormFooter from "./misc/FormFooter.jsx";
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case 'UPDATE_NAME':
+    case "UPDATE_NAME":
       return { ...state, name: action.payload };
-    case 'ADD_COLUMN':
+    case "ADD_COLUMN":
       return { ...state, columns: [...state.columns, action.payload] };
-    case 'EDIT_COLUMN':
+    case "EDIT_COLUMN":
       return {
         ...state,
         columns: state.columns.map((column) =>
           column.tempId === action.payload.tempId ? action.payload : column
         ),
       };
-    case 'REMOVE_COLUMN':
+    case "REMOVE_COLUMN":
       return {
         ...state,
         columns: state.columns.filter(
           (column) => column.tempId !== action.payload
         ),
       };
-    case 'EDIT_RULE':
+    case "EDIT_RULE":
       return { ...state, [action.payload.operation]: action.payload.rule };
   }
 };
@@ -44,17 +44,17 @@ export default function TableForm({
   setTables,
   closeModal,
   currentSchema = {
-    name: '',
+    name: "",
     columns: [],
-    getAllRule: 'admin',
-    getOneRule: 'admin',
-    createRule: 'admin',
-    updateRule: 'admin',
-    deleteRule: 'admin',
+    getAllRule: "admin",
+    getOneRule: "admin",
+    createRule: "admin",
+    updateRule: "admin",
+    deleteRule: "admin",
   },
 }) {
   const [tempIdsGenerated, setTempIdsGenerated] = useState(false);
-  const [chosenInterface, setChosenInterface] = useState('columns');
+  const [chosenInterface, setChosenInterface] = useState("columns");
 
   const [schema, dispatch] = useReducer(reducer, currentSchema);
 
@@ -87,14 +87,15 @@ export default function TableForm({
   const handleSubmit = async (e) => {
     const validate = (schema) => {
       const errors = [];
+      console.log(schema.name, "NAMEEEE");
       if (!schema.name.length) {
-        errors.push('Table name is required.');
+        errors.push("Table name is required.");
       }
       if (!schema.name.match(/^[a-zA-Z0-9_]+$/)) {
-        errors.push('Table name must be alphanumeric and contain no spaces.');
+        errors.push("Table name must be alphanumeric and contain no spaces.");
       }
       if (schema.name.length > 20) {
-        errors.push('Table name must be 20 characters or less.');
+        errors.push("Table name must be 20 characters or less.");
       }
 
       if (
@@ -110,22 +111,22 @@ export default function TableForm({
           }
         })
       ) {
-        errors.push('Table name must be unique.');
+        errors.push("Table name must be unique.");
       }
 
       if (!schema.columns.length) {
-        errors.push('At least one column is required.');
+        errors.push("At least one column is required.");
       }
       if (!schema.columns.every((column) => column.name.length)) {
-        errors.push('All columns must have a name.');
+        errors.push("All columns must have a name.");
       }
       if (!schema.columns.every((column) => column.type)) {
-        errors.push('All columns must have a type.');
+        errors.push("All columns must have a type.");
       }
 
       let colNames = schema.columns.map((column) => column.name);
       if (colNames.length !== new Set(colNames).size) {
-        errors.push('Column names must be unique.');
+        errors.push("Column names must be unique.");
       }
 
       return errors;
@@ -146,21 +147,21 @@ export default function TableForm({
     try {
       if (isNew()) {
         const { table: createdTable } = await api.createTable(clone);
-        console.log(createdTable, 'created table');
+        console.log(createdTable, "created table");
         setTables((prev) => [...prev, createdTable]);
       } else {
         const { table: editedTable } = await api.editTable(
           currentSchema.id,
           clone
         );
-        console.log(editedTable, 'edited table');
+        console.log(editedTable, "edited table");
         setTables((prev) => {
           return prev.map((table) =>
             table.id === editedTable.id ? editedTable : table
           );
         });
       }
-      showStatus(`Table successfully ${isNew() ? 'created' : 'edited'}`);
+      showStatus(`Table successfully ${isNew() ? "created" : "edited"}`);
       closeModal();
       setLocation(`/data?table=${clone.name}`);
     } catch (err) {
@@ -171,7 +172,7 @@ export default function TableForm({
   };
 
   useEffect(() => {
-    console.log('SETTING TEMP IDS');
+    console.log("SETTING TEMP IDS");
     if (!isNew()) {
       addTempIds(schema.columns);
     }
@@ -182,8 +183,8 @@ export default function TableForm({
     <div className="table-form-container">
       <div className="table-form-header-container">
         <h2 className="table-form-header">
-          {`${isNew() ? 'New' : `Edit ${tableName}`} Table`}
-        </h2>{' '}
+          {`${isNew() ? "New" : `Edit ${tableName}`} Table`}
+        </h2>{" "}
         {!isNew() && (
           <EditTableSettings
             tableId={currentSchema.id}
@@ -200,7 +201,7 @@ export default function TableForm({
               type="text"
               value={schema.name}
               onChange={(val) =>
-                dispatch({ type: 'UPDATE_NAME', payload: val })
+                dispatch({ type: "UPDATE_NAME", payload: val })
               }
               config={{ required: true, preventSpaces: true }}
             />
@@ -208,23 +209,23 @@ export default function TableForm({
           <div className="table-form-navbar">
             <div
               className={`columns-btn ${
-                chosenInterface === 'columns' ? 'active' : 'inactive'
+                chosenInterface === "columns" ? "active" : "inactive"
               }`}
-              onClick={() => setChosenInterface('columns')}
+              onClick={() => setChosenInterface("columns")}
             >
               Columns
             </div>
             <div
               className={`rules-btn ${
-                chosenInterface === 'rules' ? 'active' : 'inactive'
+                chosenInterface === "rules" ? "active" : "inactive"
               }`}
-              onClick={() => setChosenInterface('rules')}
+              onClick={() => setChosenInterface("rules")}
             >
               API Rules
             </div>
           </div>
           <div className="interface">
-            {chosenInterface === 'columns' ? (
+            {chosenInterface === "columns" ? (
               <div className="columns-interface">
                 <p className="system-fields">
                   <span>System fields</span>
@@ -254,13 +255,13 @@ export default function TableForm({
       )}
       <FormFooter>
         <Button type="confirm" onClick={handleSubmit}>
-          {`${isNew() ? 'Add' : 'Edit'} Table`}
+          {`${isNew() ? "Add" : "Edit"} Table`}
         </Button>
         <Button
           type="primary"
           onClick={(e) => {
             e.preventDefault();
-            console.log('closing');
+            console.log("closing");
             closeModal();
           }}
         >

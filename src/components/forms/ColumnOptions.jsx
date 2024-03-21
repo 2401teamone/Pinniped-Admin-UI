@@ -1,16 +1,16 @@
-import Settings from '../utils/Settings';
-import Field from './fields/Field.jsx';
+import Settings from "../utils/Settings";
+import Field from "./fields/Field.jsx";
 
 export default function ColumnOptions({ column, dispatch, tables }) {
   const removeColumn = () => {
-    dispatch({ type: 'REMOVE_COLUMN', payload: column.tempId });
+    dispatch({ type: "REMOVE_COLUMN", payload: column.tempId });
   };
   let columnOptions = null;
 
   console.log(column);
 
   switch (column.type) {
-    case 'text':
+    case "text":
       columnOptions = (
         <div className="column-options-custom-row">
           <Field
@@ -19,7 +19,7 @@ export default function ColumnOptions({ column, dispatch, tables }) {
             type="number"
             onChange={(val) =>
               dispatch({
-                type: 'EDIT_COLUMN',
+                type: "EDIT_COLUMN",
                 payload: {
                   ...column,
                   options: { ...column.options, minLength: val },
@@ -34,7 +34,7 @@ export default function ColumnOptions({ column, dispatch, tables }) {
             type="number"
             onChange={(val) =>
               dispatch({
-                type: 'EDIT_COLUMN',
+                type: "EDIT_COLUMN",
                 payload: {
                   ...column,
                   options: { ...column.options, maxLength: val },
@@ -46,7 +46,7 @@ export default function ColumnOptions({ column, dispatch, tables }) {
         </div>
       );
       break;
-    case 'number':
+    case "number":
       columnOptions = (
         <div className="column-options-custom-row">
           <Field
@@ -55,7 +55,7 @@ export default function ColumnOptions({ column, dispatch, tables }) {
             type="number"
             onChange={(val) =>
               dispatch({
-                type: 'EDIT_COLUMN',
+                type: "EDIT_COLUMN",
                 payload: {
                   ...column,
                   options: { ...column.options, min: val },
@@ -70,7 +70,7 @@ export default function ColumnOptions({ column, dispatch, tables }) {
             type="number"
             onChange={(val) =>
               dispatch({
-                type: 'EDIT_COLUMN',
+                type: "EDIT_COLUMN",
                 payload: {
                   ...column,
                   options: { ...column.options, max: val },
@@ -82,7 +82,7 @@ export default function ColumnOptions({ column, dispatch, tables }) {
         </div>
       );
       break;
-    case 'select':
+    case "select":
       columnOptions = (
         <div className="column-options-custom-row">
           <Field
@@ -91,7 +91,7 @@ export default function ColumnOptions({ column, dispatch, tables }) {
             type="number"
             onChange={(val) =>
               dispatch({
-                type: 'EDIT_COLUMN',
+                type: "EDIT_COLUMN",
                 payload: {
                   ...column,
                   options: { ...column.options, maxSelect: val },
@@ -106,7 +106,7 @@ export default function ColumnOptions({ column, dispatch, tables }) {
             type="csv"
             onChange={(val) =>
               dispatch({
-                type: 'EDIT_COLUMN',
+                type: "EDIT_COLUMN",
                 payload: {
                   ...column,
                   options: { ...column.options, options: val },
@@ -118,7 +118,7 @@ export default function ColumnOptions({ column, dispatch, tables }) {
         </div>
       );
       break;
-    case 'date':
+    case "date":
       columnOptions = (
         <div className="column-options-custom-row">
           <Field
@@ -127,7 +127,7 @@ export default function ColumnOptions({ column, dispatch, tables }) {
             type="date"
             onChange={(val) =>
               dispatch({
-                type: 'EDIT_COLUMN',
+                type: "EDIT_COLUMN",
                 payload: {
                   ...column,
                   options: { ...column.options, min: val },
@@ -142,7 +142,7 @@ export default function ColumnOptions({ column, dispatch, tables }) {
             type="date"
             onChange={(val) =>
               dispatch({
-                type: 'EDIT_COLUMN',
+                type: "EDIT_COLUMN",
                 payload: {
                   ...column,
                   options: { ...column.options, max: val },
@@ -154,52 +154,40 @@ export default function ColumnOptions({ column, dispatch, tables }) {
         </div>
       );
       break;
-    case 'relation':
+    case "relation":
       columnOptions = (
         <div className="column-options-custom-row">
           <Field
-            label="tableId"
+            label="Table Name"
             value={column.options.tableId}
             type="select"
-            onChange={(val) =>
+            onChange={(val) => {
+              console.log("dispatching val", val);
               dispatch({
-                type: 'EDIT_COLUMN',
+                type: "EDIT_COLUMN",
                 payload: {
                   ...column,
                   options: { ...column.options, tableId: val[0] },
                 },
-              })
-            }
+              });
+            }}
             config={{
               required: true,
             }}
-            options={{ options: tables.map((table) => table.id), maxSelect: 1 }}
-          />
-          <Field
-            label="tableName"
-            value={column.options.tableName}
-            type="select"
-            onChange={(val) =>
-              dispatch({
-                type: 'EDIT_COLUMN',
-                payload: {
-                  ...column,
-                  options: { ...column.options, tableName: val[0] },
-                },
-              })
-            }
-            config={{
-              required: true,
+            options={{
+              options: tables.map((table) => {
+                return { label: table.name, val: table.id };
+              }),
+              maxSelect: 1,
             }}
-            options={{ options: tables.map((table) => table.name), maxSelect: 1 }}
           />
           <Field
-            label="cascadeDelete"
+            label="Cascade Delete"
             value={column.options.cascadeDelete}
             type="bool"
             onChange={(val) =>
               dispatch({
-                type: 'EDIT_COLUMN',
+                type: "EDIT_COLUMN",
                 payload: {
                   ...column,
                   options: { ...column.options, cascadeDelete: val },
@@ -226,7 +214,7 @@ export default function ColumnOptions({ column, dispatch, tables }) {
           value={column.required}
           onChange={(val) => {
             dispatch({
-              type: 'EDIT_COLUMN',
+              type: "EDIT_COLUMN",
               payload: {
                 ...column,
                 required: val,

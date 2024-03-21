@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
 export default function Select({
   options,
@@ -10,10 +10,13 @@ export default function Select({
 }) {
   const [current, setCurrent] = useState(0);
 
+  const selectOptions = options.options;
+
   const handleSelection = useCallback(
     (optionSelected) => {
       if (options.maxSelect === 1) {
         optionSelected = [optionSelected];
+        console.log(optionSelected, "OPTION SELECTED");
         if (handleValidation && handleValidation(optionSelected)) {
           onChange(optionSelected);
           if (handleSubmit) handleSubmit(optionSelected);
@@ -56,44 +59,58 @@ export default function Select({
 
   useEffect(() => {
     const handler = (e) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         setEditing(false);
       }
 
-      if (e.key === 'ArrowDown') {
-        console.log(current, options.options.length, 'CURRENT');
+      if (e.key === "ArrowDown") {
+        console.log(current, options.options.length, "CURRENT");
         setCurrent((prev) => (prev + 1) % options.options.length);
       }
-      if (e.key === 'ArrowUp') {
-        console.log(current, options.options.length, 'CURRENT');
+      if (e.key === "ArrowUp") {
+        console.log(current, options.options.length, "CURRENT");
         setCurrent(
           (prev) => (prev - 1 + options.options.length) % options.options.length
         );
       }
-
-      if (e.key === 'ArrowRight') {
-        const selection = options.options[current];
+      console.log(e.key);
+      if (e.key === " ") {
+        let selection = options.options[current];
+        if (typeof selection === "object") {
+          selection = selection.val;
+        }
         handleSelection(selection);
       }
     };
 
-    document.addEventListener('keydown', handler);
+    document.addEventListener("keydown", handler);
 
     return () => {
-      document.removeEventListener('keydown', handler);
+      document.removeEventListener("keydown", handler);
     };
   }, [current, handleSelection, options.options.length, setEditing, options]);
 
-  const renderedOptions = options.options.map((option, idx) => {
+  const renderedOptions = selectOptions.map((option, idx) => {
+    let val = option;
+    console.log("WORKING WITH", option);
+    if (typeof option === "object") {
+      console.log(typeof option, "OBJECT");
+      val = option.val;
+      option = option.label;
+      console.log("val is now", val);
+      console.log("option is now", option);
+    }
+
     return (
       <div
         key={option}
         className={`field-select-option ${
-          value.includes(option) ? 'active' : ''
-        } ${current === idx ? 'highlight' : ''}`}
+          value.includes(option) ? "active" : ""
+        } ${current === idx ? "highlight" : ""}`}
         onClick={(e) => {
           e.stopPropagation();
-          handleSelection(option);
+          console.log(val, " ON CLICK");
+          handleSelection(val);
         }}
       >
         {option}
