@@ -1,5 +1,5 @@
-import TableCell from './TableCell';
-import Checkbox from '../utils/Checkbox.jsx';
+import TableCell from "./TableCell";
+import Checkbox from "../utils/Checkbox.jsx";
 
 export default function TableRow({
   table,
@@ -7,11 +7,16 @@ export default function TableRow({
   setRows,
   selectedRow,
   setSelectedRow,
+  tableIsScrolled,
 }) {
   return (
     table && (
-      <div className="tr">
-        <div className="select-row">
+      <tr className="tr">
+        <td
+          className={`select-row-header sticky-col ${
+            tableIsScrolled && "shadow"
+          }`}
+        >
           <Checkbox
             checked={selectedRow === row.id}
             onChange={() => {
@@ -21,10 +26,10 @@ export default function TableRow({
               });
             }}
           />
-        </div>
+        </td>
         <TableCell
           table={table}
-          column={{ type: 'pk', name: 'id' }}
+          column={{ type: "pk", name: "id" }}
           row={row}
         />
         {table.columns.map((column) => {
@@ -40,15 +45,16 @@ export default function TableRow({
         })}
         <TableCell
           table={table}
-          column={{ type: 'created_at', name: 'created_at' }}
+          column={{ type: "created_at", name: "created_at" }}
           row={row}
         />
         <TableCell
           table={table}
-          column={{ type: 'updated_at', name: 'updated_at' }}
+          column={{ type: "updated_at", name: "updated_at" }}
           row={row}
         />
-      </div>
+        <td className="right-arrow">{`->`}</td>
+      </tr>
     )
   );
 }

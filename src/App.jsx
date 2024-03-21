@@ -1,24 +1,24 @@
-import { Route, Switch } from 'wouter';
+import { Route, Switch } from "wouter";
 
-import Navbar from './components/Navbar';
+import Navbar from "./components/Navbar";
 
-import Data from './pages/Data';
-import Observability from './pages/Observability';
-import Settings from './pages/Settings';
+import Data from "./pages/Data";
+import Observability from "./pages/Observability";
+import Settings from "./pages/Settings";
 
-import Login from './components/auth/Login';
-import Register from './components/auth/Register';
-import SideModal from './components/utils/SideModal';
-import Notification from './components/utils/Notification';
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
+import SideModal from "./components/utils/SideModal";
+import Notification from "./components/utils/Notification";
 
-import { useNotificationContext } from './hooks/useNotifications';
-import useRouteOnAuth from './hooks/useRouteOnAuth';
-import useDetermineModal from './hooks/useDetermineModal';
+import { useNotificationContext } from "./hooks/useNotifications";
+import useRouteOnAuth from "./hooks/useRouteOnAuth";
+import useDetermineModal from "./hooks/useDetermineModal";
 
-import { LINKS } from './constants/constants';
+import { LINKS } from "./constants/constants";
 
 function App() {
-  console.log('app');
+  console.log("app");
 
   const { notificationState } = useNotificationContext();
   const { admin } = useRouteOnAuth();
@@ -32,7 +32,7 @@ function App() {
           <Route path={`/register`} component={Register} />
         </Switch>
       )}
-      <div>
+      <div className="main">
         {admin && (
           <div>
             <Navbar />

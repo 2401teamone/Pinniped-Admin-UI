@@ -23,6 +23,8 @@ const determineOptions = (type) => {
       return { tableId: "", cascadeDelete: 0 };
     case "select":
       return { maxSelect: 1, options: [] };
+    case "creator":
+      return {};
     default:
       throw new Error("invalid type");
   }
@@ -37,7 +39,7 @@ export default function AddColumnBar({ dispatch }) {
 
     const newField = {
       tempId: generateID(),
-      name: "",
+      name: type === 'creator' ? "creatorId" : "",
       type,
       required: 0,
       options: determineOptions(type),

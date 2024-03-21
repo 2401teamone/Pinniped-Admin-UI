@@ -45,6 +45,13 @@
   --shadow-3: rgba(0, 0, 0, 0.16) 0px 1px 4px;
 }
 
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -67,8 +74,16 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
+#root {
+  min-height: 100%;
+}
+
 #app {
-  /* left navbar */
+  min-height: 100vh;
+
+  & .main {
+    min-height: inherit;
+  }
   & .navbar {
     position: fixed;
     height: 100vh;
@@ -131,7 +146,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
   /* core pages = data, observability, and settings */
   & .page {
-    height: 100vh;
+    min-height: 100vh;
     margin-left: var(--navbar-width);
     background-color: var(--background);
 
@@ -175,15 +190,21 @@ input[type="number"]::-webkit-outer-spin-button {
     }
 
     & .data-page {
+      min-height: 100vh;
       & .data-page-navbar {
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 30px;
         padding-top: 20px;
+        min-height: 100%;
       }
+
       & .data-page-content {
+        display: flex;
+        flex-direction: column;
         margin-left: var(--subnavbar-width);
+        min-height: 100vh;
 
         & .left {
           display: flex;
@@ -196,23 +217,39 @@ input[type="number"]::-webkit-outer-spin-button {
           }
         }
         & .table-wrapper {
-          /* overflow-x: auto; */
+          padding: 2px 0;
           & .table-container {
+            overflow-x: auto;
+            overflow-y: auto;
+            padding-bottom: 5px;
+
             & .table {
-              position: relative;
-              max-width: 100%;
+              min-width: max-content;
+              table-layout: fixed;
+              width: 100%;
+
+              border-collapse: collapse;
+
+              & th:last-child,
+              td:last-child {
+                position: sticky;
+                right: 0;
+                z-index: 10;
+                background-color: var(--background);
+              }
 
               & .thead {
                 top: 0;
+                position: sticky;
+                z-index: 50;
+                background-color: var(--background);
 
-                display: flex;
-                align-items: center;
-                height: 30px;
-                padding: 10px 0px;
-                border-bottom: 1px solid var(--pk);
-
-                & .select-row-header {
-                  min-width: 33px;
+                & tr {
+                  display: flex;
+                  align-items: center;
+                  height: 30px;
+                  padding: 10px 0px;
+                  border-bottom: 1px solid var(--pk);
                 }
 
                 & .th {
@@ -227,17 +264,18 @@ input[type="number"]::-webkit-outer-spin-button {
               & .tbody {
                 max-height: calc(100% - 30px);
 
-                position: relative;
+                /* position: relative; */
 
                 & .tr {
                   display: flex;
                   align-items: center;
                   border-bottom: 1px solid var(--pk);
                   cursor: pointer;
+                  height: 30px;
 
                   & .td {
                     position: relative;
-                    width: inherit;
+                    /* width: inherit; */
                     height: inherit;
 
                     display: flex;
@@ -295,18 +333,6 @@ input[type="number"]::-webkit-outer-spin-button {
                         color: gray;
                       }
                     }
-                    & .number {
-                    }
-                    & .bool {
-                    }
-                    & .date {
-                    }
-                    & .json {
-                    }
-                    & .select {
-                    }
-                    & .relation {
-                    }
 
                     & .created_at,
                     .updated_at {
@@ -348,6 +374,30 @@ input[type="number"]::-webkit-outer-spin-button {
       }
     }
   }
+}
+
+& .sticky-col {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  left: 0;
+  width: 40px;
+
+  padding-left: 10px;
+  background-color: var(--background);
+  z-index: 5;
+
+  border-bottom: 1px solid var(--pk);
+
+  &.shadow {
+    box-shadow: rgba(0, 0, 0, 0.06) 3px 0px 5px 0px;
+  }
+}
+
+& .right-arrow {
+  width: 50px;
+  text-align: center;
 }
 
 /* Side modal for handling all sorts of functionality */
@@ -690,7 +740,6 @@ input[type="number"]::-webkit-outer-spin-button {
 .size {
   min-width: 120px;
   width: 120px;
-  max-width: 120px;
 }
 
 .delete-btn {
@@ -1005,20 +1054,14 @@ input[type="number"]::-webkit-outer-spin-button {
     justify-content: start;
     flex-grow: 1;
     gap: 3px;
-
     width: inherit;
-
     padding: 5px;
-
     border: 1px solid var(--light-gray);
     border-radius: 2px;
 
     background-color: var(--secondary-background);
 
     &.inline {
-      display: inline-block;
-      /* width: max-content; */
-      /* width: 100px; */
     }
 
     &.editing {
@@ -1050,6 +1093,7 @@ input[type="number"]::-webkit-outer-spin-button {
         position: relative;
         min-height: inherit;
         min-width: inherit;
+        overflow: hidden;
 
         display: flex;
         align-items: center;
@@ -1271,14 +1315,20 @@ input[type="number"]::-webkit-outer-spin-button {
 .footer {
   display: flex;
   justify-content: space-between;
-  position: absolute;
+  margin-top: auto;
   bottom: 0;
   align-items: center;
   padding: 20px;
   width: calc(100% - var(--subnavbar-width) - var(--navbar-width));
   cursor: default;
-  background-color: inherit;
-  /* z-index: 1000000; */
+  max-height: 50px;
+  position: absolute;
+  background-color: var(--background);
+  z-index: 10000000000;
+
+  &.overlapping {
+    border-top: 1px solid var(--pk);
+  }
 
   & .content {
     font-weight: 600;
@@ -1436,7 +1486,7 @@ input[type="number"]::-webkit-outer-spin-button {
   border-radius: 20px;
   box-shadow: var(--shadow-3);
   padding: 0 20px;
-
+  z-index: 100000000000000000000;
   display: flex;
   justify-content: space-between;
   align-items: center;

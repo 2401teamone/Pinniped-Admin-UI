@@ -1,28 +1,29 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import Icon from '../utils/Icon';
-import ActionIcon from '../utils/ActionIcon';
-import ColumnOptions from './ColumnOptions';
+import Icon from "../utils/Icon";
+import ActionIcon from "../utils/ActionIcon";
+import ColumnOptions from "./ColumnOptions";
 
 export default function ColumnInput({ column, dispatch, tables }) {
   const [showOptions, setShowOptions] = useState(false);
 
   const updateColumn = (field, value) => {
     dispatch({
-      type: 'EDIT_COLUMN',
+      type: "EDIT_COLUMN",
       payload: { ...column, [field]: value },
     });
   };
 
   return (
-    <div className={`column-container ${showOptions && 'show-border'}`}>
+    <div className={`column-container ${showOptions && "show-border"}`}>
       <div className="column-input-container">
         <div className="column-input">
           <Icon column={column} />
           <input
             type="text"
             value={column.name}
-            onChange={(e) => updateColumn('name', e.target.value)}
+            onChange={(e) => updateColumn("name", e.target.value)}
+            disabled={column.type === "creator"}
           />
         </div>
         <ActionIcon onClick={() => setShowOptions((prev) => !prev)}>

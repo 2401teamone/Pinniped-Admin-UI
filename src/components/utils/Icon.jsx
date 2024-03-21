@@ -1,49 +1,53 @@
 const ICONS = {
-  pk: 'key',
-  text: 'text',
-  number: 'hashtag',
-  bool: 'check-square',
-  date: 'calendar',
-  email: 'envelope',
-  url: 'link',
-  select: 'list',
-  relation: 'arrows-repeat',
-  json: 'code',
+  pk: "key",
+  text: "text",
+  number: "hashtag",
+  bool: "check-square",
+  date: "calendar",
+  email: "envelope",
+  url: "link",
+  select: "list",
+  relation: "arrows-repeat",
+  json: "code",
+  creator: "user",
 };
 
 export default function Icon({ column }) {
   let icon;
 
   switch (column.type) {
-    case 'pk':
+    case "pk":
       icon = <i className={`fa-light fa-${ICONS.pk}`}></i>;
       break;
-    case 'text':
+    case "text":
       icon = <i className={`fa-light fa-${ICONS.text}`}></i>;
       break;
-    case 'number':
+    case "number":
       icon = <i className={`fa-light fa-${ICONS.number}`}></i>;
       break;
-    case 'bool':
+    case "bool":
       icon = <i className={`fa-light fa-${ICONS.bool}`}></i>;
       break;
-    case 'date':
+    case "date":
       icon = <i className={`fa-light fa-${ICONS.date}`}></i>;
       break;
-    case 'email':
+    case "email":
       icon = <i className={`fa-light fa-${ICONS.email}`}></i>;
       break;
-    case 'url':
+    case "url":
       icon = <i className={`fa-light fa-${ICONS.url}`}></i>;
       break;
-    case 'select':
+    case "select":
       icon = <i className={`fa-light fa-${ICONS.select}`}></i>;
       break;
-    case 'relation':
+    case "relation":
       icon = <i className={`fa-light fa-${ICONS.relation}`}></i>;
       break;
-    case 'json':
+    case "json":
       icon = <i className={`fa-light fa-${ICONS.json}`}></i>;
+      break;
+    case "creator":
+      icon = <i className={`fa-light fa-${ICONS.creator}`}></i>;
       break;
     default:
       icon = <div></div>;

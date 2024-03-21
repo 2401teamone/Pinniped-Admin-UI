@@ -47,5 +47,5 @@ export default function TableCell({ table, column, row }) {
       );
   }
 
-  return <div className="td size">{value === undefined ? "" : component}</div>;
+  return <td className="td size">{value === undefined ? "" : component}</td>;
 }
