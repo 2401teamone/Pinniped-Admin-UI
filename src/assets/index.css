@@ -242,7 +242,6 @@ input[type="number"]::-webkit-outer-spin-button {
                 min-width: 40px;
                 vertical-align: middle;
                 padding-left: 10px;
-                z-index: 15;
                 border-bottom: 1px solid var(--pk);
 
                 &.shadow {
@@ -265,8 +264,6 @@ input[type="number"]::-webkit-outer-spin-button {
                     color: var(--text-color);
                     cursor: pointer;
                     font-weight: 600;
-
-                    padding: 5px 8px;
                     vertical-align: middle;
 
                     &:hover {
@@ -283,6 +280,7 @@ input[type="number"]::-webkit-outer-spin-button {
                 & .tr {
                   border-bottom: 1px solid var(--pk);
                   cursor: pointer;
+                  z-index: 150;
 
                   &:hover {
                     background-color: var(--hover);
@@ -853,16 +851,12 @@ input[type="number"]::-webkit-outer-spin-button {
           align-items: center;
           gap: 3px;
           margin: 15px 0;
-          /* font-weight: 600; */
 
           & .system-field {
             padding: 2px 5px;
             background-color: var(--pk);
             border-radius: 5px;
           }
-        }
-        & .actual-columns {
-          /* overflow-y: scroll; */
         }
       }
 
@@ -1262,6 +1256,10 @@ input[type="number"]::-webkit-outer-spin-button {
             }
 
             &:hover {
+              background-color: var(--hover);
+            }
+
+            &.highlight {
               background-color: var(--hover);
             }
 

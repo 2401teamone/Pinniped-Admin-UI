@@ -25,12 +25,12 @@ export default function Field({
   setTriggerValidation,
   validateOnBlur = true,
   config = {
-    required: false,
     inline: false,
     preventSpaces: false,
   },
   options,
   children,
+  required = false,
   disable = false,
   tabIndex = true,
   focusOnMount = false,
@@ -48,9 +48,39 @@ export default function Field({
     return option ? option.label : value;
   };
 
+  const handleRequiredField = useCallback((type, val) => {
+    switch (type) {
+      case "text":
+      case "number":
+      case "password":
+      case "email":
+      case "url":
+      case "date":
+      case "json":
+        return val === "";
+      case "relation":
+        console.log("REQUIRED RELATION CHECKING", val);
+        return val === null;
+      case "csv":
+      case "select":
+        return val.length === 0;
+      default:
+        return false;
+    }
+  }, []);
+
   const handleValidation = useCallback(
     (val) => {
       if (validator) {
+        if (required) {
+          console.log("CHECKING REQUIRED", label, val);
+          const requiredError = handleRequiredField(type, val);
+          if (requiredError) {
+            setError("This field is required");
+            return false;
+          }
+        }
+
         const errorMessage = validator(val);
         if (errorMessage) {
           setError(errorMessage);
@@ -60,7 +90,7 @@ export default function Field({
       setError("");
       return true;
     },
-    [validator]
+    [validator, required, handleRequiredField, type]
   );
 
   useEffect(() => {
@@ -83,13 +113,19 @@ export default function Field({
   useEffect(() => {
     const handler = (e) => {
       e.stopPropagation();
-
       if (e.key.toLowerCase() === "tab" && editing) {
         const inputEl = fieldRef.current.querySelector(".field-input");
         if (inputEl) {
           inputEl.blur();
         }
         setEditing(false);
+      }
+
+      if (e.key === " " && type === "bool") {
+        // e.preventDefault();
+        // const boolEl = fieldRef.current.querySelector(".field-bool-toggle");
+        // boolEl.click();
+        // return;
       }
 
       if (
@@ -204,6 +240,7 @@ export default function Field({
           handleSubmit={handleSubmit}
           setEditing={setEditing}
           options={options}
+          handleValidation={handleValidation}
         />
       );
       break;
@@ -230,6 +267,11 @@ export default function Field({
           fieldRef.current.click();
         }
       }}
+      onKeyPress={(e) => {
+        if (type === "bool" && e.key === " ") {
+          console.log("hitttttt");
+        }
+      }}
     >
       <div
         className={`field ${config.inline === true && "inline"} ${
@@ -242,7 +284,7 @@ export default function Field({
               {label}
             </Type>
           )}
-          {config.required && <span className="required">*</span>}
+          {required === 1 && <span className="required">*</span>}
         </label>
         <div className="content">
           {type === "bool" ? (

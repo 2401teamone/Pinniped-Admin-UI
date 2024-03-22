@@ -31,6 +31,7 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
                 label={column.name}
                 type={column.type}
                 value={rowState[column.name]}
+                required={column.required}
                 onChange={(val) => {
                   console.log(val, "changing");
                   setRowState((prevState) => {
@@ -42,23 +43,34 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
                 }}
                 handleSubmit={async (updatedVal) => {
                   console.log("update", updatedVal);
-                  const data = await api.updateOne(table.id, row.id, {
-                    [column.name]: updatedVal,
-                  });
-                  const rowId = data.row.id;
-                  setRows((prev) => {
-                    return prev.map((row) => {
-                      if (row.id === rowId) {
-                        return data.row;
-                      }
-                      return row;
+                  api
+                    .updateOne(table.id, row.id, {
+                      [column.name]: updatedVal,
+                    })
+                    .then((data) => {
+                      const rowId = data.row.id;
+                      setRows((prev) => {
+                        return prev.map((row) => {
+                          if (row.id === rowId) {
+                            return data.row;
+                          }
+                          return row;
+                        });
+                      });
+
+                      showStatus(
+                        `Updated ${row.id}'s ${column.name} to ${updatedVal}`
+                      );
+                    })
+                    .catch((err) => {
+                      showError(
+                        `Failed to update column: ${err.response.data.message}`
+                      );
                     });
-                  });
                 }}
                 validator={(val) => {
                   const validatorFn = getValidator(column.type);
                   if (validatorFn) {
-                    console.log(validatorFn, "HEREE");
                     const errorMessage = validatorFn(val, column.options);
                     if (errorMessage) {
                       return errorMessage;
@@ -74,6 +86,11 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
           );
         })}
       </div>
+      <FormFooter>
+        <Button type="primary" onClick={closeModal}>
+          Exit
+        </Button>
+      </FormFooter>
     </div>
   );
 }

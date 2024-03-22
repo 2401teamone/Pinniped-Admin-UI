@@ -1,7 +1,12 @@
+import { useRef } from "react";
+
 export default function Bool({ value, onChange, handleSubmit }) {
+  const boolRef = useRef(null);
+
   return (
     <div className="field-bool">
       <div
+        ref={boolRef}
         className={`field-bool-toggle ${value ? "active" : ""}`}
         onClick={() => {
           console.log("clicking bool");

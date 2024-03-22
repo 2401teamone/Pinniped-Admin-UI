@@ -47,11 +47,8 @@ export default function RowForm({ table, setRows, closeModal, row }) {
     console.log(formState, errors, "SUBMITTING");
     if (errors.length) {
       showError("Invalid form inputs");
-      console.log("error: ", errors);
       return;
     }
-
-    console.log(formState, "FORMSTATE");
 
     if (isNewRow) {
       api
@@ -64,7 +61,7 @@ export default function RowForm({ table, setRows, closeModal, row }) {
         })
         .catch((err) => {
           console.log(err);
-          showError("Invalid form inputs");
+          showError(`Invalid form inputs: ${err.response.data.message})`);
         });
     }
   };
@@ -101,7 +98,6 @@ export default function RowForm({ table, setRows, closeModal, row }) {
           type="primary"
           onClick={(e) => {
             e.preventDefault();
-            console.log("closing");
             closeModal();
           }}
         >
