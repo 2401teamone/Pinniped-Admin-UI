@@ -74,6 +74,20 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
+body::-webkit-scrollbar {
+  width: 12px; /* width of the entire scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+  background: orange; /* color of the tracking area */
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: blue; /* color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+  border: 3px solid orange; /* creates padding around scroll thumb */
+}
+
 #root {
   min-height: 100%;
 }
@@ -218,16 +232,38 @@ input[type="number"]::-webkit-outer-spin-button {
         }
         & .table-wrapper {
           padding: 2px 0;
+          width: 100%;
           & .table-container {
+            width: 100%;
             overflow: auto;
-            /* overflow: visible; */
             padding-bottom: 5px;
+
+            & .no-rows-container {
+              margin-top: 20px;
+              width: 100%;
+              display: flex;
+              justify-content: center;
+                & .no-rows {
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+                  gap: 30px;
+                  width: 200px;
+
+                  & .no-rows-message {
+                    font-size: 1.3rem;
+                    color: var(--text-color);
+                  
+                  }
+                }
+              }
+            }
 
             & .table {
               table-layout: auto;
               width: 100%;
               border-collapse: collapse;
-              overflow: visible;
 
               & th:last-child,
               th:first-child,
@@ -236,16 +272,20 @@ input[type="number"]::-webkit-outer-spin-button {
                 position: sticky;
                 left: 0;
                 right: 0;
-                z-index: 10;
                 background-color: var(--background);
                 width: 40px;
                 min-width: 40px;
                 vertical-align: middle;
                 padding-left: 10px;
                 border-bottom: 1px solid var(--pk);
+                z-index: 15;
 
                 &.shadow {
-                  box-shadow: 10px 0 5px -5px rgba(0, 0, 0, 0.5);
+                  /* background-color: var(--sage); */
+                }
+
+                &.hovering {
+                  background-color: var(--secondary-background);
                 }
               }
 
@@ -266,10 +306,6 @@ input[type="number"]::-webkit-outer-spin-button {
                     font-weight: 600;
                     vertical-align: middle;
 
-                    &:hover {
-                      background-color: var(--hover);
-                    }
-
                     & span {
                       margin-right: 10px;
                     }
@@ -282,8 +318,8 @@ input[type="number"]::-webkit-outer-spin-button {
                   cursor: pointer;
                   z-index: 150;
 
-                  &:hover {
-                    background-color: var(--hover);
+                  &.hovering {
+                    background-color: var(--secondary-background);
                   }
 
                   & .right-arrow {
