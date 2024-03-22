@@ -66,7 +66,7 @@ export default function Table({ table, rows, setRows }) {
       <div className="table-container" ref={tableRef}>
         <table className="table">
           <thead className="thead">
-            <tr>
+            <tr className="tr">
               <th
                 className={`select-row-header sticky-col ${
                   tableIsScrolled && "shadow"
