@@ -537,16 +537,16 @@ input[type="number"]::-webkit-outer-spin-button {
   font-weight: 600;
   display: flex;
   flex-wrap: no-wrap;
-  /* min-width: 115px; */
+  justify-content: center;
   height: 30px;
-
-  &:active {
-    transform: scale(0.95);
-  }
 
   &:focus {
     outline: 2px dashed var(--green);
     outline-offset: 3px;
+  }
+  &:active {
+    transform: scale(0.95);
+    outline: none;
   }
 
   &.primary {

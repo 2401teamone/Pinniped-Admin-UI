@@ -129,6 +129,13 @@ export default function TableForm({
         errors.push("Column names must be unique.");
       }
 
+      for (let col of schema.columns) {
+        if (col.type !== "relation") continue;
+        if (!col.options.tableId) {
+          errors.push("Relation columns must have a table selected.");
+        }
+      }
+
       return errors;
     };
 
@@ -163,16 +170,14 @@ export default function TableForm({
       }
       showStatus(`Table successfully ${isNew() ? "created" : "edited"}`);
       closeModal();
-      setLocation(`/data?table=${clone.name}`);
+      setLocation(`/_/data?table=${clone.name}`);
     } catch (err) {
-      console.log(err);
       showError(`Invalid inputs: ${err.response.data.message}`);
       addTempIds(schema.columns);
     }
   };
 
   useEffect(() => {
-    console.log("SETTING TEMP IDS");
     if (!isNew()) {
       addTempIds(schema.columns);
     }

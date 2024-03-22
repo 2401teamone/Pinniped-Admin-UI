@@ -1,4 +1,4 @@
-import { Route, Switch } from "wouter";
+import { Router, Route, Switch } from "wouter";
 
 import Navbar from "./components/Navbar";
 
@@ -32,8 +32,10 @@ function App() {
     <div id="app">
       {!admin && (
         <Switch>
-          <Route path={`/login`} component={Login} />
-          <Route path={`/register`} component={Register} />
+          <Router base="/_">
+            <Route path={`/login`} component={Login} />
+            <Route path={`/register`} component={Register} />
+          </Router>
         </Switch>
       )}
       <div className="main">
@@ -42,12 +44,14 @@ function App() {
             <Navbar />
             <div className="page">
               <Switch>
-                <Route path={`/${LINKS.data}`} component={Data} />
-                <Route
-                  path={`/${LINKS.observability}`}
-                  component={Observability}
-                />
-                <Route path={`/${LINKS.settings}`} component={Settings} />
+                <Router base="/_">
+                  <Route path={`/${LINKS.data}`} component={Data} />
+                  <Route
+                    path={`/${LINKS.observability}`}
+                    component={Observability}
+                  />
+                  <Route path={`/${LINKS.settings}`} component={Settings} />
+                </Router>
               </Switch>
             </div>
           </div>

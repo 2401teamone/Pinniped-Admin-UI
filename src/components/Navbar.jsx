@@ -1,22 +1,28 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { Link, useLocation } from 'wouter';
+import { Link, useLocation } from "wouter";
 
-import { useAuthContext } from '../hooks/useAuth';
+import { useAuthContext } from "../hooks/useAuth";
 
-import ActionIcon from './utils/ActionIcon';
+import ActionIcon from "./utils/ActionIcon";
 
-import { LINKS } from '../constants/constants.js';
+import { LINKS } from "../constants/constants.js";
 
-import pinnipedIcon from '../assets/images/pinniped_icon.png';
+import pinnipedIcon from "../assets/images/pinniped_icon.png";
 
 export default function Navbar() {
-  const [hovering, setHovering] = useState('');
+  const [hovering, setHovering] = useState("");
 
   const location = useLocation();
-  const baseLocation = [...location][0].split('/')[1];
+  const path = [...location][0].split("/");
+  const baseLocation = path[0] + "/" + path[1];
 
   const { logout } = useAuthContext();
+
+  const LINKS_WITH_BASE = {};
+  Object.values(LINKS).forEach((val) => {
+    LINKS_WITH_BASE[val] = `_${val}`;
+  });
 
   return (
     <nav className="navbar">
@@ -24,50 +30,50 @@ export default function Navbar() {
         <img src={pinnipedIcon} alt="logo" width="45px" height="45px" />
       </div>
       <Link
-        to="/data"
+        to="/_/data"
         className={`
           link 
-          ${baseLocation === LINKS.data ? 'active' : ''} 
+          ${path === "/_/data" ? "active" : ""} 
           ${
             hovering === LINKS.data && baseLocation !== LINKS.data
-              ? 'hovering'
-              : ''
+              ? "hovering"
+              : ""
           }`}
         onMouseOver={() => setHovering(LINKS.data)}
-        onMouseLeave={() => setHovering('')}
+        onMouseLeave={() => setHovering("")}
       >
         <i className="fa-regular fa-database"></i>
       </Link>
       <Link
-        to="/observability"
+        to="/_/observability"
         className={`
           link 
-          ${baseLocation === LINKS.observability ? 'active' : ''} 
+          ${baseLocation === LINKS_WITH_BASE.observability ? "active" : ""} 
           ${
             hovering === LINKS.observability &&
             baseLocation !== LINKS.observability
-              ? 'hovering'
-              : ''
+              ? "hovering"
+              : ""
           }
         `}
         onMouseOver={() => setHovering(LINKS.observability)}
-        onMouseLeave={() => setHovering('')}
+        onMouseLeave={() => setHovering("")}
       >
         <i className="fa-regular fa-chart-line"></i>
       </Link>
       <Link
-        to="/settings"
+        to="/_/settings"
         className={`
           link 
-          ${baseLocation === LINKS.settings ? 'active' : ''}
+          ${baseLocation === LINKS_WITH_BASE.settings ? "active" : ""}
           ${
             hovering === LINKS.settings && baseLocation !== LINKS.settings
-              ? 'hovering'
-              : ''
+              ? "hovering"
+              : ""
           }
         `}
         onMouseOver={() => setHovering(LINKS.settings)}
-        onMouseLeave={() => setHovering('')}
+        onMouseLeave={() => setHovering("")}
       >
         <i className="fa-regular fa-gear"></i>
       </Link>

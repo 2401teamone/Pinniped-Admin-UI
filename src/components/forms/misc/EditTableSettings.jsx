@@ -1,10 +1,10 @@
-import Settings from '../../utils/Settings';
+import Settings from "../../utils/Settings";
 
-import api from '../../../api/api.js';
+import api from "../../../api/api.js";
 
-import { useNotificationContext } from '../../../hooks/useNotifications';
+import { useNotificationContext } from "../../../hooks/useNotifications";
 
-import { useLocation } from 'wouter';
+import { useLocation } from "wouter";
 
 export default function EditTableSettings({ tableId, setTables, closeModal }) {
   const {
@@ -22,13 +22,12 @@ export default function EditTableSettings({ tableId, setTables, closeModal }) {
             .dropTable(tableId)
             .then(() => {
               setTables((prev) => prev.filter((t) => t.id !== tableId));
-              setLocation('/data');
+              setLocation("/_/data");
               closeModal();
             })
             .catch((err) => {
               console.log(err);
               showError(err.response.data.message);
-              // setIsOpen(false);
             });
         }}
       >
