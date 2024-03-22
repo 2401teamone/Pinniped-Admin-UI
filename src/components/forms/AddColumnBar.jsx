@@ -39,7 +39,8 @@ export default function AddColumnBar({ dispatch }) {
 
     const newField = {
       tempId: generateID(),
-      name: type === 'creator' ? "creatorId" : "",
+      name: type === "creator" ? "creator" : "",
+      system: type === "creator" ? true : false,
       type,
       required: 0,
       options: determineOptions(type),

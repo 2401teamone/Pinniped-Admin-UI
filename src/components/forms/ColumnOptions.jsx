@@ -1,9 +1,26 @@
 import Settings from "../utils/Settings";
 import Field from "./fields/Field.jsx";
 
-export default function ColumnOptions({ column, dispatch, tables }) {
+import { useConfirmModalContext } from "../../hooks/useConfirmModal";
+
+const creatorRuleExists = (schema) => {
+  const { getAllRule, getOneRule, createRule, updateRule, deleteRule } = schema;
+  return [getAllRule, getOneRule, createRule, updateRule, deleteRule].includes(
+    "creator"
+  );
+};
+
+export default function ColumnOptions({ schema, column, dispatch, tables }) {
+  const {
+    actionCreators: { open },
+  } = useConfirmModalContext();
+
   const removeColumn = () => {
-    dispatch({ type: "REMOVE_COLUMN", payload: column.tempId });
+    if (column.type === "creator" && creatorRuleExists(schema)) {
+      open("You need to adjust your API Rules to remove creator constraints.");
+    } else {
+      dispatch({ type: "REMOVE_COLUMN", payload: column.tempId });
+    }
   };
   let columnOptions = null;
 

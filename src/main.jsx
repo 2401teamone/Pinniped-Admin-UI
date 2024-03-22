@@ -1,20 +1,23 @@
-import { createRoot } from 'react-dom/client';
+import { createRoot } from "react-dom/client";
 
-import App from './App.jsx';
+import App from "./App.jsx";
 
-import './assets/reset.css';
-import './assets/index.css';
+import "./assets/reset.css";
+import "./assets/index.css";
 
-import { ModalProvider } from './hooks/useModal.jsx';
-import { NotificationProvider } from './hooks/useNotifications.jsx';
-import { AuthProvider } from './hooks/useAuth.jsx';
+import { ModalProvider } from "./hooks/useModal.jsx";
+import { NotificationProvider } from "./hooks/useNotifications.jsx";
+import { ConfirmModalProvider } from "./hooks/useConfirmModal.jsx";
+import { AuthProvider } from "./hooks/useAuth.jsx";
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <NotificationProvider>
     <AuthProvider>
-      <ModalProvider>
-        <App />
-      </ModalProvider>
+      <ConfirmModalProvider>
+        <ModalProvider>
+          <App />
+        </ModalProvider>
+      </ConfirmModalProvider>
     </AuthProvider>
   </NotificationProvider>
 );

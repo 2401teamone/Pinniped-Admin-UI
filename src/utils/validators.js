@@ -9,12 +9,12 @@ export const validateText = (val, { minLength, maxLength }) => {
   if (val.length > maxLength) {
     return `Must be less than ${maxLength} characters`;
   }
-  return '';
+  return "";
 };
 
 export const validateNumber = (val, { min, max }) => {
   if (isNaN(val)) {
-    return 'Must be a number';
+    return "Must be a number";
   }
   if (val < min) {
     return `Must be at least ${min}`;
@@ -22,27 +22,27 @@ export const validateNumber = (val, { min, max }) => {
   if (val > max) {
     return `Must be less than ${max}`;
   }
-  return '';
+  return "";
 };
 
 export const validateBool = (val) => {
-  if (val !== 'true' && val !== 'false') {
-    return 'Must be true or false';
+  if (val !== "true" && val !== "false") {
+    return "Must be true or false";
   }
-  return '';
+  return "";
 };
 
 export const validateSelect = (val, { maxSelect, options }) => {
   if (!Array.isArray(val)) {
-    return 'Option is not in correct format';
+    return "Option is not in correct format";
   }
   if (val.length > maxSelect) {
     return `Can select at most ${maxSelect} option(s)`;
   }
   if (val.some((v) => !options.includes(v))) {
-    return 'Invalid option selected';
+    return "Invalid option selected";
   }
-  return '';
+  return "";
 };
 
 export const validateJson = (val, { maxSize }) => {
@@ -52,63 +52,69 @@ export const validateJson = (val, { maxSize }) => {
   try {
     JSON.parse(val);
   } catch (e) {
-    return 'Invalid JSON';
+    return "Invalid JSON";
   }
-  return '';
+  return "";
 };
 
 export const validateDate = (val) => {
   if (isNaN(Date.parse(val))) {
-    return 'Invalid date';
+    return "Invalid date";
   }
-  return '';
+  return "";
 };
 
 export const validateEmail = (val) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(val)) {
-    return 'Invalid email';
+    return "Invalid email";
   }
-  return '';
+  return "";
 };
 
 export const validateUrl = (val) => {
   const urlRegex = /^(http|https):\/\/[^ "]+$/;
   if (!urlRegex.test(val)) {
-    return 'Invalid url';
+    return "Invalid url";
   }
-  return '';
+  return "";
 };
 
 export const validateRelation = (val, { tableId, cascadeDelete }) => {
-  if (typeof val !== 'string') {
-    return 'Invalid input';
+  if (typeof val !== "string") {
+    return "Invalid input";
   }
 
-  return '';
+  return "";
+};
+
+export const validateCreator = () => {
+  return "";
 };
 
 export default function getValidator(type) {
   switch (type) {
-    case 'text':
+    case "text":
       return validateText;
-    case 'number':
+    case "number":
       return validateNumber;
-    case 'bool':
+    case "bool":
       return validateBool;
-    case 'date':
+    case "date":
       return validateDate;
-    case 'email':
+    case "email":
       return validateEmail;
-    case 'url':
+    case "url":
       return validateUrl;
-    case 'select':
+    case "select":
       return validateSelect;
-    case 'json':
+    case "json":
       return validateJson;
-    case 'relation':
+    case "relation":
       return validateRelation;
+    case "creator":
+      return validateCreator;
     default:
-      throw new Error('Invalid type');
+      throw new Error("Invalid type");
   }
 }
