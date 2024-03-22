@@ -53,7 +53,7 @@ export default function TableRow({
           column={{ type: "updated_at", name: "updated_at" }}
           row={row}
         />
-        <td className="right-arrow">{`->`}</td>
+        <td className="sticky-col right-arrow">{`->`}</td>
       </tr>
     )
   );

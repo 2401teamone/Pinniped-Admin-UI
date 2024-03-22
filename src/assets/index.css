@@ -219,16 +219,15 @@ input[type="number"]::-webkit-outer-spin-button {
         & .table-wrapper {
           padding: 2px 0;
           & .table-container {
-            overflow-x: auto;
-            overflow-y: auto;
+            overflow: auto;
+            /* overflow: visible; */
             padding-bottom: 5px;
 
             & .table {
-              min-width: max-content;
-              table-layout: fixed;
+              table-layout: auto;
               width: 100%;
-
               border-collapse: collapse;
+              overflow: visible;
 
               & th:last-child,
               td:last-child {
@@ -243,61 +242,44 @@ input[type="number"]::-webkit-outer-spin-button {
                 position: sticky;
                 z-index: 50;
                 background-color: var(--background);
+                border-bottom: 1px solid var(--pk);
 
-                & tr {
-                  display: flex;
-                  align-items: center;
-                  height: 30px;
-                  padding: 10px 0px;
-                  border-bottom: 1px solid var(--pk);
-                }
+                & .tr {
+                  height: 25px;
+                  & .th {
+                    text-align: left;
+                    color: var(--text-color);
+                    cursor: pointer;
+                    font-weight: 600;
 
-                & .th {
-                  display: flex;
-                  flex-direction: row;
-                  gap: 10px;
+                    padding: 5px 8px;
+                    vertical-align: middle;
 
-                  color: var(--text-color);
-                  font-weight: 600;
+                    &:hover {
+                      background-color: var(--hover);
+                    }
+
+                    & span {
+                      margin-right: 10px;
+                    }
+                  }
                 }
               }
               & .tbody {
-                max-height: calc(100% - 30px);
-
-                /* position: relative; */
-
                 & .tr {
-                  display: flex;
-                  align-items: center;
                   border-bottom: 1px solid var(--pk);
                   cursor: pointer;
-                  height: 30px;
 
                   & .td {
-                    position: relative;
-                    /* width: inherit; */
-                    height: inherit;
-
-                    display: flex;
-                    align-items: center;
-
-                    /* padding: 3px; */
-
-                    cursor: pointer;
-
-                    & .static {
-                      width: inherit;
-                      height: inherit;
-                      display: flex;
-                      align-items: center;
-                    }
-
+                    vertical-align: middle;
+                    min-width: 100px;
                     & .pk {
+                      width: min-content;
                       cursor: default;
                       position: relative;
                       display: flex;
                       gap: 10px;
-                      padding: 4px 10px;
+                      padding: 4px 7px;
                       border-radius: 30px;
                       background-color: var(--pk);
 
@@ -377,12 +359,11 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 & .sticky-col {
-  height: 30px;
-  display: flex;
-  align-items: center;
   position: sticky;
   left: 0;
   width: 40px;
+  min-width: 40px;
+  vertical-align: middle;
 
   padding-left: 10px;
   background-color: var(--background);
@@ -778,8 +759,9 @@ input[type="number"]::-webkit-outer-spin-button {
 .panel {
   position: absolute;
   width: 100%;
-  z-index: 70;
+  z-index: 200;
   background-color: inherit;
+  /* overflow-y: scroll; */
 
   &.left {
     left: 0px;
@@ -789,11 +771,6 @@ input[type="number"]::-webkit-outer-spin-button {
     left: -40px;
     top: 20px;
   }
-}
-
-.size {
-  min-width: 120px;
-  width: 120px;
 }
 
 .delete-btn {
@@ -846,7 +823,6 @@ input[type="number"]::-webkit-outer-spin-button {
     padding: 20px var(--modal-padding) 10px var(--modal-padding);
 
     & .table-form-header {
-      /* padding: 20px; */
       font-size: 1.3rem;
       font-weight: 800;
     }
@@ -1146,7 +1122,7 @@ input[type="number"]::-webkit-outer-spin-button {
       & .content-display {
         position: relative;
         min-height: inherit;
-        min-width: inherit;
+        min-width: 100%;
         overflow: hidden;
 
         display: flex;
