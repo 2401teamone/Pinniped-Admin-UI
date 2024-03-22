@@ -43,8 +43,6 @@ export default function Field({
   let displayComponent = null;
   let editComponent = null;
 
-  console.log("rendering field");
-
   const handleSelectFormatting = (options) => {
     const option = options.find((option) => option.val === value);
     return option ? option.label : value;
@@ -68,30 +66,30 @@ export default function Field({
   useEffect(() => {
     const el = fieldRef.current;
     const handler = (e) => {
-      if (!editing) {
+      if (!editing && !disable) {
         e.stopPropagation();
         setEditing(true);
-        console.log("field clicked", label);
       }
     };
+    if (type !== "bool") {
+      el.addEventListener("click", handler, true);
 
-    el.addEventListener("click", handler, true);
-
-    return () => {
-      el.removeEventListener("click", handler, true);
-    };
-  }, [label, editing]);
+      return () => {
+        el.removeEventListener("click", handler, true);
+      };
+    }
+  }, [label, editing, disable, type]);
 
   useEffect(() => {
     const handler = (e) => {
       e.stopPropagation();
 
       if (e.key.toLowerCase() === "tab" && editing) {
+        const inputEl = fieldRef.current.querySelector(".field-input");
+        if (inputEl) {
+          inputEl.blur();
+        }
         setEditing(false);
-      }
-
-      if (e.key === "Enter" && type === "input") {
-        return;
       }
 
       if (
@@ -119,7 +117,6 @@ export default function Field({
 
   useEffect(() => {
     if (triggerValidation) {
-      console.log("validating due to external action");
       handleValidation(value);
       setTriggerValidation(false);
     }
@@ -229,7 +226,6 @@ export default function Field({
       tabIndex={tabIndex ? "0" : "-1"}
       onFocus={(e) => {
         if (!editing) {
-          console.log("field focused", label);
           e.stopPropagation();
           fieldRef.current.click();
         }

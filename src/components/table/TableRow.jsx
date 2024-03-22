@@ -17,7 +17,7 @@ export default function TableRow({
 
   return (
     table && (
-      <tr className="tr">
+      <tr className="tr" onClick={() => editRecord({ table, row, setRows })}>
         <td
           className={`select-row-header sticky-col ${
             tableIsScrolled && "shadow"
@@ -60,7 +60,6 @@ export default function TableRow({
           row={row}
         />
         <td className="sticky-col right-arrow">{`->`}</td>
-        <td onClick={() => editRecord({ table, row, setRows })}>x</td>
       </tr>
     )
   );

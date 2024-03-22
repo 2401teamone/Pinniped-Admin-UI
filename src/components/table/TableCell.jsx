@@ -43,6 +43,7 @@ export default function TableCell({ table, column, row }) {
           }}
           options={column.options}
           tabIndex={false}
+          disable={true}
         />
       );
   }

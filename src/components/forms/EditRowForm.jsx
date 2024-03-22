@@ -20,7 +20,7 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
   return (
     <div className="row-form-container">
       <h2 className="row-form-header">
-        Edit<span>{table.name}</span> Row
+        Edit <span>{table.name}</span> Row <span>{row.id}</span>
       </h2>
       <div className="row-form">
         {table.columns.map((column) => {
@@ -30,7 +30,7 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
               <Field
                 label={column.name}
                 type={column.type}
-                value={row[column.name]}
+                value={rowState[column.name]}
                 onChange={(val) => {
                   console.log(val, "changing");
                   setRowState((prevState) => {
@@ -45,7 +45,27 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
                   const data = await api.updateOne(table.id, row.id, {
                     [column.name]: updatedVal,
                   });
-                  console.log(data.row);
+                  const rowId = data.row.id;
+                  setRows((prev) => {
+                    return prev.map((row) => {
+                      if (row.id === rowId) {
+                        return data.row;
+                      }
+                      return row;
+                    });
+                  });
+                }}
+                validator={(val) => {
+                  const validatorFn = getValidator(column.type);
+                  if (validatorFn) {
+                    console.log(validatorFn, "HEREE");
+                    const errorMessage = validatorFn(val, column.options);
+                    if (errorMessage) {
+                      return errorMessage;
+                    }
+                  }
+
+                  return "";
                 }}
                 options={column.options}
                 tabIndex={true}

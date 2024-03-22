@@ -16,7 +16,7 @@ const generateInitialState = (columns) => {
     .reduce((acc, column) => {
       switch (column.type) {
         case "bool":
-          acc[column.name] = false;
+          acc[column.name] = 0;
           break;
         case "date":
           acc[column.name] = new Date().toISOString().split("T")[0];

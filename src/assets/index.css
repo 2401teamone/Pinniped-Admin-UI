@@ -230,11 +230,24 @@ input[type="number"]::-webkit-outer-spin-button {
               overflow: visible;
 
               & th:last-child,
+              th:first-child,
+              td:first-child,
               td:last-child {
                 position: sticky;
+                left: 0;
                 right: 0;
                 z-index: 10;
                 background-color: var(--background);
+                width: 40px;
+                min-width: 40px;
+                vertical-align: middle;
+                padding-left: 10px;
+                z-index: 15;
+                border-bottom: 1px solid var(--pk);
+
+                &.shadow {
+                  box-shadow: 10px 0 5px -5px rgba(0, 0, 0, 0.5);
+                }
               }
 
               & .thead {
@@ -246,6 +259,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
                 & .tr {
                   height: 25px;
+
                   & .th {
                     text-align: left;
                     color: var(--text-color);
@@ -269,6 +283,15 @@ input[type="number"]::-webkit-outer-spin-button {
                 & .tr {
                   border-bottom: 1px solid var(--pk);
                   cursor: pointer;
+
+                  &:hover {
+                    background-color: var(--hover);
+                  }
+
+                  & .right-arrow {
+                    width: 50px;
+                    text-align: center;
+                  }
 
                   & .td {
                     vertical-align: middle;
@@ -359,26 +382,6 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 & .sticky-col {
-  position: sticky;
-  left: 0;
-  width: 40px;
-  min-width: 40px;
-  vertical-align: middle;
-
-  padding-left: 10px;
-  background-color: var(--background);
-  z-index: 5;
-
-  border-bottom: 1px solid var(--pk);
-
-  &.shadow {
-    box-shadow: rgba(0, 0, 0, 0.06) 3px 0px 5px 0px;
-  }
-}
-
-& .right-arrow {
-  width: 50px;
-  text-align: center;
 }
 
 & .modal-container {
@@ -1063,16 +1066,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
     & .field {
       background-color: var(--editing-background);
-
-      & .field-bool {
-        outline: 1px solid var(--light-gray);
-        padding: 5px;
-      }
     }
-
-    /* &:first-child {
-      background-color: var(--editing-background);
-    } */
   }
 
   & * {
@@ -1088,11 +1082,7 @@ input[type="number"]::-webkit-outer-spin-button {
     padding: 5px;
     border: 1px solid var(--light-gray);
     border-radius: 2px;
-
     background-color: var(--secondary-background);
-
-    &.inline {
-    }
 
     &.editing {
       background-color: var(--editing-background);
@@ -1107,10 +1097,6 @@ input[type="number"]::-webkit-outer-spin-button {
       padding: 3px;
       border: none;
       background-color: inherit;
-
-      &:hover {
-        background-color: var(--hover);
-      }
     }
 
     & .content {
