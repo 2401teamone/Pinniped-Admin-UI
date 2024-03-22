@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 
+import { useModalContext } from "../../hooks/useModal";
 import api from "../../api/api.js";
 
 import TH from "./TableHead";
 import TableRow from "./TableRow";
 import ActionBox from "../utils/ActionBox";
+import Button from "../utils/Button";
 
 // add search
 
@@ -13,6 +15,10 @@ export default function Table({ table, rows, setRows }) {
   const [tableIsScrolled, setTableIsScrolled] = useState(false);
 
   const tableRef = useRef();
+
+  const {
+    actionCreators: { addRecord },
+  } = useModalContext();
 
   useEffect(() => {
     async function getRows() {
@@ -99,6 +105,19 @@ export default function Table({ table, rows, setRows }) {
               })}
           </tbody>
         </table>
+        {!rows.length && (
+          <div className="no-rows-container">
+            <div className="no-rows">
+              <div className="no-rows-message">No rows for this table</div>
+              <Button
+                type="inherit"
+                onClick={() => addRecord({ table, setRows })}
+              >
+                + Add Row
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       <ActionBox

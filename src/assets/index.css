@@ -74,6 +74,20 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
+body::-webkit-scrollbar {
+  width: 12px; /* width of the entire scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+  background: orange; /* color of the tracking area */
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: blue; /* color of the scroll thumb */
+  border-radius: 20px; /* roundness of the scroll thumb */
+  border: 3px solid orange; /* creates padding around scroll thumb */
+}
+
 #root {
   min-height: 100%;
 }
@@ -218,23 +232,61 @@ input[type="number"]::-webkit-outer-spin-button {
         }
         & .table-wrapper {
           padding: 2px 0;
+          width: 100%;
           & .table-container {
+            width: 100%;
             overflow: auto;
-            /* overflow: visible; */
             padding-bottom: 5px;
+
+            & .no-rows-container {
+              margin-top: 20px;
+              width: 100%;
+              display: flex;
+              justify-content: center;
+                & .no-rows {
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: center;
+                  align-items: center;
+                  gap: 30px;
+                  width: 200px;
+
+                  & .no-rows-message {
+                    font-size: 1.3rem;
+                    color: var(--text-color);
+                  
+                  }
+                }
+              }
+            }
 
             & .table {
               table-layout: auto;
               width: 100%;
               border-collapse: collapse;
-              overflow: visible;
 
               & th:last-child,
+              th:first-child,
+              td:first-child,
               td:last-child {
                 position: sticky;
+                left: 0;
                 right: 0;
-                z-index: 10;
                 background-color: var(--background);
+                width: 40px;
+                min-width: 40px;
+                vertical-align: middle;
+                padding-left: 10px;
+                border-bottom: 1px solid var(--pk);
+                z-index: 15;
+
+                &.shadow {
+                  /* background-color: var(--sage); */
+                }
+
+                &.hovering {
+                  background-color: var(--secondary-background);
+                }
               }
 
               & .thead {
@@ -246,18 +298,13 @@ input[type="number"]::-webkit-outer-spin-button {
 
                 & .tr {
                   height: 25px;
+
                   & .th {
                     text-align: left;
                     color: var(--text-color);
                     cursor: pointer;
                     font-weight: 600;
-
-                    padding: 5px 8px;
                     vertical-align: middle;
-
-                    &:hover {
-                      background-color: var(--hover);
-                    }
 
                     & span {
                       margin-right: 10px;
@@ -269,6 +316,16 @@ input[type="number"]::-webkit-outer-spin-button {
                 & .tr {
                   border-bottom: 1px solid var(--pk);
                   cursor: pointer;
+                  z-index: 150;
+
+                  &.hovering {
+                    background-color: var(--secondary-background);
+                  }
+
+                  & .right-arrow {
+                    width: 50px;
+                    text-align: center;
+                  }
 
                   & .td {
                     vertical-align: middle;
@@ -359,26 +416,6 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 & .sticky-col {
-  position: sticky;
-  left: 0;
-  width: 40px;
-  min-width: 40px;
-  vertical-align: middle;
-
-  padding-left: 10px;
-  background-color: var(--background);
-  z-index: 5;
-
-  border-bottom: 1px solid var(--pk);
-
-  &.shadow {
-    box-shadow: rgba(0, 0, 0, 0.06) 3px 0px 5px 0px;
-  }
-}
-
-& .right-arrow {
-  width: 50px;
-  text-align: center;
 }
 
 & .modal-container {
@@ -850,16 +887,12 @@ input[type="number"]::-webkit-outer-spin-button {
           align-items: center;
           gap: 3px;
           margin: 15px 0;
-          /* font-weight: 600; */
 
           & .system-field {
             padding: 2px 5px;
             background-color: var(--pk);
             border-radius: 5px;
           }
-        }
-        & .actual-columns {
-          /* overflow-y: scroll; */
         }
       }
 
@@ -1063,16 +1096,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
     & .field {
       background-color: var(--editing-background);
-
-      & .field-bool {
-        outline: 1px solid var(--light-gray);
-        padding: 5px;
-      }
     }
-
-    /* &:first-child {
-      background-color: var(--editing-background);
-    } */
   }
 
   & * {
@@ -1088,11 +1112,7 @@ input[type="number"]::-webkit-outer-spin-button {
     padding: 5px;
     border: 1px solid var(--light-gray);
     border-radius: 2px;
-
     background-color: var(--secondary-background);
-
-    &.inline {
-    }
 
     &.editing {
       background-color: var(--editing-background);
@@ -1107,10 +1127,6 @@ input[type="number"]::-webkit-outer-spin-button {
       padding: 3px;
       border: none;
       background-color: inherit;
-
-      &:hover {
-        background-color: var(--hover);
-      }
     }
 
     & .content {
@@ -1276,6 +1292,10 @@ input[type="number"]::-webkit-outer-spin-button {
             }
 
             &:hover {
+              background-color: var(--hover);
+            }
+
+            &.highlight {
               background-color: var(--hover);
             }
 

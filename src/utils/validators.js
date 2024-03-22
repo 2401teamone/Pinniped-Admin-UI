@@ -26,7 +26,8 @@ export const validateNumber = (val, { min, max }) => {
 };
 
 export const validateBool = (val) => {
-  if (val !== "true" && val !== "false") {
+  console.log("val", val, typeof val);
+  if (![0, 1].includes(val)) {
     return "Must be true or false";
   }
   return "";
@@ -81,8 +82,8 @@ export const validateUrl = (val) => {
 };
 
 export const validateRelation = (val, { tableId, cascadeDelete }) => {
-  if (typeof val !== "string") {
-    return "Invalid input";
+  if (typeof val !== "string" && val !== null) {
+    return "Invalid input asdf";
   }
 
   return "";

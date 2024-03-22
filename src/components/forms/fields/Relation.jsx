@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from "react";
 
-import api from '../../../api/api';
+import api from "../../../api/api";
 
 export default function Relation({
   value,
@@ -8,34 +8,62 @@ export default function Relation({
   handleSubmit,
   options,
   setEditing,
+  handleValidation,
 }) {
   const [showContext, setShowContext] = useState(undefined);
   const [rows, setRows] = useState([]);
+  const [current, setCurrent] = useState(0);
 
-  console.log('opening relation', { value, options }, rows);
+  const handleSelection = useCallback(
+    (row) => {
+      let selection = value === row.id ? null : row.id;
+      if (handleValidation && handleValidation(selection)) {
+        console.log(value, row.id, "asldfjhasd;lfkjadsf");
+        onChange(selection);
+        if (handleSubmit) handleSubmit(selection);
+      }
+      setEditing(false);
+    },
+    [handleSubmit, onChange, setEditing, value, handleValidation]
+  );
 
   useEffect(() => {
-    console.log('fetching related records');
     api.getAll(options.tableId).then((data) => {
       setRows(data.rows);
     });
   }, [options.tableId]);
 
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === "ArrowDown") {
+        setCurrent((prev) => (prev + 1) % rows.length);
+      }
+      if (e.key === "ArrowUp") {
+        setCurrent((prev) => (prev - 1 + rows.length) % rows.length);
+      }
+      if (e.key === " ") {
+        handleSelection(rows[current]);
+      }
+    };
+
+    document.addEventListener("keydown", handler);
+
+    return () => {
+      document.removeEventListener("keydown", handler);
+    };
+  }, [current, handleSelection, rows, setEditing]);
+
   return (
     <div className="field-relation">
       {rows.length &&
-        rows.map((row) => {
+        rows.map((row, idx) => {
           return (
             <div
               key={row.id}
               className={`field-relation-option ${
-                value === row.id ? 'active' : ''
-              }`}
-              onClick={() => {
-                onChange(row.id);
-                if (handleSubmit) handleSubmit(row.id);
-                setEditing(false);
-              }}
+                value === row.id ? "active" : ""
+              } ${current === idx ? "highlight" : ""}`}
+              onClick={() => handleSelection(row)}
             >
               <span
                 className="row-context"

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import TableCell from "./TableCell";
 import Checkbox from "../utils/Checkbox.jsx";
 
@@ -11,16 +13,23 @@ export default function TableRow({
   setSelectedRow,
   tableIsScrolled,
 }) {
+  const [hovering, setHovering] = useState(false);
+
   const {
     actionCreators: { editRecord },
   } = useModalContext();
 
   return (
     table && (
-      <tr className="tr">
+      <tr
+        className={`tr ${hovering ? "hovering" : ""}`}
+        onClick={() => editRecord({ table, row, setRows })}
+        onMouseOver={() => setHovering(true)}
+        onMouseLeave={() => setHovering(false)}
+      >
         <td
-          className={`select-row-header sticky-col ${
-            tableIsScrolled && "shadow"
+          className={`sticky-col ${tableIsScrolled ? "shadow" : ""} ${
+            hovering ? "hovering" : ""
           }`}
         >
           <Checkbox
@@ -59,8 +68,9 @@ export default function TableRow({
           column={{ type: "updated_at", name: "updated_at" }}
           row={row}
         />
-        <td className="sticky-col right-arrow">{`->`}</td>
-        <td onClick={() => editRecord({ table, row, setRows })}>x</td>
+        <td
+          className={`sticky-col right-arrow ${hovering ? "hovering" : ""}`}
+        >{`->`}</td>
       </tr>
     )
   );

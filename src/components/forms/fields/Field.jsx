@@ -25,12 +25,12 @@ export default function Field({
   setTriggerValidation,
   validateOnBlur = true,
   config = {
-    required: false,
     inline: false,
     preventSpaces: false,
   },
   options,
   children,
+  required = false,
   disable = false,
   tabIndex = true,
   focusOnMount = false,
@@ -43,16 +43,44 @@ export default function Field({
   let displayComponent = null;
   let editComponent = null;
 
-  console.log("rendering field");
-
   const handleSelectFormatting = (options) => {
     const option = options.find((option) => option.val === value);
     return option ? option.label : value;
   };
 
+  const handleRequiredField = useCallback((type, val) => {
+    switch (type) {
+      case "text":
+      case "number":
+      case "password":
+      case "email":
+      case "url":
+      case "date":
+      case "json":
+        return val === "";
+      case "relation":
+        console.log("REQUIRED RELATION CHECKING", val);
+        return val === null;
+      case "csv":
+      case "select":
+        return val.length === 0;
+      default:
+        return false;
+    }
+  }, []);
+
   const handleValidation = useCallback(
     (val) => {
       if (validator) {
+        if (required) {
+          console.log("CHECKING REQUIRED", label, val);
+          const requiredError = handleRequiredField(type, val);
+          if (requiredError) {
+            setError("This field is required");
+            return false;
+          }
+        }
+
         const errorMessage = validator(val);
         if (errorMessage) {
           setError(errorMessage);
@@ -62,36 +90,42 @@ export default function Field({
       setError("");
       return true;
     },
-    [validator]
+    [validator, required, handleRequiredField, type]
   );
 
   useEffect(() => {
     const el = fieldRef.current;
     const handler = (e) => {
-      if (!editing) {
+      if (!editing && !disable) {
         e.stopPropagation();
         setEditing(true);
-        console.log("field clicked", label);
       }
     };
+    if (type !== "bool") {
+      el.addEventListener("click", handler, true);
 
-    el.addEventListener("click", handler, true);
-
-    return () => {
-      el.removeEventListener("click", handler, true);
-    };
-  }, [label, editing]);
+      return () => {
+        el.removeEventListener("click", handler, true);
+      };
+    }
+  }, [label, editing, disable, type]);
 
   useEffect(() => {
     const handler = (e) => {
       e.stopPropagation();
-
       if (e.key.toLowerCase() === "tab" && editing) {
+        const inputEl = fieldRef.current.querySelector(".field-input");
+        if (inputEl) {
+          inputEl.blur();
+        }
         setEditing(false);
       }
 
-      if (e.key === "Enter" && type === "input") {
-        return;
+      if (e.key === " " && type === "bool") {
+        // e.preventDefault();
+        // const boolEl = fieldRef.current.querySelector(".field-bool-toggle");
+        // boolEl.click();
+        // return;
       }
 
       if (
@@ -119,7 +153,6 @@ export default function Field({
 
   useEffect(() => {
     if (triggerValidation) {
-      console.log("validating due to external action");
       handleValidation(value);
       setTriggerValidation(false);
     }
@@ -207,6 +240,7 @@ export default function Field({
           handleSubmit={handleSubmit}
           setEditing={setEditing}
           options={options}
+          handleValidation={handleValidation}
         />
       );
       break;
@@ -229,9 +263,13 @@ export default function Field({
       tabIndex={tabIndex ? "0" : "-1"}
       onFocus={(e) => {
         if (!editing) {
-          console.log("field focused", label);
           e.stopPropagation();
           fieldRef.current.click();
+        }
+      }}
+      onKeyPress={(e) => {
+        if (type === "bool" && e.key === " ") {
+          console.log("hitttttt");
         }
       }}
     >
@@ -246,7 +284,7 @@ export default function Field({
               {label}
             </Type>
           )}
-          {config.required && <span className="required">*</span>}
+          {required === 1 && <span className="required">*</span>}
         </label>
         <div className="content">
           {type === "bool" ? (

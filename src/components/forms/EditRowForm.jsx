@@ -20,7 +20,7 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
   return (
     <div className="row-form-container">
       <h2 className="row-form-header">
-        Edit<span>{table.name}</span> Row
+        Edit <span>{table.name}</span> Row <span>{row.id}</span>
       </h2>
       <div className="row-form">
         {table.columns.map((column) => {
@@ -30,7 +30,8 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
               <Field
                 label={column.name}
                 type={column.type}
-                value={row[column.name]}
+                value={rowState[column.name]}
+                required={column.required}
                 onChange={(val) => {
                   console.log(val, "changing");
                   setRowState((prevState) => {
@@ -42,10 +43,41 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
                 }}
                 handleSubmit={async (updatedVal) => {
                   console.log("update", updatedVal);
-                  const data = await api.updateOne(table.id, row.id, {
-                    [column.name]: updatedVal,
-                  });
-                  console.log(data.row);
+                  api
+                    .updateOne(table.id, row.id, {
+                      [column.name]: updatedVal,
+                    })
+                    .then((data) => {
+                      const rowId = data.row.id;
+                      setRows((prev) => {
+                        return prev.map((row) => {
+                          if (row.id === rowId) {
+                            return data.row;
+                          }
+                          return row;
+                        });
+                      });
+
+                      showStatus(
+                        `Updated ${row.id}'s ${column.name} to ${updatedVal}`
+                      );
+                    })
+                    .catch((err) => {
+                      showError(
+                        `Failed to update column: ${err.response.data.message}`
+                      );
+                    });
+                }}
+                validator={(val) => {
+                  const validatorFn = getValidator(column.type);
+                  if (validatorFn) {
+                    const errorMessage = validatorFn(val, column.options);
+                    if (errorMessage) {
+                      return errorMessage;
+                    }
+                  }
+
+                  return "";
                 }}
                 options={column.options}
                 tabIndex={true}
@@ -54,6 +86,11 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
           );
         })}
       </div>
+      <FormFooter>
+        <Button type="primary" onClick={closeModal}>
+          Exit
+        </Button>
+      </FormFooter>
     </div>
   );
 }

@@ -62,10 +62,6 @@ export default function Select({
 
   useEffect(() => {
     const handler = (e) => {
-      if (e.key === "Escape") {
-        setEditing(false);
-      }
-
       if (e.key === "ArrowDown") {
         console.log(current, options.options.length, "CURRENT");
         setCurrent((prev) => (prev + 1) % options.options.length);
@@ -76,7 +72,6 @@ export default function Select({
           (prev) => (prev - 1 + options.options.length) % options.options.length
         );
       }
-      console.log(e.key);
       if (e.key === " ") {
         let selection = options.options[current];
         if (typeof selection === "object") {
@@ -95,13 +90,9 @@ export default function Select({
 
   const renderedOptions = selectOptions.map((option, idx) => {
     let val = option;
-    console.log("WORKING WITH", option);
     if (typeof option === "object") {
-      console.log(typeof option, "OBJECT");
       val = option.val;
       option = option.label;
-      console.log("val is now", val);
-      console.log("option is now", option);
     }
 
     return (
@@ -112,7 +103,6 @@ export default function Select({
         } ${current === idx ? "highlight" : ""}`}
         onClick={(e) => {
           e.stopPropagation();
-          console.log(val, " ON CLICK");
           handleSelection(val);
         }}
       >

@@ -33,12 +33,6 @@ export default function Input({
     const refVar = inputRef.current;
 
     const handler = (e) => {
-      console.log(e.key, "KEY");
-      if (e.key === "Enter") {
-        console.log("entering");
-        e.preventDefault();
-        return;
-      }
       if (e.key === " ") {
         e.preventDefault();
         e.target.value += "_";
@@ -50,7 +44,6 @@ export default function Input({
     }
 
     if (editing) {
-      console.log("focusing input");
       inputRef.current.focus();
     }
 
@@ -61,9 +54,30 @@ export default function Input({
     };
   });
 
+  // useEffect(() => {
+  //   const inputRefCurrent = inputRef.current;
+  //   if () {
+  //     return () => {
+  //       inputRefCurrent.blur();
+  //     };
+  //   }
+  // }, [value]);
+
   return (
     <input
       ref={inputRef}
+      onKeyPressCapture={(e) => {
+        console.log(e.key, "KEYPRESS");
+        if (e.key === "Enter") {
+          console.log("preventing default");
+          e.preventDefault();
+        }
+
+        if (e.key === "Tab") {
+          console.log("blurring");
+          inputRef.current.blur();
+        }
+      }}
       className="field-input"
       type={type === "password" ? "password" : "text"}
       value={typeof value === "number" ? value.toString() : value}
@@ -80,6 +94,7 @@ export default function Input({
         }
       }}
       onBlur={(e) => {
+        console.log("BLUR INPUT");
         let formattedVal = formatVal(e.target.value, type);
         if (handleValidation && validateOnBlur) handleValidation(formattedVal);
         if (handleSubmit) {
