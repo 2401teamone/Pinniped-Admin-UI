@@ -14,15 +14,9 @@ export default function Navbar() {
   const [hovering, setHovering] = useState("");
 
   const location = useLocation();
-  const path = [...location][0].split("/");
-  const baseLocation = path[0] + "/" + path[1];
+  const baseLocation = [...location][0];
 
   const { logout } = useAuthContext();
-
-  const LINKS_WITH_BASE = {};
-  Object.values(LINKS).forEach((val) => {
-    LINKS_WITH_BASE[val] = `_${val}`;
-  });
 
   return (
     <nav className="navbar">
@@ -33,7 +27,7 @@ export default function Navbar() {
         to="/_/data"
         className={`
           link 
-          ${path === "/_/data" ? "active" : ""} 
+          ${baseLocation === "/_/data" ? "active" : ""} 
           ${
             hovering === LINKS.data && baseLocation !== LINKS.data
               ? "hovering"
@@ -48,7 +42,7 @@ export default function Navbar() {
         to="/_/observability"
         className={`
           link 
-          ${baseLocation === LINKS_WITH_BASE.observability ? "active" : ""} 
+          ${baseLocation === "/_/observability" ? "active" : ""} 
           ${
             hovering === LINKS.observability &&
             baseLocation !== LINKS.observability
@@ -65,7 +59,7 @@ export default function Navbar() {
         to="/_/settings"
         className={`
           link 
-          ${baseLocation === LINKS_WITH_BASE.settings ? "active" : ""}
+          ${baseLocation === "/_/settings" ? "active" : ""}
           ${
             hovering === LINKS.settings && baseLocation !== LINKS.settings
               ? "hovering"
