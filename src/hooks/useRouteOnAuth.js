@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
-import { useAuthContext } from './useAuth';
+import { useAuthContext } from "./useAuth";
 
-import { useLocation } from 'wouter';
+import { useLocation } from "wouter";
 
 export default function useRouteOnAuth() {
   const { admin, setAdmin, adminInStorage, adminHasRegistered } =
@@ -18,9 +18,9 @@ export default function useRouteOnAuth() {
         } else {
           adminHasRegistered().then((res) => {
             if (res) {
-              if (!admin) setLocation('/login');
+              if (!admin) setLocation("/_/login");
             } else {
-              if (!admin) setLocation('/register');
+              if (!admin) setLocation("/_/register");
             }
           });
         }

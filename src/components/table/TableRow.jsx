@@ -1,6 +1,8 @@
 import TableCell from "./TableCell";
 import Checkbox from "../utils/Checkbox.jsx";
 
+import { useModalContext } from "../../hooks/useModal";
+
 export default function TableRow({
   table,
   row,
@@ -9,6 +11,10 @@ export default function TableRow({
   setSelectedRow,
   tableIsScrolled,
 }) {
+  const {
+    actionCreators: { editRecord },
+  } = useModalContext();
+
   return (
     table && (
       <tr className="tr">
@@ -54,6 +60,7 @@ export default function TableRow({
           row={row}
         />
         <td className="sticky-col right-arrow">{`->`}</td>
+        <td onClick={() => editRecord({ table, row, setRows })}>x</td>
       </tr>
     )
   );

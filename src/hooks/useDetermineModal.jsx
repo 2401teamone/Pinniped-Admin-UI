@@ -1,10 +1,11 @@
-import { useModalContext } from './useModal';
+import { useModalContext } from "./useModal";
 
-import { MODAL_CONTENT } from '../constants/constants';
+import { MODAL_CONTENT } from "../constants/constants";
 
-import TableForm from '../components/forms/TableForm.jsx';
-import RowForm from '../components/forms/RowForm.jsx';
-import LogView from '../components/LogView';
+import TableForm from "../components/forms/TableForm.jsx";
+import RowForm from "../components/forms/RowForm.jsx";
+import EditRowForm from "../components/forms/EditRowForm.jsx";
+import LogView from "../components/LogView";
 
 export default function useDetermineModal() {
   const {
@@ -27,7 +28,7 @@ export default function useDetermineModal() {
       break;
     case MODAL_CONTENT.editRecord:
       modalContent = (
-        <RowForm
+        <EditRowForm
           table={data.table}
           row={data.row}
           setRows={data.setRows}
@@ -54,7 +55,7 @@ export default function useDetermineModal() {
         />
       );
       break;
-    case 'VIEW_LOG':
+    case "VIEW_LOG":
       modalContent = <LogView log={data} />;
       break;
     default:
