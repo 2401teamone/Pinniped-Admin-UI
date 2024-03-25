@@ -210,7 +210,9 @@ body::-webkit-scrollbar-thumb {
       & .admin-buttons {
         padding: 0 10px;
         margin-top: 20px;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-color);
 
         & .admin-button {
           padding: 15px;
@@ -241,9 +243,35 @@ body::-webkit-scrollbar-thumb {
           box-shadow: var(--shadow-4);
           border-radius: var(--min-radius);
           margin: 50px auto;
-          width: 600px;
+          width: 700px;
           padding: 30px;
           background-color: white;
+
+          & .backup {
+            
+            & .backup-console {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              margin-bottom: 20px;
+              & .backup-header {
+                font-size: 1.3rem;
+              }
+
+              & button {
+                & i {
+                  margin-right: 10px;
+                }
+              }
+            }
+
+            & .backups-log {
+              border: 1px solid var(--pk);
+              min-height: 200px;
+              border-radius: var(--min-radius);
+              padding: 10px;
+            }
+          }
         }
       }
 

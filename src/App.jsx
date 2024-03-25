@@ -62,6 +62,8 @@ function App() {
           <ConfirmModal
             onClose={actionCreators.close}
             onConfirm={confirmModalState.onConfirm}
+            no={confirmModalState.no}
+            yes={confirmModalState.yes}
           >
             {confirmModalState.message}
           </ConfirmModal>

@@ -10,6 +10,8 @@ function reducer(state, action) {
         isOpen: true,
         message: action.message,
         onConfirm: action.onConfirm,
+        no: action.buttons.no || "no",
+        yes: action.buttons.yes || "yes",
       };
     case "CLOSE":
       return {
@@ -30,8 +32,8 @@ export const ConfirmModalProvider = ({ children }) => {
 
   const actionCreators = {
     close: () => confirmModalDispatch({ type: "CLOSE" }),
-    open: (message, onConfirm = undefined) =>
-      confirmModalDispatch({ type: "OPEN", message, onConfirm }),
+    open: (message, onConfirm = undefined, buttons) =>
+      confirmModalDispatch({ type: "OPEN", message, onConfirm, buttons }),
   };
 
   return (
