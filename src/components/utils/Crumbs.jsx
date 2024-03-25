@@ -1,9 +1,8 @@
 export default function Crumbs({ crumbs }) {
   const renderedCrumbs = crumbs.map((crumb, idx) => {
-    console.log;
     return (
       <span key={`${crumb}-${idx}`}>
-        <span className={idx === crumbs.length - 1 ? 'crumb-end' : 'crumb'}>
+        <span className={idx === crumbs.length - 1 ? "crumb-end" : "crumb"}>
           {crumb}
         </span>
         {idx < crumbs.length - 1 && (

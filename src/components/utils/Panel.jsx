@@ -7,7 +7,6 @@ export default function Panel({
   excludeClicksOn,
 }) {
   const panelRef = useRef(null);
-  console.log("panel rendered");
   useEffect(() => {
     const handler = (e) => {
       if (panelRef.current && !panelRef.current.contains(e.target)) {
@@ -15,7 +14,6 @@ export default function Panel({
           return;
         }
 
-        console.log("closing panel");
         setIsOpen(false);
       }
     };
