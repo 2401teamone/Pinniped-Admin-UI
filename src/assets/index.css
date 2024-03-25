@@ -273,8 +273,8 @@ body::-webkit-scrollbar-thumb {
             margin-bottom: 20px;
 
             & .card {
-              width: 200px;
-              height: 70px;
+              width: 250px;
+              height: 90px;
               border-radius: var(--min-radius);
               border: 1px solid var(--pk);
               box-shadow: var(--shadow-4);
@@ -290,18 +290,23 @@ body::-webkit-scrollbar-thumb {
                 padding-bottom: 2px;
               }
 
-              & .card-data {
-                flex-grow: 1;
+              & .data {
+                color: var(--text-color);
+                font-weight: 600;
+                font-size: 1.8rem;
               }
             }
           }
 
           & .chart {
+            display: flex;
+            justify-content: start;
             border: 1px solid var(--pk);
             padding: 20px;
             border-radius: var(--min-radius);
             box-shadow: var(--shadow-4);
             background-color: white;
+            
           }
         }
       }
@@ -1817,9 +1822,44 @@ body::-webkit-scrollbar-thumb {
   & .logs-header {
     text-align: center;
     padding: 10px 0;
-    border-bottom: 2px solid var(--pk);
-    font-size: 1.3rem;
-    margin-top: 30px;
+    font-size: 1.5rem;
+    margin: 10px 0;
+  }
+  
+  & .search-logs {
+    /* margin-bottom: 20px; */
+    border-bottom: 1px solid var(--pk);
+    position: relative;
+
+    & input {
+      width: 100%;
+      font-size: 1.1rem;
+      padding: 5px;
+
+      &:hover {
+        background-color: var(--secondary-background);
+      }
+    }
+
+    & button {
+      position: absolute;
+      right: 2px;
+      top: 2px;
+      font-size: 0.9rem;
+      padding: 5px;
+      background-color: inherit;
+      border-radius: var(--min-radius);
+
+      &:hover {
+        background-color: var(--hover);
+      }
+    }
+
+  }
+
+  & .logs-rows {
+    max-height: 100vh;
+    overflow-y: scroll;
   }
   & .log {
     
