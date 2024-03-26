@@ -29,10 +29,12 @@ export default memo(function Table({ table, rows, setRows }) {
 
   useEffect(() => {
     async function getRows() {
-      setLoading(true);
       const data = await api.getAll(table.id);
       return data;
     }
+    const timeoutId = setTimeout(() => {
+      setLoading(true);
+    }, 50);
 
     getRows()
       .then((data) => {
@@ -42,6 +44,7 @@ export default memo(function Table({ table, rows, setRows }) {
         showError(err.message);
       })
       .finally(() => {
+        clearTimeout(timeoutId);
         setLoading(false);
         setHasQueried(true);
       });

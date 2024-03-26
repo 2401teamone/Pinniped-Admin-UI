@@ -339,6 +339,13 @@ input[type="number"]::-webkit-outer-spin-button {
         gap: 30px;
         padding-top: 20px;
         min-height: 100%;
+
+      }
+
+      & .separator {
+        height: 1px;
+        width: 100%;
+        border: 1px solid var(--pk)
       }
 
       & .data-page-content {

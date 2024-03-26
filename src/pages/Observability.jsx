@@ -32,10 +32,9 @@ export default function Observability() {
   const filterBySearchTerm = (log) => {
     return (
       log.method.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      log.status.toString().includes(searchTerm) ||
+      log.statusCode === searchTerm ||
       log.url.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      log.auth.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      log.timestamp.toLowerCase().includes(searchTerm.toLowerCase())
+      String(log.timestamp).toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
 
