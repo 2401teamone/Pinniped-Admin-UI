@@ -10,8 +10,8 @@ function reducer(state, action) {
         isOpen: true,
         message: action.message,
         onConfirm: action.onConfirm,
-        no: action.buttons.no || "no",
-        yes: action.buttons.yes || "yes",
+        no: action?.buttons?.no || "no",
+        yes: action?.buttons?.yes || "yes",
       };
     case "CLOSE":
       return {

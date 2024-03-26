@@ -26,6 +26,7 @@ export default function Input({
   handleSubmit,
   validateOnBlur,
   editing,
+  placeholder,
 }) {
   const inputRef = useRef();
 

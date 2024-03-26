@@ -75,20 +75,6 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-body::-webkit-scrollbar {
-  width: 12px; /* width of the entire scrollbar */
-}
-
-body::-webkit-scrollbar-track {
-  background: orange; /* color of the tracking area */
-}
-
-body::-webkit-scrollbar-thumb {
-  background-color: blue; /* color of the scroll thumb */
-  border-radius: 20px; /* roundness of the scroll thumb */
-  border: 3px solid orange; /* creates padding around scroll thumb */
-}
-
 #root {
   min-height: 100%;
 }
@@ -237,15 +223,18 @@ body::-webkit-scrollbar-thumb {
       & .settings-page-content {
         margin-left: var(--subnavbar-width);
         min-height: 100vh;
+        overflow: scroll;
 
 
         & .settings-page-content-data {
           box-shadow: var(--shadow-4);
           border-radius: var(--min-radius);
           margin: 50px auto;
-          width: 700px;
+          width: 80%;
+          min-width: 300px;
           padding: 30px;
           background-color: white;
+          max-height: 80%;
 
           & .backup {
             
@@ -589,7 +578,7 @@ body::-webkit-scrollbar-thumb {
     z-index: 120;
 
     & .message {
-      font-size: 1.3rem;
+      /* font-size: 1.3rem; */
       letter-spacing: 0.5px;
       padding: 15px;
       padding-bottom: none;
@@ -602,7 +591,13 @@ body::-webkit-scrollbar-thumb {
       justify-content: flex-end;
       padding-top: 10px;
       background-color: var(--background);
-      padding: 10px;
+      padding: 15px 10px;
+    }
+
+    .btns-small {
+      position: absolute;
+      top: 3px;
+      right: 3px;
     }
   }
 }
@@ -710,6 +705,8 @@ body::-webkit-scrollbar-thumb {
 
 /* Button */
 .btn {
+  display: flex;
+  align-items: center;
   padding: 7px 25px;
   border-radius: var(--min-radius);
   transition: scale 300ms ease;
@@ -1253,9 +1250,13 @@ body::-webkit-scrollbar-thumb {
     gap: 3px;
     width: inherit;
     padding: 5px;
-    border: 1px solid var(--light-gray);
+    border: 1px solid var(--pk);
     border-radius: 2px;
     background-color: var(--secondary-background);
+
+    & .placeholder {
+      color: var(--text-color);
+    }
 
     &.editing {
       background-color: var(--editing-background);
@@ -1496,11 +1497,18 @@ body::-webkit-scrollbar-thumb {
     }
   }
 
-  & .field-error-message-container {
+  & .field-message-container {
     padding: 3px 0;
-    color: var(--error-font);
     font-size: 0.9rem;
-    animation: slideErrorMessage 0.3s ease;
+    
+    & .field-validator-context {
+      color: var(--text-color);
+    }
+    
+    & .field-error-message{
+      color: var(--error-font);
+      animation: slideErrorMessage 0.3s ease;
+    }
   }
 }
 

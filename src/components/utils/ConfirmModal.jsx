@@ -24,9 +24,9 @@ export default function SideModal({
             </Button>
           </div>
         ) : (
-          <div className="btns">
+          <div className="btns-small">
             <Button type="inherit" onClick={onClose}>
-              Exit
+              X
             </Button>
           </div>
         )}
