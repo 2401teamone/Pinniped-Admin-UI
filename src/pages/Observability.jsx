@@ -78,6 +78,7 @@ export default function Observability() {
       <div className="observability-page">
         <Logs
           logs={logs.filter(filterBySearchTerm)}
+          setLogs={setLogs}
           setSearchTerm={setSearchTerm}
         />
 
@@ -90,7 +91,7 @@ export default function Observability() {
               <Card header="Requests today">{todaysLogs.length}</Card>
               <Card header="Average Requests/day">{5}</Card>
               <Card header="Errors">
-                {logs.filter((log) => log.level > 30).length}
+                {logs.filter((log) => log.statusCode >= 400).length}
               </Card>
             </div>
             <div className="chart">

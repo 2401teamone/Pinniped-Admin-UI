@@ -3,7 +3,7 @@ import { useState } from "react";
 import SubNavbar from "./utils/SubNavbar";
 import Log from "./Log";
 
-export default function Logs({ logs, setSearchTerm }) {
+export default function Logs({ logs, setLogs, setSearchTerm }) {
   const [viewingLog, setViewingLog] = useState(null);
   const [input, setInput] = useState("");
 
@@ -57,6 +57,7 @@ export default function Logs({ logs, setSearchTerm }) {
                     viewingLog={viewingLog}
                     setViewingLog={setViewingLog}
                     log={log}
+                    setLogs={setLogs}
                   ></Log>
                 );
               })}

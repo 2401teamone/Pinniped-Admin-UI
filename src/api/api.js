@@ -83,6 +83,12 @@ class Api {
     const res = await this.axios.get("/admin/logs");
     return res.data;
   }
+
+  async deleteLog(id) {
+    console.log(id, "ADMIN UI HERE");
+    const res = await this.axios.delete(`/admin/logs/${id}`);
+    return res.data;
+  }
 }
 
 export default new Api();
