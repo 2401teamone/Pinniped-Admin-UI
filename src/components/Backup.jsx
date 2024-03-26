@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 import api from "../api/api.js";
 
 import Button from "./utils/Button.jsx";
+import Field from "./forms/fields/Field.jsx";
+
+import useFieldsAsForm from "../hooks/useFieldsAsForm.jsx";
 
 import { useConfirmModalContext } from "../hooks/useConfirmModal.jsx";
 
-import Field from "./forms/fields/Field.jsx";
+import downloadFile from "../utils/download_file.js";
 
-const Form = ({ close }) => {
+const Form = ({ close, setBackups }) => {
   const [backupName, setBackupName] = useState("");
 
   return (
@@ -22,7 +26,8 @@ const Form = ({ close }) => {
         onChange={(val) => setBackupName(val)}
         placeholder="Leave empty to autogenerate"
         validator={(val) => {
-          if (val.length === 0) return "";
+          console.log(val, "VALLLLL");
+          if (!val) return "";
           if (!/^[a-zA-Z0-9]+\.db$/.test(val)) return "Invalid backup name";
           return "";
         }}
@@ -41,8 +46,17 @@ const Form = ({ close }) => {
         <Button
           type="primary"
           onClick={() => {
-            console.log("backing up", backupName);
-            close();
+            api
+              .backup(backupName)
+              .then(({ data }) =>
+                setBackups((prev) => [...prev, data.backupFileName])
+              )
+              .catch((err) => {
+                console.error(err);
+              })
+              .finally(() => {
+                close();
+              });
           }}
         >
           Start Backup
@@ -53,46 +67,88 @@ const Form = ({ close }) => {
 };
 
 export default function Backup() {
+  const [backups, setBackups] = useState([]);
+
   const {
     actionCreators: { open, close },
   } = useConfirmModalContext();
 
-  const backups = [
-    {
-      id: 1,
-      date: "2021-09-01",
-      time: "12:00",
-    },
-    {
-      id: 2,
-      date: "2021-09-02",
-      time: "12:00",
-    },
-    {
-      id: 3,
-      date: "2021-09-03",
-      time: "12:00",
-    },
-  ];
+  useEffect(() => {
+    api
+      .getBackups()
+      .then((data) => {
+        setBackups(data.backups);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   return (
     <div className="backup">
       <div className="backup-console">
         <h2 className="backup-header">Backup your Pinniped data</h2>
-        <Button type="inherit" onClick={() => open(<Form close={close} />)}>
+        <Button
+          type="inherit"
+          onClick={() => open(<Form close={close} setBackups={setBackups} />)}
+        >
           <i className="fa-regular fa-play"></i>
           Backup
         </Button>
       </div>
       <div className="backups-log">
-        {backups.map((backup) => {
-          return (
-            <div key={backup.id} className="backup-log">
-              <div className="backup-log-date">{backup.date}</div>
-              <div className="backup-log-time">{backup.time}</div>
-            </div>
-          );
-        })}
+        {!backups.length ? (
+          <div className="no-backups">
+            <p>No Backups.</p>
+            <p>
+              Please use the Backup button above to create your first backup.
+            </p>
+          </div>
+        ) : (
+          backups.map((backup) => {
+            return (
+              <div key={backup} className="backup-log">
+                <div className="backup-name">{backup}</div>
+                <div className="backup-actions">
+                  <div
+                    className="backup-download"
+                    onClick={async () => {
+                      api
+                        .downloadBackup(backup)
+                        .then((blob) => {
+                          console.log(blob);
+                          downloadFile(blob, backup);
+                        })
+                        .catch((err) => {
+                          console.error(err);
+                        });
+                    }}
+                  >
+                    <i className="fa-sharp fa-light fa-circle-down"></i>
+                  </div>
+                  <div
+                    className="backup-delete"
+                    onClick={() => {
+                      console.log(`Deleting ${backup}`);
+                      api
+                        .deleteBackup(backup)
+                        .then(() => {
+                          setBackups((prev) =>
+                            prev.filter((b) => b !== backup)
+                          );
+                        })
+                        .catch((err) => {
+                          console.error(err);
+                        });
+                    }}
+                  >
+                    <i className="fa-regular fa-trash"></i>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
     </div>
   );

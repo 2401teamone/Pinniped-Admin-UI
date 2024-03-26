@@ -68,9 +68,9 @@ export default function TableRow({
           column={{ type: "updated_at", name: "updated_at" }}
           row={row}
         />
-        <td
-          className={`sticky-col right-arrow ${hovering ? "hovering" : ""}`}
-        >{`->`}</td>
+        <td className={`sticky-col right-arrow ${hovering ? "hovering" : ""}`}>
+          <i className="fa-regular fa-arrow-right"></i>
+        </td>
       </tr>
     )
   );

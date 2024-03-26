@@ -89,6 +89,28 @@ class Api {
     const res = await this.axios.delete(`/admin/logs/${id}`);
     return res.data;
   }
+
+  async getBackups() {
+    const res = await this.axios.get("/admin/backups");
+    return res.data;
+  }
+
+  async backup(filename) {
+    const res = await this.axios.post(`/admin/backups`, { filename });
+    return res.data;
+  }
+
+  async downloadBackup(filename) {
+    const res = await this.axios.get(`/admin/backups/${filename}`, {
+      responseType: "blob",
+    });
+    return new Blob([res.data], { type: res.headers["content-type"] });
+  }
+
+  async deleteBackup(filename) {
+    const res = await this.axios.delete(`/admin/backups/${filename}`);
+    return res.data;
+  }
 }
 
 export default new Api();
