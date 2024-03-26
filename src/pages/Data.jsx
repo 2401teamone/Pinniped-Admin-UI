@@ -45,12 +45,14 @@ export default function Data() {
     setLocation(`/data?table=${tableName}`);
   };
 
-  const getTable = (tableName) => {
-    return tables.find((table) => table.name === tableName);
-  };
+  const getTable = useCallback(
+    (tableName) => {
+      return tables.find((table) => table.name === tableName);
+    },
+    [tables]
+  );
 
   useEffect(() => {
-    console.log("getting tables");
     async function getTables() {
       const data = await api.getTables();
       return data.tables;
@@ -65,7 +67,7 @@ export default function Data() {
   }, [showError]);
 
   useEffect(() => {
-    if (tableName) {
+    if (getTable(tableName)) {
       const footerIsOverlapping = () => {
         const table = document
           .querySelector(".table-wrapper")
@@ -75,7 +77,6 @@ export default function Data() {
           .getBoundingClientRect();
 
         const overlapping = !(footer.top > table.bottom);
-        console.log(overlapping);
 
         if (overlapping) {
           setFooterOverlapping(true);
@@ -89,7 +90,7 @@ export default function Data() {
         window.removeEventListener("resize", footerIsOverlapping);
       };
     }
-  }, [tableName]);
+  }, [tableName, setFooterOverlapping, tables, getTable]);
 
   return (
     <div className="data-page">
@@ -154,7 +155,9 @@ export default function Data() {
             </div>
           </PageHeader>
           <SearchBar />
-          <Table table={getTable(tableName)} rows={rows} setRows={setRows} />
+          {getTable(tableName) && (
+            <Table table={getTable(tableName)} rows={rows} setRows={setRows} />
+          )}
           <Footer overlapping={footerOverlapping}>
             Total Found: {rows.length}
           </Footer>

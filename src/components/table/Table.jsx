@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 
 import { useModalContext } from "../../hooks/useModal";
 import api from "../../api/api.js";
@@ -7,12 +7,19 @@ import TH from "./TableHead";
 import TableRow from "./TableRow";
 import ActionBox from "../utils/ActionBox";
 import Button from "../utils/Button";
+import LoadingSpinner from "../utils/LoadingSpinner";
 
-// add search
+import { useNotificationContext } from "../../hooks/useNotifications";
 
-export default function Table({ table, rows, setRows }) {
+export default memo(function Table({ table, rows, setRows }) {
   const [selectedRow, setSelectedRow] = useState(null);
   const [tableIsScrolled, setTableIsScrolled] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [hasQueried, setHasQueried] = useState(false);
+
+  const {
+    actionCreators: { showError },
+  } = useNotificationContext();
 
   const tableRef = useRef();
 
@@ -22,15 +29,23 @@ export default function Table({ table, rows, setRows }) {
 
   useEffect(() => {
     async function getRows() {
+      setLoading(true);
       const data = await api.getAll(table.id);
-      console.log(data.rows);
-      setRows(data.rows);
+      return data;
     }
-    if (table) {
-      console.log("fetched rows");
-      getRows();
-    }
-  }, [table, setRows]);
+
+    getRows()
+      .then((data) => {
+        setRows(data.rows);
+      })
+      .catch((err) => {
+        showError(err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+        setHasQueried(true);
+      });
+  }, [setRows, showError, table.id]);
 
   useEffect(() => {
     const adjustTableHeight = () => {
@@ -40,9 +55,7 @@ export default function Table({ table, rows, setRows }) {
     };
 
     adjustTableHeight();
-
     window.addEventListener("resize", adjustTableHeight);
-
     return () => {
       window.removeEventListener("resize", adjustTableHeight);
     };
@@ -89,7 +102,15 @@ export default function Table({ table, rows, setRows }) {
             </tr>
           </thead>
           <tbody className="tbody">
+            {loading && (
+              <tr className="loading">
+                <td colSpan={table.columns.length + 5}>
+                  <LoadingSpinner />
+                </td>
+              </tr>
+            )}
             {rows &&
+              !loading &&
               rows.map((row) => {
                 return (
                   <TableRow
@@ -105,7 +126,7 @@ export default function Table({ table, rows, setRows }) {
               })}
           </tbody>
         </table>
-        {!rows.length && (
+        {!rows.length && hasQueried && (
           <div className="no-rows-container">
             <div className="no-rows">
               <div className="no-rows-message">No rows for this table</div>
@@ -128,4 +149,4 @@ export default function Table({ table, rows, setRows }) {
       />
     </div>
   );
-}
+});

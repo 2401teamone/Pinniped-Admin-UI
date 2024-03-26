@@ -55,7 +55,7 @@ export default function useDetermineModal() {
         />
       );
       break;
-    case "VIEW_LOG":
+    case MODAL_CONTENT.viewLog:
       modalContent = <LogView log={data} />;
       break;
     default:

@@ -21,6 +21,7 @@ export default function Field({
   handleSubmit,
   onClose,
   validator,
+  validatorContext,
   triggerValidation,
   setTriggerValidation,
   validateOnBlur = true,
@@ -30,6 +31,7 @@ export default function Field({
   },
   options,
   children,
+  placeholder = null,
   required = false,
   disable = false,
   tabIndex = true,
@@ -73,7 +75,6 @@ export default function Field({
     (val) => {
       if (validator) {
         if (required) {
-          console.log("CHECKING REQUIRED", label, val);
           const requiredError = handleRequiredField(type, val);
           if (requiredError) {
             setError("This field is required");
@@ -110,15 +111,19 @@ export default function Field({
     }
   }, [label, editing, disable, type]);
 
+  const closeAndBlurInput = () => {
+    const inputEl = fieldRef.current.querySelector(".field-input");
+    if (inputEl) {
+      inputEl.blur();
+    }
+    setEditing(false);
+  };
+
   useEffect(() => {
     const handler = (e) => {
       e.stopPropagation();
       if (e.key.toLowerCase() === "tab" && editing) {
-        const inputEl = fieldRef.current.querySelector(".field-input");
-        if (inputEl) {
-          inputEl.blur();
-        }
-        setEditing(false);
+        closeAndBlurInput();
       }
 
       if (e.key === " " && type === "bool") {
@@ -140,7 +145,7 @@ export default function Field({
       }
 
       if (e.key === "Escape") {
-        setEditing(false);
+        closeAndBlurInput();
       }
     };
 
@@ -173,7 +178,12 @@ export default function Field({
           displayComponent = <span>{value.join(", ")}</span>;
           break;
         default:
-          displayComponent = <span>{value}</span>;
+          console.log(value, placeholder, "HERE");
+          displayComponent = (
+            <span>
+              {value || <span className="placeholder">{placeholder}</span>}
+            </span>
+          );
       }
       editComponent = (
         <Input
@@ -316,9 +326,19 @@ export default function Field({
         </div>
         {children}
       </div>
-      {!!error.length && !config.inline && (
-        <div className="field-error-message-container">
-          <span className="field-error-message">{error}</span>
+
+      {(!!error.length || !!validatorContext) && !config.inline && (
+        <div className="field-message-container">
+          {error.length ? (
+            <div className="field-error-message">{error}</div>
+          ) : (
+            ""
+          )}
+          {validatorContext ? (
+            <div className="field-validator-context">{validatorContext}</div>
+          ) : (
+            ""
+          )}
         </div>
       )}
     </div>

@@ -2,7 +2,13 @@ import { createPortal } from "react-dom";
 
 import Button from "./Button";
 
-export default function SideModal({ onClose, children, onConfirm }) {
+export default function SideModal({
+  onClose,
+  children,
+  onConfirm,
+  no = "no",
+  yes = "yes",
+}) {
   const modal = (
     <div className="modal-container">
       <div className="modal-background" onClick={onClose}></div>
@@ -11,16 +17,16 @@ export default function SideModal({ onClose, children, onConfirm }) {
         {onConfirm && typeof onConfirm === "function" ? (
           <div className="btns">
             <Button type="inherit" onClick={onClose}>
-              No
+              {no}
             </Button>
-            <Button type="danger" onClick={onConfirm}>
-              Yes
+            <Button type="secondary" onClick={onConfirm}>
+              {yes}
             </Button>
           </div>
         ) : (
-          <div className="btns">
+          <div className="btns-small">
             <Button type="inherit" onClick={onClose}>
-              Exit
+              X
             </Button>
           </div>
         )}

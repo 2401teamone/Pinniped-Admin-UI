@@ -29,3 +29,4 @@ export const NOTIFICATION_TYPES = {
   status: "status",
   error: "error",
 };
+

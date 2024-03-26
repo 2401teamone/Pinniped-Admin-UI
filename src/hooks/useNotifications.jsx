@@ -1,6 +1,6 @@
-import { useReducer, useContext, createContext } from 'react';
+import { useReducer, useContext, createContext, useCallback } from "react";
 
-import { NOTIFICATION_TYPES } from '../constants/constants.js';
+import { NOTIFICATION_TYPES } from "../constants/constants.js";
 
 export const NotificationContext = createContext(null);
 
@@ -20,44 +20,49 @@ function reducer(state, action) {
         type: NOTIFICATION_TYPES.error,
         message: action.message,
       };
-    case 'CLOSE':
+    case "CLOSE":
       return {
         ...state,
         showing: false,
-        type: '',
-        message: '',
+        type: "",
+        message: "",
       };
     default:
-      throw new Error('INVALID OPTION');
+      throw new Error("INVALID OPTION");
   }
 }
 
 export const NotificationProvider = ({ children }) => {
   const [notificationState, notificationDispatch] = useReducer(reducer, {
     showing: false,
-    type: '',
-    message: '',
+    type: "",
+    message: "",
   });
 
+  const showError = useCallback((message) => {
+    console.log(message);
+    notificationDispatch({
+      type: NOTIFICATION_TYPES.error,
+      message: message,
+    });
+  }, []);
+
+  const showStatus = useCallback((message) => {
+    console.log(message);
+    notificationDispatch({
+      type: NOTIFICATION_TYPES.status,
+      message: message,
+    });
+  }, []);
+
+  const closeNotification = useCallback(() => {
+    notificationDispatch({ type: "CLOSE" });
+  }, []);
+
   const actionCreators = {
-    closeNotification: () => {
-      console.log('closing notification');
-      notificationDispatch({ type: 'CLOSE' });
-    },
-    showStatus: (message) => {
-      console.log(message);
-      notificationDispatch({
-        type: NOTIFICATION_TYPES.status,
-        message: message,
-      });
-    },
-    showError: (message) => {
-      console.log(message);
-      notificationDispatch({
-        type: NOTIFICATION_TYPES.error,
-        message: message,
-      });
-    },
+    closeNotification,
+    showStatus,
+    showError,
   };
 
   return (

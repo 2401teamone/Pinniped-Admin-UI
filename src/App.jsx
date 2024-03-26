@@ -20,12 +20,9 @@ import { useConfirmModalContext } from "./hooks/useConfirmModal";
 import { LINKS } from "./constants/constants";
 
 function App() {
-  console.log("app");
-
   const { notificationState } = useNotificationContext();
   const { admin } = useRouteOnAuth();
   const { isOpen, modalContent, close } = useDetermineModal();
-
   const { confirmModalState, actionCreators } = useConfirmModalContext();
 
   return (
@@ -65,6 +62,8 @@ function App() {
           <ConfirmModal
             onClose={actionCreators.close}
             onConfirm={confirmModalState.onConfirm}
+            no={confirmModalState.no}
+            yes={confirmModalState.yes}
           >
             {confirmModalState.message}
           </ConfirmModal>
