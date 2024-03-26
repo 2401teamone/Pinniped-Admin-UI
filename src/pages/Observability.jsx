@@ -1,44 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import PageHeader from "../components/utils/PageHeader";
 import Logs from "../components/Logs";
 import Card from "../components/utils/Card";
 import Chart from "../components/Chart";
 
-const getRandomTimestamp = () => {
-  const startOfMonth = new Date();
-  startOfMonth.setDate(1);
-  startOfMonth.setHours(0, 0, 0, 0);
-
-  const endOfMonth = new Date();
-  endOfMonth.setMonth(endOfMonth.getMonth() + 1);
-  endOfMonth.setDate(0);
-  endOfMonth.setHours(23, 59, 59, 999);
-
-  const randomTimestamp = new Date(
-    startOfMonth.getTime() +
-      Math.random() * (endOfMonth.getTime() - startOfMonth.getTime())
-  );
-
-  return randomTimestamp.toISOString();
-};
-const logs = [];
-
-for (let i = 0; i < 1000; i++) {
-  logs.push({
-    id: Math.random().toString(36).substring(7),
-    type: Math.random() > 0.3 ? "normal" : "error",
-    status: Math.floor(Math.random() * 500) + 100,
-    method: Math.random() > 0.5 ? "get" : "post",
-    url:
-      "/api/collections/" + Math.random().toString(36).substring(7) + "/rows",
-    auth: "admin",
-    timestamp: getRandomTimestamp(),
-  });
-}
+import api from "../api/api.js";
 
 export default function Observability() {
+  const [logs, setLogs] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    async function getLogs() {
+      const data = await api.getLogs();
+      return data.logs;
+    }
+    getLogs().then((logs) => {
+      setLogs(
+        logs.map((log) => {
+          return {
+            ...log,
+            timestamp: new Date(parseInt(log.time)),
+            headers: JSON.parse(log.headers),
+          };
+        })
+      );
+    });
+  }, []);
 
   const filterBySearchTerm = (log) => {
     return (
@@ -79,33 +68,37 @@ export default function Observability() {
     const totalRequests = logs.length;
     const averageRequestsPerDay = totalRequests / uniqueDays;
 
-    return Math.round(averageRequestsPerDay, 0);
+    const res = Math.round(averageRequestsPerDay, 0);
+
+    return res;
   };
 
   return (
-    <div className="observability-page">
-      <Logs
-        logs={logs.filter(filterBySearchTerm)}
-        setSearchTerm={setSearchTerm}
-      />
+    logs && (
+      <div className="observability-page">
+        <Logs
+          logs={logs.filter(filterBySearchTerm)}
+          setSearchTerm={setSearchTerm}
+        />
 
-      <div className="observability-page-content">
-        <PageHeader>
-          <h1>Dashboard</h1>
-        </PageHeader>
-        <div className="observability-page-content-data">
-          <div className="cards">
-            <Card header="Requests today">{todaysLogs.length}</Card>
-            <Card header="Average Requests/day">{requestsPerDay()}</Card>
-            <Card header="Errors">
-              {logs.filter((log) => log.type === "error").length}
-            </Card>
-          </div>
-          <div className="chart">
-            <Chart data={logs.filter(filterBySearchTerm)}></Chart>
+        <div className="observability-page-content">
+          <PageHeader>
+            <h1>Dashboard</h1>
+          </PageHeader>
+          <div className="observability-page-content-data">
+            <div className="cards">
+              <Card header="Requests today">{todaysLogs.length}</Card>
+              <Card header="Average Requests/day">{5}</Card>
+              <Card header="Errors">
+                {logs.filter((log) => log.level > 30).length}
+              </Card>
+            </div>
+            <div className="chart">
+              <Chart data={logs.filter(filterBySearchTerm)}></Chart>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    )
   );
 }

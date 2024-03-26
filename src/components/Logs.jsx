@@ -49,7 +49,7 @@ export default function Logs({ logs, setSearchTerm }) {
         <div className="logs-rows">
           {logs.length &&
             logs
-              .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+              .sort((a, b) => b.timestamp - a.timestamp)
               .map((log) => {
                 return (
                   <Log

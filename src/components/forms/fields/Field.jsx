@@ -126,13 +126,6 @@ export default function Field({
         closeAndBlurInput();
       }
 
-      if (e.key === " " && type === "bool") {
-        // e.preventDefault();
-        // const boolEl = fieldRef.current.querySelector(".field-bool-toggle");
-        // boolEl.click();
-        // return;
-      }
-
       if (
         e.key === "Enter" &&
         !e.metaKey &&

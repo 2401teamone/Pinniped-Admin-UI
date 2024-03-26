@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
 
 class Api {
   constructor() {
     this.axios = axios.create({
-      baseURL: 'http://localhost:3000/api',
+      baseURL: "http://localhost:3000/api",
       withCredentials: true,
     });
   }
@@ -32,12 +32,12 @@ class Api {
   }
 
   async getTables() {
-    const res = await this.axios.get('/schema');
+    const res = await this.axios.get("/schema");
     return res.data;
   }
 
   async createTable(data) {
-    const res = await this.axios.post('/schema', data);
+    const res = await this.axios.post("/schema", data);
     return res.data;
   }
 
@@ -52,30 +52,35 @@ class Api {
   }
 
   async checkForAdmin() {
-    const res = await this.axios.get('/auth/');
+    const res = await this.axios.get("/auth/");
     const { user } = res.data;
-    if (user?.role === 'admin') return user;
+    if (user?.role === "admin") return user;
     return null;
   }
 
   async checkIfAdminHasRegistered() {
-    const res = await this.axios.get('/auth/admin/registered');
-    console.log(res, "HEREEE")
+    const res = await this.axios.get("/auth/admin/registered");
+    console.log(res, "HEREEE");
     return res.data;
   }
 
   async register(data) {
-    const res = await this.axios.post('/auth/admin/register', data);
+    const res = await this.axios.post("/auth/admin/register", data);
     return res.data;
   }
 
   async login(data) {
-    const res = await this.axios.post('/auth/admin/login', data);
+    const res = await this.axios.post("/auth/admin/login", data);
     return res.data;
   }
 
   async logout() {
-    const res = await this.axios.post('/auth/logout');
+    const res = await this.axios.post("/auth/logout");
+    return res.data;
+  }
+
+  async getLogs() {
+    const res = await this.axios.get("/admin/logs");
     return res.data;
   }
 }

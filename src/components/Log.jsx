@@ -36,16 +36,18 @@ export default function Log({ log, viewingLog, setViewingLog }) {
         <div>
           <span
             className="log-method"
-            style={{ color: determineColor(log.method) }}
+            style={{ color: determineColor(log.method.toLowerCase()) }}
           >
             {log.method}
           </span>
           {": "}
-          <span className="log-status">{log.status}</span>
-          {log.type === "error" && (
+          <span className="log-status">{log.statusCode}</span>
+          {log.statusCode >= 400 ? (
             <span className="error">
               <i className="fa-solid fa-circle-exclamation"></i>
             </span>
+          ) : (
+            ""
           )}
         </div>
         <div className="log-timestamp">
