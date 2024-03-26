@@ -1898,10 +1898,21 @@ input[type="number"]::-webkit-outer-spin-button {
     overflow-y: scroll;
   }
   & .log {
-    
+    position: relative;
     padding: 10px;
     border-bottom: 1px solid var(--light-gray);
     cursor: pointer;
+
+    & .delete-log {
+      position: absolute;
+      right: 3px;
+      bottom: 3px;
+      color: var(--error-font);
+      font-size: 1.3rem;
+      cursor: pointer;
+      z-index: 120;
+      
+    }
 
     &.viewing-log {
       background-color: var(--secondary-background);
@@ -1968,6 +1979,10 @@ input[type="number"]::-webkit-outer-spin-button {
         &:first-child {
           font-weight: 600;
           color: var(--text-color)
+        }
+
+        &.headers {
+          line-height: 1.3;
         }
       }
     }

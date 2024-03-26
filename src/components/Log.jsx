@@ -1,5 +1,7 @@
 import { useModalContext } from "../hooks/useModal";
+import { useState } from "react";
 import { format } from "date-fns";
+import api from "../api/api.js";
 
 const determineColor = (method) => {
   switch (method) {
@@ -16,7 +18,8 @@ const determineColor = (method) => {
   }
 };
 
-export default function Log({ log, viewingLog, setViewingLog }) {
+export default function Log({ log, viewingLog, setViewingLog, setLogs }) {
+  const [hovering, setHovering] = useState(false);
   const {
     modalState,
     actionCreators: { viewLog },
@@ -31,21 +34,25 @@ export default function Log({ log, viewingLog, setViewingLog }) {
         viewLog(log);
         setViewingLog(log.id);
       }}
+      onMouseOver={() => setHovering(true)}
+      onMouseOut={() => setHovering(false)}
     >
       <div className="top">
         <div>
           <span
             className="log-method"
-            style={{ color: determineColor(log.method) }}
+            style={{ color: determineColor(log.method.toLowerCase()) }}
           >
             {log.method}
           </span>
           {": "}
-          <span className="log-status">{log.status}</span>
-          {log.type === "error" && (
+          <span className="log-status">{log.statusCode}</span>
+          {log.statusCode >= 400 ? (
             <span className="error">
               <i className="fa-solid fa-circle-exclamation"></i>
             </span>
+          ) : (
+            ""
           )}
         </div>
         <div className="log-timestamp">
@@ -55,6 +62,26 @@ export default function Log({ log, viewingLog, setViewingLog }) {
       <div className="bottom">
         <div className="log-url">{log.url}</div>
       </div>
+      {hovering ? (
+        <div
+          className="delete-log"
+          onClick={(e) => {
+            e.stopPropagation();
+            api
+              .deleteLog(log.id)
+              .then(() => {
+                setLogs((prev) => prev.filter((l) => l.id !== log.id));
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          }}
+        >
+          <i className="fa-duotone fa-eraser"></i>
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 }

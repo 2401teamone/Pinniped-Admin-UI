@@ -3,7 +3,7 @@ import { useState } from "react";
 import SubNavbar from "./utils/SubNavbar";
 import Log from "./Log";
 
-export default function Logs({ logs, setSearchTerm }) {
+export default function Logs({ logs, setLogs, setSearchTerm }) {
   const [viewingLog, setViewingLog] = useState(null);
   const [input, setInput] = useState("");
 
@@ -49,7 +49,7 @@ export default function Logs({ logs, setSearchTerm }) {
         <div className="logs-rows">
           {logs.length &&
             logs
-              .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+              .sort((a, b) => b.timestamp - a.timestamp)
               .map((log) => {
                 return (
                   <Log
@@ -57,6 +57,7 @@ export default function Logs({ logs, setSearchTerm }) {
                     viewingLog={viewingLog}
                     setViewingLog={setViewingLog}
                     log={log}
+                    setLogs={setLogs}
                   ></Log>
                 );
               })}
