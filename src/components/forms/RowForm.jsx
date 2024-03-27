@@ -12,7 +12,7 @@ import useFieldsAsForm from "../../hooks/useFieldsAsForm";
 
 const generateInitialState = (columns) => {
   return columns
-    .filter((column) => !column.system)
+    .filter((column) => column.editable)
     .reduce((acc, column) => {
       switch (column.type) {
         case "bool":
@@ -61,7 +61,7 @@ export default function RowForm({ table, setRows, closeModal, row }) {
         })
         .catch((err) => {
           console.log(err);
-          showError(`Invalid form inputs: ${err.response.data.message})`);
+          showError(`Invalid form inputs: ${err.response.data.message}`);
         });
     }
   };
@@ -73,16 +73,20 @@ export default function RowForm({ table, setRows, closeModal, row }) {
       </h2>
       <form className="row-form">
         {table.columns.map((column, idx) => {
-          if (column.system) return null;
+          if (!column.editable) return null;
           return (
             <div className="row-form-field" key={column.name}>
               <Field
                 options={column.options}
-                required={column.required}
-                {...register(column.name, column.type, (val) => {
-                  const validatorFn = getValidator(column.type);
-                  return validatorFn(val, column.options);
-                })}
+                {...register(
+                  column.name,
+                  column.type,
+                  (val) => {
+                    const validatorFn = getValidator(column.type);
+                    return validatorFn(val, column.options);
+                  },
+                  column.required
+                )}
                 tabIndex={true}
                 focusOnMount={idx === 0}
               />

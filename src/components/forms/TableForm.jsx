@@ -240,17 +240,19 @@ export default function TableForm({
                 </p>
                 <AddColumnBar dispatch={dispatch} />
                 <div className="actual-columns">
-                  {schema.columns.map((column) => {
-                    return (
-                      <ColumnInput
-                        key={column.tempId}
-                        schema={schema}
-                        column={column}
-                        dispatch={dispatch}
-                        tables={tables}
-                      />
-                    );
-                  })}
+                  {schema.columns
+                    .filter((column) => !column.system)
+                    .map((column) => {
+                      return (
+                        <ColumnInput
+                          key={column.tempId}
+                          schema={schema}
+                          column={column}
+                          dispatch={dispatch}
+                          tables={tables}
+                        />
+                      );
+                    })}
                 </div>
               </div>
             ) : (

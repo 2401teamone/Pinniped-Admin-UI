@@ -1,15 +1,18 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from "react";
+
+import { handleRequiredField } from "../utils/validators";
 
 export default function useFieldsAsForm(initialState = {}) {
   const [formState, setFormState] = useState(initialState);
   const [errors, setErrors] = useState([]);
   const [triggerValidation, setTriggerValidation] = useState(false);
 
-  const register = (label, type, validator) => {
+  const register = (label, type, validator, required) => {
     return {
       label,
       type,
       value: formState[label],
+      required,
       triggerValidation,
       setTriggerValidation,
       onChange: (val) => setFormState({ ...formState, [label]: val }),
@@ -21,15 +24,23 @@ export default function useFieldsAsForm(initialState = {}) {
             return errorMessage;
           }
         }
+        if (required) {
+          const requiredError = handleRequiredField(type, val);
+          const errorMessage = `${label} is required`;
+          if (requiredError) {
+            setErrors((prev) => [...prev, { label, errorMessage }]);
+            return errorMessage;
+          }
+        }
         setErrors(errors.filter((error) => error.label !== label));
-        return '';
+        return "";
       },
     };
   };
 
   const handleSubmit = (callback) => {
     document.onkeydown = (e) => {
-      if (e.metaKey && e.key === 'Enter') {
+      if (e.metaKey && e.key === "Enter") {
         e.preventDefault();
         setTriggerValidation(true);
         callback(formState, errors);
@@ -39,7 +50,10 @@ export default function useFieldsAsForm(initialState = {}) {
     return (e) => {
       e.preventDefault();
       setTriggerValidation(true);
-      callback(formState, errors);
+
+      setTimeout(() => {
+        callback(formState, errors);
+      }, 0);
     };
   };
 
@@ -47,5 +61,6 @@ export default function useFieldsAsForm(initialState = {}) {
     register,
     handleSubmit,
     errors,
+    formState,
   };
 }

@@ -13,6 +13,8 @@ import Json from "./Json";
 
 import Panel from "../../utils/Panel";
 
+import { handleRequiredField } from "../../../utils/validators";
+
 export default function Field({
   label,
   type,
@@ -50,47 +52,27 @@ export default function Field({
     return option ? option.label : value;
   };
 
-  const handleRequiredField = useCallback((type, val) => {
-    switch (type) {
-      case "text":
-      case "number":
-      case "password":
-      case "email":
-      case "url":
-      case "date":
-      case "json":
-        return val === "";
-      case "relation":
-        return val === null;
-      case "csv":
-      case "select":
-        return val.length === 0;
-      default:
-        return false;
-    }
-  }, []);
-
   const handleValidation = useCallback(
     (val) => {
       if (validator) {
-        if (required) {
-          const requiredError = handleRequiredField(type, val);
-          if (requiredError) {
-            setError("This field is required");
-            return false;
-          }
-        }
-
         const errorMessage = validator(val);
         if (errorMessage) {
+          console.log(errorMessage, "IN FIELD");
           setError(errorMessage);
+          return false;
+        }
+      }
+      if (required) {
+        const requiredError = handleRequiredField(type, val);
+        if (requiredError) {
+          setError("This field is required");
           return false;
         }
       }
       setError("");
       return true;
     },
-    [validator, required, handleRequiredField, type]
+    [validator, required, type]
   );
 
   useEffect(() => {
@@ -150,6 +132,7 @@ export default function Field({
 
   useEffect(() => {
     if (triggerValidation) {
+      console.log("TRIGGERED VALIDATON", value);
       handleValidation(value);
       setTriggerValidation(false);
     }
@@ -280,7 +263,7 @@ export default function Field({
               {label}
             </Type>
           )}
-          {required === 1 && <span className="required">*</span>}
+          {required ? <span className="required">*</span> : ""}
         </label>
         <div className="content">
           {type === "bool" ? (

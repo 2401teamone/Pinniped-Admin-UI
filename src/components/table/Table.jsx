@@ -11,7 +11,7 @@ import LoadingSpinner from "../utils/LoadingSpinner";
 
 import { useNotificationContext } from "../../hooks/useNotifications";
 
-export default memo(function Table({ table, rows, setRows }) {
+export default function Table({ table, rows, setRows }) {
   const [selectedRows, setSelectedRows] = useState([]);
   const [tableIsScrolled, setTableIsScrolled] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -24,8 +24,12 @@ export default memo(function Table({ table, rows, setRows }) {
   const tableRef = useRef();
 
   const {
-    actionCreators: { addRecord },
+    actionCreators: { addUser, addRecord },
   } = useModalContext();
+
+  useEffect(() => {
+    setSelectedRows([]);
+  }, [table.id]);
 
   useEffect(() => {
     async function getRows() {
@@ -96,9 +100,9 @@ export default memo(function Table({ table, rows, setRows }) {
               ></th>
               <TH column={{ type: "pk", name: "id" }}></TH>
               {table &&
-                table.columns.map((column) => (
-                  <TH key={column.name} column={column} />
-                ))}
+                table.columns
+                  .filter((column) => column.type !== "password")
+                  .map((column) => <TH key={column.name} column={column} />)}
               <TH column={{ type: "date", name: "created_at" }} />
               <TH column={{ type: "date", name: "updated_at" }} />
               <th className="right-arrow">...</th>
@@ -135,7 +139,11 @@ export default memo(function Table({ table, rows, setRows }) {
               <div className="no-rows-message">No rows for this table</div>
               <Button
                 type="inherit"
-                onClick={() => addRecord({ table, setRows })}
+                onClick={() => {
+                  if (table.name === "users") {
+                    addUser({ table, setRows });
+                  } else addRecord({ table, setRows });
+                }}
               >
                 + Add Row
               </Button>
@@ -152,4 +160,4 @@ export default memo(function Table({ table, rows, setRows }) {
       />
     </div>
   );
-});
+}
