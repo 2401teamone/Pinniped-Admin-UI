@@ -1,39 +1,60 @@
-import { createPortal } from 'react-dom';
+import { createPortal } from "react-dom";
 
-import api from '../../api/api.js';
+import api from "../../api/api.js";
 
-import { useNotificationContext } from '../../hooks/useNotifications.jsx';
+import { useNotificationContext } from "../../hooks/useNotifications.jsx";
+import { useConfirmModalContext } from "../../hooks/useConfirmModal.jsx";
 
 export default function ActionBox({
   table,
-  selectedRow,
-  setSelectedRow,
+  selectedRows,
+  setSelectedRows,
   setRows,
 }) {
-
-  const { notificationState: { showing } } = useNotificationContext();
+  const {
+    notificationState: { showing },
+  } = useNotificationContext();
+  const {
+    actionCreators: { open },
+  } = useConfirmModalContext();
 
   const handleDelete = () => {
-    api.deleteOne(table.id, selectedRow).then(() => {
-      console.log('deleting', table.id, selectedRow);
-      setSelectedRow(null);
-      setRows((prev) => prev.filter((r) => r.id !== selectedRow));
+    const promises = selectedRows.map((selectedRow) => {
+      return api.deleteOne(table.id, selectedRow);
+    });
+
+    Promise.all(promises).then(() => {
+      setSelectedRows([]);
+      setRows((prev) => prev.filter((r) => !selectedRows.includes(r.id)));
     });
   };
 
-  const actionBox = selectedRow && (
-    <div className={`action-box ${showing && 'above-notification'}`}>
+  const actionBox = selectedRows.length && (
+    <div className={`action-box ${showing && "above-notification"}`}>
       <div className="left">
-        <span>Row Selected</span>
-        <span className="reset" onClick={() => setSelectedRow(null)}>
+        <span>
+          {selectedRows.length} Row{`${selectedRows.length > 1 ? "s" : ""}`}{" "}
+          Selected
+        </span>
+        <span className="reset" onClick={() => setSelectedRows([])}>
           Reset
         </span>
       </div>
-      <div onClick={handleDelete} className="row-delete right">
+      <div
+        onClick={() => {
+          open(
+            `Are you sure you want to delete the selected row${
+              selectedRows.length > 1 ? "s" : ""
+            }?`,
+            handleDelete
+          );
+        }}
+        className="row-delete right"
+      >
         <i className="fa-regular fa-trash"></i>
       </div>
     </div>
   );
 
-  return createPortal(actionBox, document.querySelector('#action-box'));
+  return createPortal(actionBox, document.querySelector("#action-box"));
 }

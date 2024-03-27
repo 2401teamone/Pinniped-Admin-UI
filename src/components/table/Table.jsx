@@ -12,7 +12,7 @@ import LoadingSpinner from "../utils/LoadingSpinner";
 import { useNotificationContext } from "../../hooks/useNotifications";
 
 export default memo(function Table({ table, rows, setRows }) {
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [selectedRows, setSelectedRows] = useState([]);
   const [tableIsScrolled, setTableIsScrolled] = useState(false);
   const [loading, setLoading] = useState(false);
   const [hasQueried, setHasQueried] = useState(false);
@@ -121,8 +121,8 @@ export default memo(function Table({ table, rows, setRows }) {
                     table={table}
                     row={row}
                     setRows={setRows}
-                    selectedRow={selectedRow}
-                    setSelectedRow={setSelectedRow}
+                    selectedRows={selectedRows}
+                    setSelectedRows={setSelectedRows}
                     tableIsScrolled={tableIsScrolled}
                   />
                 );
@@ -146,8 +146,8 @@ export default memo(function Table({ table, rows, setRows }) {
 
       <ActionBox
         table={table}
-        selectedRow={selectedRow}
-        setSelectedRow={setSelectedRow}
+        selectedRows={selectedRows}
+        setSelectedRows={setSelectedRows}
         setRows={setRows}
       />
     </div>

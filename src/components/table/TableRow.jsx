@@ -9,8 +9,8 @@ export default function TableRow({
   table,
   row,
   setRows,
-  selectedRow,
-  setSelectedRow,
+  selectedRows,
+  setSelectedRows,
   tableIsScrolled,
 }) {
   const [hovering, setHovering] = useState(false);
@@ -33,11 +33,14 @@ export default function TableRow({
           }`}
         >
           <Checkbox
-            checked={selectedRow === row.id}
+            checked={selectedRows.includes(row.id)}
             onChange={() => {
-              setSelectedRow((prev) => {
-                if (prev === row.id) return null;
-                return row.id;
+              setSelectedRows((prev) => {
+                if (prev.includes(row.id)) {
+                  return prev.filter((id) => id !== row.id);
+                } else {
+                  return [...prev, row.id];
+                }
               });
             }}
           />

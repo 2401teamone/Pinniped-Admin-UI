@@ -500,7 +500,8 @@ input[type="number"]::-webkit-outer-spin-button {
                 & .tr {
                   border-bottom: 1px solid var(--pk);
                   cursor: pointer;
-                  z-index: 150;
+                  z-index: 80;
+                  height: 45px;
 
                   &.hovering {
                     background-color: var(--secondary-background);
@@ -1733,14 +1734,14 @@ input[type="number"]::-webkit-outer-spin-button {
   position: absolute;
   width: 250px;
   height: 40px;
-  bottom: 40px;
+  bottom: 60px;
   left: 50%;
   border: 1px solid var(--light-gray);
   background-color: white;
   border-radius: 20px;
   box-shadow: var(--shadow-3);
   padding: 0 20px;
-  z-index: 100000000000000000000;
+  z-index: 70;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1962,7 +1963,7 @@ input[type="number"]::-webkit-outer-spin-button {
       color: var(--error-font);
       font-size: 1.3rem;
       cursor: pointer;
-      z-index: 120;
+      z-index: 80;
       
     }
 
