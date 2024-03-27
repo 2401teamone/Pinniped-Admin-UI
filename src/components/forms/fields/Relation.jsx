@@ -18,7 +18,6 @@ export default function Relation({
     (row) => {
       let selection = value === row.id ? null : row.id;
       if (handleValidation && handleValidation(selection)) {
-        console.log(value, row.id, "asldfjhasd;lfkjadsf");
         onChange(selection);
         if (handleSubmit) handleSubmit(selection);
       }

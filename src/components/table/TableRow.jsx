@@ -50,17 +50,19 @@ export default function TableRow({
           column={{ type: "pk", name: "id" }}
           row={row}
         />
-        {table.columns.map((column) => {
-          return (
-            <TableCell
-              key={`${column.name}-${row.id}`}
-              table={table}
-              column={column}
-              row={row}
-              setRows={setRows}
-            />
-          );
-        })}
+        {table.columns
+          .filter((column) => column.type !== "password")
+          .map((column) => {
+            return (
+              <TableCell
+                key={`${column.name}-${row.id}`}
+                table={table}
+                column={column}
+                row={row}
+                setRows={setRows}
+              />
+            );
+          })}
         <TableCell
           table={table}
           column={{ type: "created_at", name: "created_at" }}

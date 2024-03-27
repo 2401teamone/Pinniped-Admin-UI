@@ -35,18 +35,20 @@ export default function DataNavbar({
           </div>
           <div className="separator"></div>
           {tables.length &&
-            tables.map((table) => {
-              return (
-                <NavRow
-                  key={table.name}
-                  table={table}
-                  active={table.name === currentTable}
-                  onClick={() => chooseTable(table.name)}
-                >
-                  {table.name}
-                </NavRow>
-              );
-            })}
+            tables
+              .filter((table) => table.name !== "admins")
+              .map((table) => {
+                return (
+                  <NavRow
+                    key={table.name}
+                    table={table}
+                    active={table.name === currentTable}
+                    onClick={() => chooseTable(table.name)}
+                  >
+                    {table.name}
+                  </NavRow>
+                );
+              })}
         </div>
       </div>
     </SubNavbar>

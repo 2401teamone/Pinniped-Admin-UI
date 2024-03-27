@@ -79,6 +79,11 @@ class Api {
     return res.data;
   }
 
+  async registerUser(data) {
+    const res = await this.axios.post("/auth/register", data);
+    return res.data;
+  }
+
   async getLogs() {
     const res = await this.axios.get("/admin/logs");
     return res.data;

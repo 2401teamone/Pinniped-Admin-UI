@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const formatVal = (val, type) => {
   let formattedVal;
@@ -28,6 +28,8 @@ export default function Input({
   editing,
 }) {
   const inputRef = useRef();
+
+  const [initialValue] = useState(value);
 
   useEffect(() => {
     const refVar = inputRef.current;
@@ -76,7 +78,7 @@ export default function Input({
       onBlur={(e) => {
         let formattedVal = formatVal(e.target.value, type);
         if (handleValidation && validateOnBlur) handleValidation(formattedVal);
-        if (handleSubmit) {
+        if (handleSubmit && initialValue !== formattedVal) {
           handleSubmit(formattedVal);
         }
       }}

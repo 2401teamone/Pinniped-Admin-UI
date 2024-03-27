@@ -10,6 +10,7 @@ const ICONS = {
   relation: "arrows-repeat",
   json: "code",
   creator: "user",
+  password: "lock",
 };
 
 export default function Icon({ column }) {
@@ -48,6 +49,9 @@ export default function Icon({ column }) {
       break;
     case "creator":
       icon = <i className={`fa-light fa-${ICONS.creator}`}></i>;
+      break;
+    case "password":
+      icon = <i className={`fa-light fa-${ICONS.password}`}></i>;
       break;
     default:
       icon = <div></div>;

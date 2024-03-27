@@ -484,7 +484,7 @@ input[type="number"]::-webkit-outer-spin-button {
                     vertical-align: middle;
                     min-width: max-content;
                     white-space: nowrap;
-                    padding: 0 10px 0 0;
+                    padding-right: 30px;
                     
                     & span {
                       margin-right: 10px;
@@ -515,8 +515,11 @@ input[type="number"]::-webkit-outer-spin-button {
 
                   & .td {
                     vertical-align: middle;
+                    width: fit-content;
+                    min-width: 80px;
+                    padding-right: 30px;
                     & .pk {
-                      width: min-content;
+                      width: fit-content;
                       cursor: default;
                       position: relative;
                       display: flex;
@@ -524,6 +527,7 @@ input[type="number"]::-webkit-outer-spin-button {
                       padding: 4px 7px;
                       border-radius: 30px;
                       background-color: var(--pk);
+                      
 
                       & .copy-btn {
                         cursor: pointer;

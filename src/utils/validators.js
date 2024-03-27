@@ -83,14 +83,42 @@ export const validateUrl = (val) => {
 
 export const validateRelation = (val, { tableId, cascadeDelete }) => {
   if (typeof val !== "string" && val !== null) {
-    return "Invalid input asdf";
+    return "Invalid relation";
   }
 
   return "";
 };
 
+export const validatePassword = (val) => {
+  if (val.length < 10) {
+    return "Password must be at least 10 characters";
+  } else if (!/(?=.*\d)(?=.*[!@#$%^&*])/.test(val)) {
+    return "Password must contain at least one number and one special character";
+  } else return "";
+};
+
 export const validateCreator = () => {
   return "";
+};
+
+export const handleRequiredField = (type, val) => {
+  switch (type) {
+    case "text":
+    case "number":
+    case "password":
+    case "email":
+    case "url":
+    case "date":
+    case "json":
+      return val === "";
+    case "relation":
+      return val === null;
+    case "csv":
+    case "select":
+      return val.length === 0;
+    default:
+      return false;
+  }
 };
 
 export default function getValidator(type) {
@@ -115,6 +143,8 @@ export default function getValidator(type) {
       return validateRelation;
     case "creator":
       return validateCreator;
+    case "password":
+      return validatePassword;
     default:
       throw new Error("Invalid type");
   }

@@ -1,11 +1,18 @@
-import { useReducer, useContext, createContext } from 'react';
+import { useReducer, useContext, createContext } from "react";
 
-import { MODAL_CONTENT } from '../constants/constants.js';
+import { MODAL_CONTENT } from "../constants/constants.js";
 
 export const ModalContext = createContext(null);
 
 function reducer(state, action) {
   switch (action.type) {
+    case MODAL_CONTENT.addUser:
+      return {
+        ...state,
+        isOpen: true,
+        component: MODAL_CONTENT.addUser,
+        data: action.data,
+      };
     case MODAL_CONTENT.addRecord:
       return {
         ...state,
@@ -41,7 +48,7 @@ function reducer(state, action) {
         component: MODAL_CONTENT.viewLog,
         data: action.data,
       };
-    case 'CLOSE':
+    case "CLOSE":
       return {
         ...state,
         isOpen: false,
@@ -49,7 +56,7 @@ function reducer(state, action) {
         data: null,
       };
     default:
-      throw new Error('INVALID OPTION');
+      throw new Error("INVALID OPTION");
   }
 }
 
@@ -61,7 +68,8 @@ export const ModalProvider = ({ children }) => {
   });
 
   const actionCreators = {
-    close: () => modalDispatch({ type: 'CLOSE' }),
+    close: () => modalDispatch({ type: "CLOSE" }),
+    addUser: (data) => modalDispatch({ type: MODAL_CONTENT.addUser, data }),
     addRecord: (data) => modalDispatch({ type: MODAL_CONTENT.addRecord, data }),
     editRecord: (data) =>
       modalDispatch({ type: MODAL_CONTENT.editRecord, data }),

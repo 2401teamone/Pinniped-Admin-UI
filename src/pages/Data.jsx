@@ -24,7 +24,7 @@ export default function Data() {
   const [footerOverlapping, setFooterOverlapping] = useState(false);
 
   const {
-    actionCreators: { addRecord, editTable },
+    actionCreators: { addUser, addRecord, editTable },
   } = useModalContext();
 
   const {
@@ -107,17 +107,22 @@ export default function Data() {
             <div className="left">
               <Crumbs crumbs={["Data", `${tableName}`]} />
               <div className="data-page-action-icons">
-                <ActionIcon
-                  onClick={() =>
-                    editTable({
-                      tables,
-                      setTables,
-                      currentSchema: getTable(tableName),
-                    })
-                  }
-                >
-                  <i className="fa-sharp fa-regular fa-gear"></i>
-                </ActionIcon>
+                {tableName === "users" ? (
+                  ""
+                ) : (
+                  <ActionIcon
+                    onClick={() =>
+                      editTable({
+                        tables,
+                        setTables,
+                        currentSchema: getTable(tableName),
+                      })
+                    }
+                  >
+                    <i className="fa-sharp fa-regular fa-gear"></i>
+                  </ActionIcon>
+                )}
+
                 <ActionIcon
                   onClick={async () => {
                     await api
@@ -146,9 +151,13 @@ export default function Data() {
             <div className="right">
               <Button
                 type="confirm"
-                onClick={() =>
-                  addRecord({ table: getTable(tableName), setRows })
-                }
+                onClick={() => {
+                  if (tableName === "users") {
+                    addUser({ setRows, table: getTable(tableName) });
+                  } else {
+                    addRecord({ table: getTable(tableName), setRows });
+                  }
+                }}
               >
                 <i className="fa-regular fa-plus"></i> Add Row
               </Button>

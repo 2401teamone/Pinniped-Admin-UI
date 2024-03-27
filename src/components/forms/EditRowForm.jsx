@@ -24,7 +24,7 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
       </h2>
       <div className="row-form">
         {table.columns.map((column) => {
-          if (column.system) return null;
+          if (!column.editable) return null;
           return (
             <div className="row-form-field" key={column.name}>
               <Field

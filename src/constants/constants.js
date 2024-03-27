@@ -5,6 +5,7 @@ export const LINKS = {
 };
 
 export const MODAL_CONTENT = {
+  addUser: "ADD_USER",
   addRecord: "ADD_RECORD",
   editRecord: "EDIT_RECORD",
   addTable: "ADD_TABLE",
@@ -23,10 +24,10 @@ export const TYPES = {
   select: "select",
   relation: "relation",
   creator: "creator",
+  password: "password",
 };
 
 export const NOTIFICATION_TYPES = {
   status: "status",
   error: "error",
 };
-
