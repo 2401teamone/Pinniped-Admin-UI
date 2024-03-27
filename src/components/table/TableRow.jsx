@@ -9,8 +9,8 @@ export default function TableRow({
   table,
   row,
   setRows,
-  selectedRow,
-  setSelectedRow,
+  selectedRows,
+  setSelectedRows,
   tableIsScrolled,
 }) {
   const [hovering, setHovering] = useState(false);
@@ -33,11 +33,14 @@ export default function TableRow({
           }`}
         >
           <Checkbox
-            checked={selectedRow === row.id}
+            checked={selectedRows.includes(row.id)}
             onChange={() => {
-              setSelectedRow((prev) => {
-                if (prev === row.id) return null;
-                return row.id;
+              setSelectedRows((prev) => {
+                if (prev.includes(row.id)) {
+                  return prev.filter((id) => id !== row.id);
+                } else {
+                  return [...prev, row.id];
+                }
               });
             }}
           />
@@ -68,9 +71,9 @@ export default function TableRow({
           column={{ type: "updated_at", name: "updated_at" }}
           row={row}
         />
-        <td
-          className={`sticky-col right-arrow ${hovering ? "hovering" : ""}`}
-        >{`->`}</td>
+        <td className={`sticky-col right-arrow ${hovering ? "hovering" : ""}`}>
+          <i className="fa-regular fa-arrow-right"></i>
+        </td>
       </tr>
     )
   );

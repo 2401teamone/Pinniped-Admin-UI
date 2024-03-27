@@ -3,7 +3,6 @@ import { useState, useEffect, useCallback } from "react";
 import api from "../api/api";
 
 import { useModalContext } from "../hooks/useModal";
-
 import { useNotificationContext } from "../hooks/useNotifications";
 
 import { useLocation, useSearch } from "wouter";
@@ -15,6 +14,7 @@ import ActionIcon from "../components/utils/ActionIcon";
 import SearchBar from "../components/utils/SearchBar";
 import DataNavbar from "../components/DataNavbar";
 import Table from "../components/table/Table";
+import TableDashboard from "../components/TableDashboard";
 import Footer from "../components/utils/Footer";
 
 export default function Data() {
@@ -155,14 +155,19 @@ export default function Data() {
             </div>
           </PageHeader>
           <SearchBar />
-          {getTable(tableName) && (
+          {getTable(tableName) ? (
             <Table table={getTable(tableName)} rows={rows} setRows={setRows} />
+          ) : (
+            ""
           )}
           <Footer overlapping={footerOverlapping}>
             Total Found: {rows.length}
           </Footer>
         </div>
       )}
+      <div className="data-page-content">
+        <TableDashboard />
+      </div>
     </div>
   );
 }

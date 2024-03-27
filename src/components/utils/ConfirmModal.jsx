@@ -2,7 +2,7 @@ import { createPortal } from "react-dom";
 
 import Button from "./Button";
 
-export default function SideModal({
+export default function ConfirmModal({
   onClose,
   children,
   onConfirm,
@@ -19,7 +19,13 @@ export default function SideModal({
             <Button type="inherit" onClick={onClose}>
               {no}
             </Button>
-            <Button type="secondary" onClick={onConfirm}>
+            <Button
+              type="primary"
+              onClick={() => {
+                onConfirm();
+                onClose();
+              }}
+            >
               {yes}
             </Button>
           </div>

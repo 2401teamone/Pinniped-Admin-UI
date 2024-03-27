@@ -61,7 +61,6 @@ export default function Field({
       case "json":
         return val === "";
       case "relation":
-        console.log("REQUIRED RELATION CHECKING", val);
         return val === null;
       case "csv":
       case "select":
@@ -171,7 +170,6 @@ export default function Field({
           displayComponent = <span>{value.join(", ")}</span>;
           break;
         default:
-          console.log(value, placeholder, "HERE");
           displayComponent = (
             <span>
               {value || <span className="placeholder">{placeholder}</span>}
@@ -268,11 +266,6 @@ export default function Field({
         if (!editing) {
           e.stopPropagation();
           fieldRef.current.click();
-        }
-      }}
-      onKeyPress={(e) => {
-        if (type === "bool" && e.key === " ") {
-          console.log("hitttttt");
         }
       }}
     >

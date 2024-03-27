@@ -234,9 +234,10 @@ input[type="number"]::-webkit-outer-spin-button {
           min-width: 300px;
           padding: 30px;
           background-color: white;
-          max-height: 80%;
+          
 
           & .backup {
+          
             
             & .backup-console {
               display: flex;
@@ -259,6 +260,50 @@ input[type="number"]::-webkit-outer-spin-button {
               min-height: 200px;
               border-radius: var(--min-radius);
               padding: 10px;
+
+              & .no-backups {
+                
+                font-size: 1.3rem;
+                color: var(--text-color);
+                & p {
+                  margin: 10px;
+                }
+              }
+
+              & .backup-log {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px;
+                cursor: default;
+                border-radius: var(--min-radius);
+                &:hover {
+                  background-color: var(--hover);
+                }
+
+                & .backup-actions {
+                  display: flex;
+                  gap: 20px;
+
+                  & div {
+                    cursor: pointer;
+                    & i {
+                      font-size: 1.5rem;
+                    }
+                  }
+                  & .backup-download {
+                    &:hover {
+                      color: var(--blue);
+                    }
+                  }
+
+                  & .backup-delete {
+                    &:hover {
+                      color: var(--red);
+                    }
+                  }
+                }
+              }
             }
           }
         }
@@ -339,6 +384,13 @@ input[type="number"]::-webkit-outer-spin-button {
         gap: 30px;
         padding-top: 20px;
         min-height: 100%;
+
+      }
+
+      & .separator {
+        height: 1px;
+        width: 100%;
+        border: 1px solid var(--pk)
       }
 
       & .data-page-content {
@@ -448,7 +500,8 @@ input[type="number"]::-webkit-outer-spin-button {
                 & .tr {
                   border-bottom: 1px solid var(--pk);
                   cursor: pointer;
-                  z-index: 150;
+                  z-index: 80;
+                  height: 45px;
 
                   &.hovering {
                     background-color: var(--secondary-background);
@@ -457,11 +510,11 @@ input[type="number"]::-webkit-outer-spin-button {
                   & .right-arrow {
                     width: 50px;
                     text-align: center;
+                    color: var(--text-color);
                   }
 
                   & .td {
                     vertical-align: middle;
-                    min-width: 100px;
                     & .pk {
                       width: min-content;
                       cursor: default;
@@ -1681,14 +1734,14 @@ input[type="number"]::-webkit-outer-spin-button {
   position: absolute;
   width: 250px;
   height: 40px;
-  bottom: 40px;
+  bottom: 60px;
   left: 50%;
   border: 1px solid var(--light-gray);
   background-color: white;
   border-radius: 20px;
   box-shadow: var(--shadow-3);
   padding: 0 20px;
-  z-index: 100000000000000000000;
+  z-index: 70;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1910,7 +1963,7 @@ input[type="number"]::-webkit-outer-spin-button {
       color: var(--error-font);
       font-size: 1.3rem;
       cursor: pointer;
-      z-index: 120;
+      z-index: 80;
       
     }
 

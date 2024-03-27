@@ -1,53 +1,50 @@
-import { useState } from 'react';
+import Auth from "./Auth.jsx";
+import Field from "../forms/fields/Field.jsx";
+import Button from "../utils/Button.jsx";
 
-import Auth from './Auth.jsx';
-import Field from '../forms/fields/Field.jsx';
-import Button from '../utils/Button.jsx';
+import useFieldsAsForm from "../../hooks/useFieldsAsForm";
 
-import { useAuthContext } from '../../hooks/useAuth';
+import { useAuthContext } from "../../hooks/useAuth";
+
+import { useNotificationContext } from "../../hooks/useNotifications";
 
 export default function Login() {
-  const [credentials, setCredentials] = useState({
-    username: '',
-    password: '',
+  const { register, handleSubmit } = useFieldsAsForm({
+    username: "",
+    password: "",
   });
-
-  const [triggerValidation, setTriggerValidation] = useState(false);
 
   const { login } = useAuthContext();
 
-  const handleSubmit = async () => {
-    console.log('logging in', credentials);
-    setTriggerValidation(true);
-    await login(credentials);
-  };
+  const {
+    actionCreators: { showError },
+  } = useNotificationContext();
 
   return (
     <Auth>
       <div className="auth-form">
         <p className="instructions">Admin Signin</p>
         <Field
-          label="username"
-          type="text"
-          value={credentials.username}
-          onChange={(val) => setCredentials({ ...credentials, username: val })}
           config={{ required: true, preventSpaces: true }}
-          triggerValidation={triggerValidation}
-          setTriggerValidation={setTriggerValidation}
+          {...register("username", "text")}
         />
 
         <Field
-          label="password"
-          type="password"
-          value={credentials.password}
-          onChange={(val) => setCredentials({ ...credentials, password: val })}
-          config={{ required: true }}
-          triggerValidation={triggerValidation}
-          setTriggerValidation={setTriggerValidation}
+          config={{ required: true, preventSpaces: true }}
+          {...register("password", "password")}
         />
 
-        <Button type="primary" onClick={handleSubmit}>
-          Sign In
+        <Button
+          type="primary"
+          onClick={handleSubmit(async (formState) => {
+            try {
+              await login(formState);
+            } catch (err) {
+              showError(err.response.data.detail);
+            }
+          })}
+        >
+          Log In
         </Button>
       </div>
     </Auth>

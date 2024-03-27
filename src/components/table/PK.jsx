@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 export default function PK({ id }) {
   const [hovering, setHovering] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const copyId = () => {
+  const copyId = (e) => {
+    e.stopPropagation();
     navigator.clipboard.writeText(id);
     setCopied(true);
     setTimeout(() => {
@@ -21,8 +22,8 @@ export default function PK({ id }) {
         onClick={copyId}
       ></i>
       {hovering && (
-        <div className={`copy-tooltip ${copied && 'copied'}`}>
-          {copied ? 'Copied' : 'Copy'}
+        <div className={`copy-tooltip ${copied && "copied"}`}>
+          {copied ? "Copied" : "Copy"}
         </div>
       )}
       {id.slice(0, 10)}
