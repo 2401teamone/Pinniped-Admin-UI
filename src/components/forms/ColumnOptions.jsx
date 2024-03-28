@@ -216,36 +216,38 @@ export default function ColumnOptions({ schema, column, dispatch, tables }) {
   }
 
   return (
-    <div className="column-options">
-      <div className="column-options-custom">
-        <div>{columnOptions}</div>
-      </div>
-      <div className="column-options-standard">
-        {column.type === "creator" ? (
-          ""
-        ) : (
-          <Field
-            label="required"
-            type="bool"
-            config={{ inline: true }}
-            value={column.required}
-            onChange={(val) => {
-              dispatch({
-                type: "EDIT_COLUMN",
-                payload: {
-                  ...column,
-                  required: val,
-                },
-              });
-            }}
-          />
-        )}
+    <div className="column-options-container">
+      <div className="column-options">
+        <div className="column-options-custom">
+          <div>{columnOptions}</div>
+        </div>
+        <div className="column-options-standard">
+          {column.type === "creator" ? (
+            ""
+          ) : (
+            <Field
+              label="required"
+              type="bool"
+              config={{ inline: true }}
+              value={column.required}
+              onChange={(val) => {
+                dispatch({
+                  type: "EDIT_COLUMN",
+                  payload: {
+                    ...column,
+                    required: val,
+                  },
+                });
+              }}
+            />
+          )}
 
-        <Settings>
-          <div className="settings-item" onClick={removeColumn}>
-            Remove
-          </div>
-        </Settings>
+          <Settings>
+            <div className="settings-item" onClick={removeColumn}>
+              Remove
+            </div>
+          </Settings>
+        </div>
       </div>
     </div>
   );

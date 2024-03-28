@@ -5,6 +5,11 @@ export default class Table {
     this.type = table.type;
     this.columns = table.columns;
     this.options = table.options;
+    this.getAllRule = table.getAllRule;
+    this.getOneRule = table.getOneRule;
+    this.createRule = table.createRule;
+    this.updateRule = table.updateRule;
+    this.deleteRule = table.deleteRule;
   }
 
   generateInitialState() {
