@@ -2,8 +2,17 @@ import axios from "axios";
 
 class Api {
   constructor() {
+    this.location = window.location.href;
+
+    if (import.meta.env.PROD) {
+      const regex = /^(https?:\/\/[^\/]+)(\/[^\/]+)?/;
+      this.baseURL = this.location.match(regex)[1] + "/api";
+    } else {
+      this.baseURL = "http://localhost:3000/api";
+    }
+
     this.axios = axios.create({
-      baseURL: "http://localhost:3000/api",
+      baseURL: this.baseURL,
       withCredentials: true,
     });
   }
