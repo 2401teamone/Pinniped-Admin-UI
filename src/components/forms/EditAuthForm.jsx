@@ -49,15 +49,13 @@ export default function EditAuthForm({ table, row, setRows, closeModal }) {
             handleSubmit={async (updatedVal) => {
               console.log("update", updatedVal);
               api
-                .updateOne(table.id, row.id, {
-                  username: updatedVal,
-                })
+                .updateUsername(row.id, updatedVal)
                 .then((data) => {
-                  const rowId = data.row.id;
+                  const rowId = data.data.id;
                   setRows((prev) => {
                     return prev.map((row) => {
                       if (row.id === rowId) {
-                        return data.row;
+                        return data.data;
                       }
                       return row;
                     });
@@ -135,7 +133,25 @@ export default function EditAuthForm({ table, row, setRows, closeModal }) {
               <div className="change-password-btn">
                 <Button
                   type="primary"
-                  onClick={() => api.changePassword(row.id, formState.password)}
+                  onClick={handleSubmit((formState, errors) => {
+                    if (errors.length) {
+                      showError(
+                        "Failed to update password: Please correct the errors"
+                      );
+                      return;
+                    }
+                    api
+                      .changePassword(row.id, formState.password)
+                      .then(() => {
+                        showStatus("Password updated successfully");
+                        setChangePassword(0);
+                      })
+                      .catch((err) => {
+                        showError(
+                          `Failed to update password: ${err.response.data.message}`
+                        );
+                      });
+                  })}
                 >
                   Change Password
                 </Button>

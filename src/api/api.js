@@ -84,12 +84,18 @@ class Api {
     return res.data;
   }
 
+  async updateUsername(id, username) {
+    const res = await this.axios.patch(`/auth/${id}/username`, {
+      username,
+    });
+    return res.data;
+  }
+
   async changePassword(id, password) {
-    console.log(id, password, "HERE");
-    // const res = await this.axios.post(`/auth/change-password/${id}`, {
-    //   password,
-    // });
-    // return res.data;
+    const res = await this.axios.patch(`/auth/${id}/password`, {
+      password,
+    });
+    return res.data;
   }
 
   async getLogs() {

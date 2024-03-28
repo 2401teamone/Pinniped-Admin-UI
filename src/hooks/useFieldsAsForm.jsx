@@ -50,10 +50,7 @@ export default function useFieldsAsForm(initialState = {}) {
     return (e) => {
       e.preventDefault();
       setTriggerValidation(true);
-
-      setTimeout(() => {
-        callback(formState, errors);
-      }, 0);
+      callback(formState, errors);
     };
   };
 

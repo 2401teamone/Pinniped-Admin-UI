@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect } from "react";
+import { createPortal } from "react-dom";
 
-import { useNotificationContext } from '../../hooks/useNotifications.jsx';
+import { useNotificationContext } from "../../hooks/useNotifications.jsx";
 
 export default function Notification({ type, children }) {
   const {
@@ -9,10 +9,10 @@ export default function Notification({ type, children }) {
   } = useNotificationContext();
 
   useEffect(() => {
-    if (type === 'error' || type === 'status') {
+    if (type === "error" || type === "status") {
       const timeoutId = setTimeout(() => {
         closeNotification();
-      }, 4000);
+      }, 2000);
 
       return () => {
         clearTimeout(timeoutId);
@@ -24,7 +24,7 @@ export default function Notification({ type, children }) {
     <div className={`notification ${type}`}>
       <div className="left">
         <div className="icon">
-          {type === 'error' ? (
+          {type === "error" ? (
             <i className="fa-regular fa-circle-exclamation"></i>
           ) : (
             <i className="fa-sharp fa-regular fa-check"></i>
@@ -38,5 +38,5 @@ export default function Notification({ type, children }) {
     </div>
   );
 
-  return createPortal(notification, document.querySelector('#notifications'));
+  return createPortal(notification, document.querySelector("#notifications"));
 }
