@@ -24,8 +24,6 @@ export default function ColumnOptions({ schema, column, dispatch, tables }) {
   };
   let columnOptions = null;
 
-  console.log(column);
-
   switch (column.type) {
     case "text":
       columnOptions = (
@@ -224,21 +222,25 @@ export default function ColumnOptions({ schema, column, dispatch, tables }) {
         <div>{columnOptions}</div>
       </div>
       <div className="column-options-standard">
-        <Field
-          label="required"
-          type="bool"
-          config={{ inline: true }}
-          value={column.required}
-          onChange={(val) => {
-            dispatch({
-              type: "EDIT_COLUMN",
-              payload: {
-                ...column,
-                required: val,
-              },
-            });
-          }}
-        />
+        {column.type === "creator" ? (
+          ""
+        ) : (
+          <Field
+            label="required"
+            type="bool"
+            config={{ inline: true }}
+            value={column.required}
+            onChange={(val) => {
+              dispatch({
+                type: "EDIT_COLUMN",
+                payload: {
+                  ...column,
+                  required: val,
+                },
+              });
+            }}
+          />
+        )}
 
         <Settings>
           <div className="settings-item" onClick={removeColumn}>

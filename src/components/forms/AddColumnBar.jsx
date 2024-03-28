@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { TYPES } from "../../constants/constants";
 import Icon from "../utils/Icon.jsx";
+import { useConfirmModalContext } from "../../hooks/useConfirmModal";
 
 const determineOptions = (type) => {
   switch (type) {
@@ -12,10 +13,9 @@ const determineOptions = (type) => {
     case "date":
       return { min: "2021-01-01", max: "2022-01-01" };
     case "bool":
-      return {};
     case "email":
-      return {};
     case "url":
+    case "creator":
       return {};
     case "json":
       return { maxSize: 20000 };
@@ -23,16 +23,35 @@ const determineOptions = (type) => {
       return { tableId: "", cascadeDelete: 0 };
     case "select":
       return { maxSelect: 1, options: [] };
-    case "creator":
-      return {};
+    case "password":
+      return { minLength: 10, requiredPattern: "(?=.*d)(?=.*[!@#$%^&*])" };
     default:
       throw new Error("invalid type");
   }
 };
 
-export default function AddColumnBar({ dispatch }) {
+const creatorColumnAlreadyExists = (columns) => {
+  console.log(columns);
+  for (let column of columns) {
+    if (column.type === "creator") {
+      return true;
+    }
+  }
+  return false;
+};
+
+export default function AddColumnBar({ dispatch, columns }) {
   const [showContext, setShowContext] = useState("");
+
+  const {
+    actionCreators: { open },
+  } = useConfirmModalContext();
+
   const addColumn = (type) => {
+    if (type === "creator" && creatorColumnAlreadyExists(columns)) {
+      open("Creator column already exists");
+      return;
+    }
     const generateID = () => {
       return Math.random().toString(36).substring(7);
     };

@@ -99,9 +99,14 @@ export default function Table({ table, rows, setRows }) {
                 }`}
               ></th>
               <TH column={{ type: "pk", name: "id" }}></TH>
+              {table.type === "auth" ? (
+                <TH column={{ type: "username", name: "username" }}></TH>
+              ) : (
+                ""
+              )}
               {table &&
                 table.columns
-                  .filter((column) => column.type !== "password")
+                  .filter((column) => column.show)
                   .map((column) => <TH key={column.name} column={column} />)}
               <TH column={{ type: "date", name: "created_at" }} />
               <TH column={{ type: "date", name: "updated_at" }} />

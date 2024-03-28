@@ -50,8 +50,19 @@ export default function TableRow({
           column={{ type: "pk", name: "id" }}
           row={row}
         />
+        {table.type === "auth" ? (
+          <TableCell
+            table={table}
+            column={{ type: "username", name: "username" }}
+            row={row}
+          />
+        ) : (
+          ""
+        )}
         {table.columns
-          .filter((column) => column.type !== "password")
+          .filter((column) => {
+            return column.show;
+          })
           .map((column) => {
             return (
               <TableCell

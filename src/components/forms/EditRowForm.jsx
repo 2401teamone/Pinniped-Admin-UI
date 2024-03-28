@@ -24,7 +24,7 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
       </h2>
       <div className="row-form">
         {table.columns.map((column) => {
-          if (!column.editable) return null;
+          if (column.system) return null;
           return (
             <div className="row-form-field" key={column.name}>
               <Field
@@ -71,7 +71,7 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
                 validator={(val) => {
                   const validatorFn = getValidator(column.type);
                   if (validatorFn) {
-                    const errorMessage = validatorFn(val, column.options);
+                    const errorMessage = validatorFn(val, column.options, column.required);
                     if (errorMessage) {
                       return errorMessage;
                     }

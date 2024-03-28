@@ -11,28 +11,26 @@ import { useNotificationContext } from "../../hooks/useNotifications";
 import useFieldsAsForm from "../../hooks/useFieldsAsForm";
 
 const generateInitialState = (columns) => {
-  return columns
-    .filter((column) => column.editable)
-    .reduce((acc, column) => {
-      switch (column.type) {
-        case "bool":
-          acc[column.name] = 0;
-          break;
-        case "date":
-          acc[column.name] = new Date().toISOString().split("T")[0];
-          break;
-        case "relation":
-          acc[column.name] = null;
-          break;
-        case "select":
-          acc[column.name] = [];
-          break;
-        default:
-          acc[column.name] = "";
-      }
+  return columns.reduce((acc, column) => {
+    switch (column.type) {
+      case "bool":
+        acc[column.name] = 0;
+        break;
+      case "date":
+        acc[column.name] = new Date().toISOString().split("T")[0];
+        break;
+      case "relation":
+        acc[column.name] = null;
+        break;
+      case "select":
+        acc[column.name] = [];
+        break;
+      default:
+        acc[column.name] = "";
+    }
 
-      return acc;
-    }, {});
+    return acc;
+  }, {});
 };
 
 export default function RowForm({ table, setRows, closeModal, row }) {
@@ -40,11 +38,12 @@ export default function RowForm({ table, setRows, closeModal, row }) {
   const {
     actionCreators: { showError, showStatus },
   } = useNotificationContext();
-  const initialState = isNewRow ? generateInitialState(table.columns) : {};
+  const initialState = isNewRow
+    ? generateInitialState(table.columns, isNewRow)
+    : {};
   const { register, handleSubmit } = useFieldsAsForm(initialState);
-
+  console.log(table.columns, "COLUMNNSNNSNSNSNNS");
   const onSubmit = (formState, errors) => {
-    console.log(formState, errors, "SUBMITTING");
     if (errors.length) {
       showError("Invalid form inputs");
       return;
@@ -54,7 +53,6 @@ export default function RowForm({ table, setRows, closeModal, row }) {
       api
         .createOne(table.id, formState)
         .then((data) => {
-          console.log("Received ", data, "upon create row");
           setRows((prev) => [...prev, data.row]);
           showStatus("Row added successfully");
           closeModal();
@@ -73,7 +71,6 @@ export default function RowForm({ table, setRows, closeModal, row }) {
       </h2>
       <form className="row-form">
         {table.columns.map((column, idx) => {
-          if (!column.editable) return null;
           return (
             <div className="row-form-field" key={column.name}>
               <Field
@@ -81,10 +78,7 @@ export default function RowForm({ table, setRows, closeModal, row }) {
                 {...register(
                   column.name,
                   column.type,
-                  (val) => {
-                    const validatorFn = getValidator(column.type);
-                    return validatorFn(val, column.options);
-                  },
+                  (val) => getValidator(column.type)(val, column.options),
                   column.required
                 )}
                 tabIndex={true}

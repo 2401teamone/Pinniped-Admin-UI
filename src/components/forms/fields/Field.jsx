@@ -54,6 +54,7 @@ export default function Field({
 
   const handleValidation = useCallback(
     (val) => {
+      console.log("validating");
       if (validator) {
         const errorMessage = validator(val);
         if (errorMessage) {
@@ -62,17 +63,17 @@ export default function Field({
           return false;
         }
       }
-      if (required) {
-        const requiredError = handleRequiredField(type, val);
-        if (requiredError) {
-          setError("This field is required");
-          return false;
-        }
-      }
+      // if (required) {
+      //   const requiredError = handleRequiredField(type, val);
+      //   if (requiredError) {
+      //     setError("This field is required");
+      //     return false;
+      //   }
+      // }
       setError("");
       return true;
     },
-    [validator, required, type]
+    [validator]
   );
 
   useEffect(() => {
@@ -145,6 +146,7 @@ export default function Field({
     case "email":
     case "url":
     case "csv":
+    case "username":
       switch (type) {
         case "password":
           displayComponent = <span>{"*".repeat(value.length)}</span>;
@@ -309,6 +311,9 @@ export default function Field({
             ""
           )}
         </div>
+      )}
+      {!config.inline && !error.length && !validatorContext && (
+        <div className="field-message-container"></div>
       )}
     </div>
   );

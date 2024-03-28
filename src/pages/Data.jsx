@@ -107,22 +107,17 @@ export default function Data() {
             <div className="left">
               <Crumbs crumbs={["Data", `${tableName}`]} />
               <div className="data-page-action-icons">
-                {tableName === "users" ? (
-                  ""
-                ) : (
-                  <ActionIcon
-                    onClick={() =>
-                      editTable({
-                        tables,
-                        setTables,
-                        currentSchema: getTable(tableName),
-                      })
-                    }
-                  >
-                    <i className="fa-sharp fa-regular fa-gear"></i>
-                  </ActionIcon>
-                )}
-
+                <ActionIcon
+                  onClick={() =>
+                    editTable({
+                      tables,
+                      setTables,
+                      currentSchema: getTable(tableName),
+                    })
+                  }
+                >
+                  <i className="fa-sharp fa-regular fa-gear"></i>
+                </ActionIcon>
                 <ActionIcon
                   onClick={async () => {
                     await api
@@ -152,8 +147,9 @@ export default function Data() {
               <Button
                 type="confirm"
                 onClick={() => {
-                  if (tableName === "users") {
-                    addUser({ setRows, table: getTable(tableName) });
+                  let type = getTable(tableName).type;
+                  if (type === "auth") {
+                    addUser({ table: getTable(tableName), setRows });
                   } else {
                     addRecord({ table: getTable(tableName), setRows });
                   }

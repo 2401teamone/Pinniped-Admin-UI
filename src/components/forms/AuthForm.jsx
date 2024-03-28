@@ -10,18 +10,44 @@ import { useNotificationContext } from "../../hooks/useNotifications";
 
 import useFieldsAsForm from "../../hooks/useFieldsAsForm";
 
+const generateInitialState = (columns) => {
+  return columns.reduce((acc, column) => {
+    switch (column.type) {
+      case "bool":
+        acc[column.name] = 0;
+        break;
+      case "date":
+        acc[column.name] = new Date().toISOString().split("T")[0];
+        break;
+      case "relation":
+        acc[column.name] = null;
+        break;
+      case "select":
+        acc[column.name] = [];
+        break;
+      default:
+        acc[column.name] = "";
+    }
+
+    return acc;
+  }, {});
+};
+
 export default function AuthForm({ table, setRows, closeModal }) {
   const {
     actionCreators: { showError, showStatus },
   } = useNotificationContext();
 
-  const initialState = { username: "", password: "", passwordConfirm: "" };
+  const credentials = { username: "", password: "", passwordConfirm: "" };
 
-  const { register, handleSubmit, formState } = useFieldsAsForm(initialState);
+  const { register, handleSubmit, formState } = useFieldsAsForm({
+    ...credentials,
+    ...generateInitialState(table.columns),
+  });
 
   const onSubmit = (formState, errors) => {
-    console.log(formState, "FORMSTATE");
     if (errors.length) {
+      console.log(errors, "ERRORS", formState);
       showError("Invalid form inputs");
       return;
     }
@@ -29,6 +55,7 @@ export default function AuthForm({ table, setRows, closeModal }) {
     api
       .registerUser(formState)
       .then((data) => {
+        console.log(data, "RETURNED");
         setRows((prev) => [...prev, data.data]);
         showStatus("User registered successfully");
         closeModal();
@@ -51,37 +78,64 @@ export default function AuthForm({ table, setRows, closeModal }) {
           />
         </div>
         <div className="row-form-field">
-          <Field
-            {...register(
-              "password",
-              "password",
-              (val) => {
-                const validator = getValidator("password");
-                return validator(val);
-              },
-              true
-            )}
-            tabIndex={true}
-            required={true}
-          />
+          <div className="row-form-flex">
+            <Field
+              {...register(
+                "password",
+                "password",
+                (val) => {
+                  if (val.length < 10) {
+                    return "Password must be at least 10 characters long";
+                  }
+                  if (!/(?=.*d)(?=.*[!@#$%^&*])/.test(val)) {
+                    return "Password must contain at least one digit and one special character";
+                  }
+                  return "";
+                },
+                true
+              )}
+              tabIndex={true}
+              required={true}
+            />
+            <Field
+              {...register(
+                "passwordConfirm",
+                "password",
+                () => {
+                  if (formState.passwordConfirm !== formState.password) {
+                    return "Passwords do not match";
+                  }
+                  return "";
+                },
+                true
+              )}
+              tabIndex={true}
+              required={true}
+            />
+          </div>
         </div>
-        <div className="row-form-field">
-          <Field
-            {...register(
-              "passwordConfirm",
-              "password",
-              () => {
-                if (formState.passwordConfirm !== formState.password) {
-                  return "Passwords do not match";
-                }
-                return "";
-              },
-              true
-            )}
-            tabIndex={true}
-            required={true}
-          />
-        </div>
+        <div className="auth-separator"></div>
+        {table.columns.map((column, idx) => {
+          return (
+            <div className="row-form-field" key={column.name}>
+              <Field
+                options={column.options}
+                {...register(
+                  column.name,
+                  column.type,
+                  (val) => {
+                    console.log("VALIDATING", val, column.type, column.options);
+                    const validatorFn = getValidator(column.type);
+                    return validatorFn(val, column.options);
+                  },
+                  column.required
+                )}
+                tabIndex={true}
+                focusOnMount={idx === 0}
+              />
+            </div>
+          );
+        })}
       </form>
       <FormFooter>
         <Button type="confirm" onClick={handleSubmit(onSubmit)}>

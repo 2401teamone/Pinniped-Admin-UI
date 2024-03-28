@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import Icon from "../utils/Icon";
 import ActionIcon from "../utils/ActionIcon";
@@ -6,6 +6,7 @@ import ColumnOptions from "./ColumnOptions";
 
 export default function ColumnInput({ schema, column, dispatch, tables }) {
   const [showOptions, setShowOptions] = useState(false);
+  const inputRef = useRef(null);
 
   const updateColumn = (field, value) => {
     dispatch({
@@ -21,6 +22,7 @@ export default function ColumnInput({ schema, column, dispatch, tables }) {
           <Icon column={column} />
           <input
             type="text"
+            ref={inputRef}
             value={column.name}
             onChange={(e) => updateColumn("name", e.target.value)}
             disabled={column.type === "creator"}

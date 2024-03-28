@@ -18,6 +18,8 @@ const reducer = (state, action) => {
   switch (action.type) {
     case "UPDATE_NAME":
       return { ...state, name: action.payload };
+    case "UPDATE_TYPE":
+      return { ...state, type: action.payload };
     case "ADD_COLUMN":
       return { ...state, columns: [...state.columns, action.payload] };
     case "EDIT_COLUMN":
@@ -45,6 +47,7 @@ export default function TableForm({
   closeModal,
   currentSchema = {
     name: "",
+    type: "base",
     columns: [],
     getAllRule: "admin",
     getOneRule: "admin",
@@ -87,7 +90,6 @@ export default function TableForm({
   const handleSubmit = async (e) => {
     const validate = (schema) => {
       const errors = [];
-      console.log(schema.name, "NAMEEEE");
       if (!schema.name.length) {
         errors.push("Table name is required.");
       }
@@ -220,39 +222,49 @@ export default function TableForm({
             >
               Columns
             </div>
-            <div
-              className={`rules-btn ${
-                chosenInterface === "rules" ? "active" : "inactive"
-              }`}
-              onClick={() => setChosenInterface("rules")}
-            >
-              API Rules
-            </div>
+            {currentSchema.type === "auth" ? (
+              ""
+            ) : (
+              <div
+                className={`rules-btn ${
+                  chosenInterface === "rules" ? "active" : "inactive"
+                }`}
+                onClick={() => setChosenInterface("rules")}
+              >
+                API Rules
+              </div>
+            )}
           </div>
           <div className="interface">
             {chosenInterface === "columns" ? (
               <div className="columns-interface">
                 <p className="system-fields">
                   <span>System fields</span>
-                  <span className="system-field">id</span>,
-                  <span className="system-field">created_at</span>,
-                  <span className="system-field">updated_at</span>.
+                  <span className="system-field">id</span>
+                  <span className="system-field">created_at</span>
+                  <span className="system-field">updated_at</span>
+                  {schema.type === "auth" ? (
+                    <span>
+                      <span className="system-field">username</span>
+                      <span className="system-field">password</span>
+                    </span>
+                  ) : (
+                    ""
+                  )}
                 </p>
-                <AddColumnBar dispatch={dispatch} />
+                <AddColumnBar dispatch={dispatch} columns={schema.columns} />
                 <div className="actual-columns">
-                  {schema.columns
-                    .filter((column) => !column.system)
-                    .map((column) => {
-                      return (
-                        <ColumnInput
-                          key={column.tempId}
-                          schema={schema}
-                          column={column}
-                          dispatch={dispatch}
-                          tables={tables}
-                        />
-                      );
-                    })}
+                  {schema.columns.map((column) => {
+                    return (
+                      <ColumnInput
+                        key={column.tempId}
+                        schema={schema}
+                        column={column}
+                        dispatch={dispatch}
+                        tables={tables}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             ) : (

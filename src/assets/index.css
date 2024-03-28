@@ -1042,7 +1042,15 @@ input[type="number"]::-webkit-outer-spin-button {
     height: inherit;
 
     & .row-form-field {
-      margin: 20px 0;
+      margin: 10px 0;
+
+      & .row-form-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      
+      }
     }
   }
 }
@@ -1276,6 +1284,7 @@ input[type="number"]::-webkit-outer-spin-button {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
     }
   }
 }
@@ -1557,6 +1566,7 @@ input[type="number"]::-webkit-outer-spin-button {
   & .field-message-container {
     padding: 3px 0;
     font-size: 0.9rem;
+    min-height: 20px;
     
     & .field-validator-context {
       color: var(--text-color);
@@ -1795,7 +1805,9 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 & .settings-container {
-  position: relative;
+  position: absolute;
+  right: 2px;
+  bottom: 0px;
   height: 20px;
   display: flex;
   align-items: center;
@@ -2045,4 +2057,11 @@ input[type="number"]::-webkit-outer-spin-button {
     }
   }
 
+}
+
+& .auth-separator {
+  
+  width: 100%;
+  height: 1px;
+  background-color: var(--pk);
 }
