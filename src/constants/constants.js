@@ -6,6 +6,7 @@ export const LINKS = {
 
 export const MODAL_CONTENT = {
   addUser: "ADD_USER",
+  editUser: "EDIT_USER",
   addRecord: "ADD_RECORD",
   editRecord: "EDIT_RECORD",
   addTable: "ADD_TABLE",

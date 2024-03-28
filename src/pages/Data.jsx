@@ -17,10 +17,11 @@ import Table from "../components/table/Table";
 import TableDashboard from "../components/TableDashboard";
 import Footer from "../components/utils/Footer";
 
+import TableClass from "../utils/table.js";
+
 export default function Data() {
   const [tables, setTables] = useState([]);
   const [rows, setRows] = useState([]);
-
   const [footerOverlapping, setFooterOverlapping] = useState(false);
 
   const {
@@ -47,7 +48,10 @@ export default function Data() {
 
   const getTable = useCallback(
     (tableName) => {
-      return tables.find((table) => table.name === tableName);
+      let foundTable = tables.find((table) => table.name === tableName);
+      if (foundTable) {
+        return new TableClass(foundTable);
+      }
     },
     [tables]
   );
@@ -107,22 +111,17 @@ export default function Data() {
             <div className="left">
               <Crumbs crumbs={["Data", `${tableName}`]} />
               <div className="data-page-action-icons">
-                {tableName === "users" ? (
-                  ""
-                ) : (
-                  <ActionIcon
-                    onClick={() =>
-                      editTable({
-                        tables,
-                        setTables,
-                        currentSchema: getTable(tableName),
-                      })
-                    }
-                  >
-                    <i className="fa-sharp fa-regular fa-gear"></i>
-                  </ActionIcon>
-                )}
-
+                <ActionIcon
+                  onClick={() =>
+                    editTable({
+                      tables,
+                      setTables,
+                      currentSchema: getTable(tableName),
+                    })
+                  }
+                >
+                  <i className="fa-sharp fa-regular fa-gear"></i>
+                </ActionIcon>
                 <ActionIcon
                   onClick={async () => {
                     await api
@@ -152,8 +151,9 @@ export default function Data() {
               <Button
                 type="confirm"
                 onClick={() => {
-                  if (tableName === "users") {
-                    addUser({ setRows, table: getTable(tableName) });
+                  let type = getTable(tableName).type;
+                  if (type === "auth") {
+                    addUser({ table: getTable(tableName), setRows });
                   } else {
                     addRecord({ table: getTable(tableName), setRows });
                   }

@@ -26,6 +26,7 @@ export default function Input({
   handleSubmit,
   validateOnBlur,
   editing,
+  error,
 }) {
   const inputRef = useRef();
 
@@ -67,6 +68,7 @@ export default function Input({
       type={type === "password" ? "password" : "text"}
       value={typeof value === "number" ? value.toString() : value}
       onChange={(e) => {
+        if (error.length) handleValidation(formatVal(e.target.value, type));
         if (type === "number" && e.target.value === "") {
           onChange("");
         } else if (type === "number" && !/^\d+$/.test(e.target.value)) {

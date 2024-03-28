@@ -1,7 +1,21 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
-export default function Bool({ value, onChange, handleSubmit }) {
+export default function Bool({ value, onChange, handleSubmit, fieldRef }) {
   const boolRef = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === " " && document.activeElement === fieldRef.current) {
+        boolRef.current.click();
+      }
+    };
+
+    document.addEventListener("keydown", handler);
+
+    return () => {
+      document.removeEventListener("keydown", handler);
+    };
+  }, [fieldRef]);
 
   return (
     <div className="field-bool">
@@ -9,7 +23,6 @@ export default function Bool({ value, onChange, handleSubmit }) {
         ref={boolRef}
         className={`field-bool-toggle ${value ? "active" : ""}`}
         onClick={() => {
-          console.log("clicking bool");
           const frozenValue = value === 0 ? 1 : 0;
           onChange(frozenValue);
           if (handleSubmit) handleSubmit(frozenValue);

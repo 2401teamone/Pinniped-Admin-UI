@@ -1,7 +1,6 @@
-import { useState, useEffect, useRef, memo } from "react";
+import { useRef, memo } from "react";
 
 import { useModalContext } from "../../hooks/useModal";
-import api from "../../api/api.js";
 
 import TH from "./TableHead";
 import TableRow from "./TableRow";
@@ -9,83 +8,22 @@ import ActionBox from "../utils/ActionBox";
 import Button from "../utils/Button";
 import LoadingSpinner from "../utils/LoadingSpinner";
 
-import { useNotificationContext } from "../../hooks/useNotifications";
+import useFetchRows from "../../hooks/useFetchRows";
+import useCheckScroll from "../../hooks/ui/useCheckScroll";
+import useAdjustTable from "../../hooks/ui/useAdjustTable";
+import useSelectRows from "../../hooks/useSelectRows";
 
-export default function Table({ table, rows, setRows }) {
-  const [selectedRows, setSelectedRows] = useState([]);
-  const [tableIsScrolled, setTableIsScrolled] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [hasQueried, setHasQueried] = useState(false);
-
-  const {
-    actionCreators: { showError },
-  } = useNotificationContext();
-
+export default memo(function Table({ table, rows, setRows }) {
   const tableRef = useRef();
 
   const {
     actionCreators: { addUser, addRecord },
   } = useModalContext();
 
-  useEffect(() => {
-    setSelectedRows([]);
-  }, [table.id]);
-
-  useEffect(() => {
-    async function getRows() {
-      const data = await api.getAll(table.id);
-      return data;
-    }
-    const timeoutId = setTimeout(() => {
-      setLoading(true);
-    }, 50);
-
-    getRows()
-      .then((data) => {
-        setRows(data.rows);
-      })
-      .catch((err) => {
-        showError(err.message);
-      })
-      .finally(() => {
-        clearTimeout(timeoutId);
-        setLoading(false);
-        setHasQueried(true);
-      });
-  }, [setRows, showError, table.id]);
-
-  useEffect(() => {
-    const adjustTableHeight = () => {
-      const availableHeight = window.innerHeight - 145 - 50;
-
-      tableRef.current.style.maxHeight = availableHeight + "px";
-    };
-
-    adjustTableHeight();
-    window.addEventListener("resize", adjustTableHeight);
-    return () => {
-      window.removeEventListener("resize", adjustTableHeight);
-    };
-  }, []);
-
-  useEffect(() => {
-    const table = document.querySelector(".table-container");
-    const checkIfTableIsScrolled = () => {
-      if (table.scrollLeft > 15) {
-        console.log("is scrolled");
-        setTableIsScrolled(true);
-      } else {
-        console.log("not scrolled");
-        setTableIsScrolled(false);
-      }
-    };
-
-    table.addEventListener("scroll", checkIfTableIsScrolled);
-
-    return () => {
-      table.removeEventListener("scroll", checkIfTableIsScrolled);
-    };
-  }, []);
+  const { loading, hasQueried } = useFetchRows(table, rows, setRows);
+  const { tableIsScrolled } = useCheckScroll();
+  const { selectedRows, setSelectedRows } = useSelectRows(table);
+  useAdjustTable(tableRef);
 
   return (
     <div className="table-wrapper">
@@ -99,9 +37,14 @@ export default function Table({ table, rows, setRows }) {
                 }`}
               ></th>
               <TH column={{ type: "pk", name: "id" }}></TH>
+              {table.type === "auth" ? (
+                <TH column={{ type: "username", name: "username" }}></TH>
+              ) : (
+                ""
+              )}
               {table &&
                 table.columns
-                  .filter((column) => column.type !== "password")
+                  .filter((column) => column.show)
                   .map((column) => <TH key={column.name} column={column} />)}
               <TH column={{ type: "date", name: "created_at" }} />
               <TH column={{ type: "date", name: "updated_at" }} />
@@ -160,4 +103,4 @@ export default function Table({ table, rows, setRows }) {
       />
     </div>
   );
-}
+});

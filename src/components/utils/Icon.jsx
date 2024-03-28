@@ -9,8 +9,10 @@ const ICONS = {
   select: "list",
   relation: "arrows-repeat",
   json: "code",
-  creator: "user",
+  creator: "signature",
   password: "lock",
+  username: "user",
+  csv: "file-csv",
 };
 
 export default function Icon({ column }) {
@@ -52,6 +54,12 @@ export default function Icon({ column }) {
       break;
     case "password":
       icon = <i className={`fa-light fa-${ICONS.password}`}></i>;
+      break;
+    case "username":
+      icon = <i className={`fa-light fa-${ICONS.username}`}></i>;
+      break;
+    case "csv":
+      icon = <i className={`fa-light fa-${ICONS.csv}`}></i>;
       break;
     default:
       icon = <div></div>;

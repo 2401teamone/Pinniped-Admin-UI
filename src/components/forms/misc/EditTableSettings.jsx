@@ -26,7 +26,6 @@ export default function EditTableSettings({ tableId, setTables, closeModal }) {
               closeModal();
             })
             .catch((err) => {
-              console.log(err);
               showError(err.response.data.message);
             });
         }}

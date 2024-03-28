@@ -4,11 +4,11 @@ export default function AdminButtons({
   currentInterface,
   setCurrentInterface,
 }) {
-  const buttons = ["Backup", "Admin"];
+  const buttons = ["Backup", "Admins"];
 
   let icon = {
     Backup: <i className="fa-light fa-cabinet-filing"></i>,
-    Admin: <i className="fa-light fa-user-tie"></i>,
+    Admins: <i className="fa-light fa-user-tie"></i>,
   };
   return (
     <SubNavbar>

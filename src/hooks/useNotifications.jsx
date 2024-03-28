@@ -40,7 +40,6 @@ export const NotificationProvider = ({ children }) => {
   });
 
   const showError = useCallback((message) => {
-    console.log(message);
     notificationDispatch({
       type: NOTIFICATION_TYPES.error,
       message: message,
@@ -48,7 +47,6 @@ export const NotificationProvider = ({ children }) => {
   }, []);
 
   const showStatus = useCallback((message) => {
-    console.log(message);
     notificationDispatch({
       type: NOTIFICATION_TYPES.status,
       message: message,

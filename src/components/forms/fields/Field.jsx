@@ -13,8 +13,6 @@ import Json from "./Json";
 
 import Panel from "../../utils/Panel";
 
-import { handleRequiredField } from "../../../utils/validators";
-
 export default function Field({
   label,
   type,
@@ -37,7 +35,6 @@ export default function Field({
   required = false,
   disable = false,
   tabIndex = true,
-  focusOnMount = false,
 }) {
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState("");
@@ -57,22 +54,14 @@ export default function Field({
       if (validator) {
         const errorMessage = validator(val);
         if (errorMessage) {
-          console.log(errorMessage, "IN FIELD");
           setError(errorMessage);
-          return false;
-        }
-      }
-      if (required) {
-        const requiredError = handleRequiredField(type, val);
-        if (requiredError) {
-          setError("This field is required");
           return false;
         }
       }
       setError("");
       return true;
     },
-    [validator, required, type]
+    [validator]
   );
 
   useEffect(() => {
@@ -132,7 +121,6 @@ export default function Field({
 
   useEffect(() => {
     if (triggerValidation) {
-      console.log("TRIGGERED VALIDATON", value);
       handleValidation(value);
       setTriggerValidation(false);
     }
@@ -145,6 +133,7 @@ export default function Field({
     case "email":
     case "url":
     case "csv":
+    case "username":
       switch (type) {
         case "password":
           displayComponent = <span>{"*".repeat(value.length)}</span>;
@@ -169,6 +158,7 @@ export default function Field({
           handleValidation={handleValidation}
           validateOnBlur={validateOnBlur}
           editing={editing}
+          error={error}
         />
       );
       break;
@@ -271,6 +261,7 @@ export default function Field({
               value={value}
               onChange={onChange}
               handleSubmit={handleSubmit}
+              fieldRef={fieldRef}
             />
           ) : (
             editing && (
@@ -295,7 +286,6 @@ export default function Field({
         </div>
         {children}
       </div>
-
       {(!!error.length || !!validatorContext) && !config.inline && (
         <div className="field-message-container">
           {error.length ? (
@@ -309,6 +299,9 @@ export default function Field({
             ""
           )}
         </div>
+      )}
+      {!config.inline && !error.length && !validatorContext && (
+        <div className="field-message-container"></div>
       )}
     </div>
   );

@@ -69,7 +69,6 @@ class Api {
 
   async checkIfAdminHasRegistered() {
     const res = await this.axios.get("/auth/admin/registered");
-    console.log(res, "HEREEE");
     return res.data;
   }
 
@@ -93,13 +92,26 @@ class Api {
     return res.data;
   }
 
+  async updateUsername(id, username) {
+    const res = await this.axios.patch(`/auth/${id}/username`, {
+      username,
+    });
+    return res.data;
+  }
+
+  async changePassword(id, password) {
+    const res = await this.axios.patch(`/auth/${id}/password`, {
+      password,
+    });
+    return res.data;
+  }
+
   async getLogs() {
     const res = await this.axios.get("/admin/logs");
     return res.data;
   }
 
   async deleteLog(id) {
-    console.log(id, "ADMIN UI HERE");
     const res = await this.axios.delete(`/admin/logs/${id}`);
     return res.data;
   }

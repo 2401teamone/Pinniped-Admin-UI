@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-import { handleRequiredField } from "../utils/validators";
-
 export default function useFieldsAsForm(initialState = {}) {
   const [formState, setFormState] = useState(initialState);
   const [errors, setErrors] = useState([]);
@@ -24,14 +22,6 @@ export default function useFieldsAsForm(initialState = {}) {
             return errorMessage;
           }
         }
-        if (required) {
-          const requiredError = handleRequiredField(type, val);
-          const errorMessage = `${label} is required`;
-          if (requiredError) {
-            setErrors((prev) => [...prev, { label, errorMessage }]);
-            return errorMessage;
-          }
-        }
         setErrors(errors.filter((error) => error.label !== label));
         return "";
       },
@@ -50,10 +40,7 @@ export default function useFieldsAsForm(initialState = {}) {
     return (e) => {
       e.preventDefault();
       setTriggerValidation(true);
-
-      setTimeout(() => {
-        callback(formState, errors);
-      }, 0);
+      callback(formState, errors);
     };
   };
 

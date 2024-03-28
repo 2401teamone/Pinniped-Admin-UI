@@ -26,7 +26,6 @@ const Form = ({ close, setBackups }) => {
         onChange={(val) => setBackupName(val)}
         placeholder="Leave empty to autogenerate"
         validator={(val) => {
-          console.log(val, "VALLLLL");
           if (!val) return "";
           if (!/^[a-zA-Z0-9]+\.db$/.test(val)) return "Invalid backup name";
           return "";
@@ -116,7 +115,6 @@ export default function Backup() {
                       api
                         .downloadBackup(backup)
                         .then((blob) => {
-                          console.log(blob);
                           downloadFile(blob, backup);
                         })
                         .catch((err) => {
@@ -129,7 +127,6 @@ export default function Backup() {
                   <div
                     className="backup-delete"
                     onClick={() => {
-                      console.log(`Deleting ${backup}`);
                       api
                         .deleteBackup(backup)
                         .then(() => {
@@ -137,9 +134,7 @@ export default function Backup() {
                             prev.filter((b) => b !== backup)
                           );
                         })
-                        .catch((err) => {
-                          console.error(err);
-                        });
+                        .catch((err) => {});
                     }}
                   >
                     <i className="fa-regular fa-trash"></i>

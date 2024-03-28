@@ -2,7 +2,13 @@
  * Validators receive the current value along with an options object specific to the type
  */
 
-export const validateText = (val, { minLength, maxLength }) => {
+export const validateText = (val, { minLength, maxLength }, required) => {
+  if (required && val === "") {
+    return "Field is required";
+  }
+  if (!required && val === "") {
+    return "";
+  }
   if (val.length < minLength) {
     return `Must be at least ${minLength} characters`;
   }
@@ -12,8 +18,14 @@ export const validateText = (val, { minLength, maxLength }) => {
   return "";
 };
 
-export const validateNumber = (val, { min, max }) => {
-  if (isNaN(val)) {
+export const validateNumber = (val, { min, max }, required) => {
+  if (required && val === "") {
+    return "Field is required";
+  }
+  if (!required && val === "") {
+    return "";
+  }
+  if (required && isNaN(val)) {
     return "Must be a number";
   }
   if (val < min) {
@@ -25,8 +37,7 @@ export const validateNumber = (val, { min, max }) => {
   return "";
 };
 
-export const validateBool = (val) => {
-  console.log("val", val, typeof val);
+export const validateBool = (val, options, required) => {
   if (![0, 1].includes(val)) {
     return "Must be true or false";
   }
@@ -58,14 +69,26 @@ export const validateJson = (val, { maxSize }) => {
   return "";
 };
 
-export const validateDate = (val) => {
+export const validateDate = (val, options, required) => {
+  if (required && val === "") {
+    return "Field is required";
+  }
+  if (!required && val === "") {
+    return "";
+  }
   if (isNaN(Date.parse(val))) {
     return "Invalid date";
   }
   return "";
 };
 
-export const validateEmail = (val) => {
+export const validateEmail = (val, options, required) => {
+  if (required && val === "") {
+    return "Field is required";
+  }
+  if (!required && val === "") {
+    return "";
+  }
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(val)) {
     return "Invalid email";
@@ -73,7 +96,13 @@ export const validateEmail = (val) => {
   return "";
 };
 
-export const validateUrl = (val) => {
+export const validateUrl = (val, options, required) => {
+  if (required && val === "") {
+    return "Field is required";
+  }
+  if (!required && val === "") {
+    return "";
+  }
   const urlRegex = /^(http|https):\/\/[^ "]+$/;
   if (!urlRegex.test(val)) {
     return "Invalid url";
@@ -81,7 +110,13 @@ export const validateUrl = (val) => {
   return "";
 };
 
-export const validateRelation = (val, { tableId, cascadeDelete }) => {
+export const validateRelation = (val, { tableId, cascadeDelete }, required) => {
+  if (required && val === null) {
+    return "Field is required";
+  }
+  if (!required && val === null) {
+    return "";
+  }
   if (typeof val !== "string" && val !== null) {
     return "Invalid relation";
   }
@@ -89,15 +124,24 @@ export const validateRelation = (val, { tableId, cascadeDelete }) => {
   return "";
 };
 
-export const validatePassword = (val) => {
-  if (val.length < 10) {
-    return "Password must be at least 10 characters";
-  } else if (!/(?=.*\d)(?=.*[!@#$%^&*])/.test(val)) {
-    return "Password must contain at least one number and one special character";
-  } else return "";
+export const validateCreator = () => {
+  return "";
 };
 
-export const validateCreator = () => {
+export const validateUsername = (val, { minLength }) => {
+  if (val.length < minLength) {
+    return `Username must be at least ${minLength} characters`;
+  }
+  return "";
+};
+
+export const validatePassword = (val, { minLength, requiredPattern }) => {
+  if (val.length < minLength) {
+    return `Password must be at least ${minLength} characters`;
+  }
+  if (!new RegExp(requiredPattern).test(val)) {
+    return `Password must match: ${requiredPattern}`;
+  }
   return "";
 };
 
@@ -110,6 +154,7 @@ export const handleRequiredField = (type, val) => {
     case "url":
     case "date":
     case "json":
+    case "username":
       return val === "";
     case "relation":
       return val === null;
@@ -145,6 +190,8 @@ export default function getValidator(type) {
       return validateCreator;
     case "password":
       return validatePassword;
+    case "username":
+      return validateUsername;
     default:
       throw new Error("Invalid type");
   }

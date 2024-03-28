@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import Icon from "../utils/Icon";
 import ActionIcon from "../utils/ActionIcon";
 import ColumnOptions from "./ColumnOptions";
 
-export default function ColumnInput({ schema, column, dispatch, tables }) {
+export default function ColumnInput({
+  schema,
+  column,
+  dispatch,
+  tables,
+  isNew,
+}) {
   const [showOptions, setShowOptions] = useState(false);
+
+  const inputRef = useRef(null);
 
   const updateColumn = (field, value) => {
     dispatch({
@@ -14,6 +22,10 @@ export default function ColumnInput({ schema, column, dispatch, tables }) {
     });
   };
 
+  useEffect(() => {
+    if (isNew()) inputRef.current.focus();
+  }, [isNew]);
+
   return (
     <div className={`column-container ${showOptions && "show-border"}`}>
       <div className="column-input-container">
@@ -21,6 +33,7 @@ export default function ColumnInput({ schema, column, dispatch, tables }) {
           <Icon column={column} />
           <input
             type="text"
+            ref={inputRef}
             value={column.name}
             onChange={(e) => updateColumn("name", e.target.value)}
             disabled={column.type === "creator"}

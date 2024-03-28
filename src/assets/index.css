@@ -1042,7 +1042,20 @@ input[type="number"]::-webkit-outer-spin-button {
     height: inherit;
 
     & .row-form-field {
-      margin: 20px 0;
+      margin: 10px 0;
+
+      & .row-form-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      
+      }
+
+      & .change-password-btn {
+        display: flex;
+        justify-content: end;
+      }
     }
   }
 }
@@ -1072,7 +1085,7 @@ input[type="number"]::-webkit-outer-spin-button {
     & .interface {
       padding: 10px var(--modal-padding);
       background-color: white;
-      height: calc(100vh - 200px);
+      height: calc(100vh - 150px);
       border-top: 1px solid var(--light-gray);
 
       flex-grow: 1;
@@ -1137,7 +1150,7 @@ input[type="number"]::-webkit-outer-spin-button {
       justify-content: space-around;
 
       & .columns-btn,
-      .rules-btn {
+      .rules-btn, .options-btn {
         position: relative;
         margin-bottom: -0.8px;
         width: 150px;
@@ -1276,6 +1289,7 @@ input[type="number"]::-webkit-outer-spin-button {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: relative;
     }
   }
 }
@@ -1344,6 +1358,11 @@ input[type="number"]::-webkit-outer-spin-button {
 
         display: flex;
         align-items: center;
+
+        & span {
+          min-width: fit-content;
+          white-space: nowrap;
+        }
 
         & .content-display-select {
           display: flex;
@@ -1557,6 +1576,7 @@ input[type="number"]::-webkit-outer-spin-button {
   & .field-message-container {
     padding: 3px 0;
     font-size: 0.9rem;
+    min-height: 20px;
     
     & .field-validator-context {
       color: var(--text-color);
@@ -1795,7 +1815,9 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 & .settings-container {
-  position: relative;
+  position: absolute;
+  right: 2px;
+  bottom: 0px;
   height: 20px;
   display: flex;
   align-items: center;
@@ -2025,6 +2047,13 @@ input[type="number"]::-webkit-outer-spin-button {
     margin-bottom: 20px;
   }
 
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 300px;
+    line-height: 1.5;
+  }
+
   & table {
     width: 100%;
     & tr {
@@ -2045,4 +2074,11 @@ input[type="number"]::-webkit-outer-spin-button {
     }
   }
 
+}
+
+& .auth-separator {
+  width: 100%;
+  height: 1px;
+  background-color: var(--pk);
+  margin: 5px 0 25px 0;
 }
