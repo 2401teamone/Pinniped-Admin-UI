@@ -68,6 +68,7 @@ export default function TableForm({
   const [chosenInterface, setChosenInterface] = useState("columns");
 
   const [schema, dispatch] = useReducer(reducer, currentSchema);
+  console.log("received", schema, currentSchema);
 
   const [, setLocation] = useLocation();
 

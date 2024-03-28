@@ -43,16 +43,14 @@ export default function ColumnInput({
           <i className="fa-sharp fa-regular fa-gear"></i>
         </ActionIcon>
       </div>
-      {showOptions && (
-        <div>
-          <ColumnOptions
-            schema={schema}
-            column={column}
-            dispatch={dispatch}
-            tables={tables}
-          />
-        </div>
-      )}
+      <div className={`show-column-options ${showOptions ? "expanded" : "hide"}`}>
+        <ColumnOptions
+          schema={schema}
+          column={column}
+          dispatch={dispatch}
+          tables={tables}
+        />
+      </div>
     </div>
   );
 }
