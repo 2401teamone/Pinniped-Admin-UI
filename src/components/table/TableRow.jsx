@@ -16,14 +16,18 @@ export default function TableRow({
   const [hovering, setHovering] = useState(false);
 
   const {
-    actionCreators: { editRecord },
+    actionCreators: { editUser, editRecord },
   } = useModalContext();
 
   return (
     table && (
       <tr
         className={`tr ${hovering ? "hovering" : ""}`}
-        onClick={() => editRecord({ table, row, setRows })}
+        onClick={() => {
+          if (table.type === "auth") {
+            editUser({ table, row, setRows });
+          } else editRecord({ table, row, setRows });
+        }}
         onMouseOver={() => setHovering(true)}
         onMouseLeave={() => setHovering(false)}
       >

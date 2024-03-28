@@ -23,8 +23,6 @@ const determineOptions = (type) => {
       return { tableId: "", cascadeDelete: 0 };
     case "select":
       return { maxSelect: 1, options: [] };
-    case "password":
-      return { minLength: 10, requiredPattern: "(?=.*d)(?=.*[!@#$%^&*])" };
     default:
       throw new Error("invalid type");
   }

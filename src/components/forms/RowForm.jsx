@@ -70,23 +70,25 @@ export default function RowForm({ table, setRows, closeModal, row }) {
         {isNewRow ? "New" : "Edit"} <span>{table.name}</span> Row
       </h2>
       <form className="row-form">
-        {table.columns.map((column, idx) => {
-          return (
-            <div className="row-form-field" key={column.name}>
-              <Field
-                options={column.options}
-                {...register(
-                  column.name,
-                  column.type,
-                  (val) => getValidator(column.type)(val, column.options),
-                  column.required
-                )}
-                tabIndex={true}
-                focusOnMount={idx === 0}
-              />
-            </div>
-          );
-        })}
+        {table.columns
+          .filter((column) => column.type !== "creator")
+          .map((column, idx) => {
+            return (
+              <div className="row-form-field" key={column.name}>
+                <Field
+                  options={column.options}
+                  {...register(
+                    column.name,
+                    column.type,
+                    (val) => getValidator(column.type)(val, column.options),
+                    column.required
+                  )}
+                  tabIndex={true}
+                  focusOnMount={idx === 0}
+                />
+              </div>
+            );
+          })}
       </form>
       <FormFooter>
         <Button type="confirm" onClick={handleSubmit(onSubmit)}>

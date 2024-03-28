@@ -13,8 +13,6 @@ import Json from "./Json";
 
 import Panel from "../../utils/Panel";
 
-import { handleRequiredField } from "../../../utils/validators";
-
 export default function Field({
   label,
   type,
@@ -54,7 +52,6 @@ export default function Field({
 
   const handleValidation = useCallback(
     (val) => {
-      console.log("validating");
       if (validator) {
         const errorMessage = validator(val);
         if (errorMessage) {
@@ -63,13 +60,6 @@ export default function Field({
           return false;
         }
       }
-      // if (required) {
-      //   const requiredError = handleRequiredField(type, val);
-      //   if (requiredError) {
-      //     setError("This field is required");
-      //     return false;
-      //   }
-      // }
       setError("");
       return true;
     },
@@ -171,6 +161,7 @@ export default function Field({
           handleValidation={handleValidation}
           validateOnBlur={validateOnBlur}
           editing={editing}
+          error={error}
         />
       );
       break;

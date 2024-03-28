@@ -4,8 +4,15 @@ import Icon from "../utils/Icon";
 import ActionIcon from "../utils/ActionIcon";
 import ColumnOptions from "./ColumnOptions";
 
-export default function ColumnInput({ schema, column, dispatch, tables }) {
+export default function ColumnInput({
+  schema,
+  column,
+  dispatch,
+  tables,
+  isNew,
+}) {
   const [showOptions, setShowOptions] = useState(false);
+
   const inputRef = useRef(null);
 
   const updateColumn = (field, value) => {
@@ -14,6 +21,10 @@ export default function ColumnInput({ schema, column, dispatch, tables }) {
       payload: { ...column, [field]: value },
     });
   };
+
+  useEffect(() => {
+    if (isNew()) inputRef.current.focus();
+  }, [isNew]);
 
   return (
     <div className={`column-container ${showOptions && "show-border"}`}>

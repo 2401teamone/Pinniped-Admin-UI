@@ -26,6 +26,7 @@ export default function Input({
   handleSubmit,
   validateOnBlur,
   editing,
+  error,
 }) {
   const inputRef = useRef();
 
@@ -67,6 +68,7 @@ export default function Input({
       type={type === "password" ? "password" : "text"}
       value={typeof value === "number" ? value.toString() : value}
       onChange={(e) => {
+        if (error.length) handleValidation(formatVal(e.target.value, type));
         if (type === "number" && e.target.value === "") {
           onChange("");
         } else if (type === "number" && !/^\d+$/.test(e.target.value)) {
@@ -76,6 +78,7 @@ export default function Input({
         }
       }}
       onBlur={(e) => {
+        console.log("blurring");
         let formattedVal = formatVal(e.target.value, type);
         if (handleValidation && validateOnBlur) handleValidation(formattedVal);
         if (handleSubmit && initialValue !== formattedVal) {

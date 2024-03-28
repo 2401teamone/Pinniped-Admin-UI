@@ -72,7 +72,19 @@ export default function AuthForm({ table, setRows, closeModal }) {
       <form className="row-form">
         <div className="row-form-field">
           <Field
-            {...register("username", "text", undefined, true)}
+            {...register(
+              "username",
+              "text",
+              () => {
+                if (
+                  formState.username.length < table.options.minUsernameLength
+                ) {
+                  return `Username must be at least ${table.options.minUsernameLength} characters long`;
+                }
+                return "";
+              },
+              true
+            )}
             tabIndex={true}
             required={true}
           />
@@ -84,11 +96,11 @@ export default function AuthForm({ table, setRows, closeModal }) {
                 "password",
                 "password",
                 (val) => {
-                  if (val.length < 10) {
-                    return "Password must be at least 10 characters long";
+                  if (val.length < table.options.minPasswordLength) {
+                    return `Password must be at least ${table.options.minPasswordLength} characters long`;
                   }
-                  if (!/(?=.*d)(?=.*[!@#$%^&*])/.test(val)) {
-                    return "Password must contain at least one digit and one special character";
+                  if (!new RegExp(table.options.pattern).test(val)) {
+                    return `Invalid password`;
                   }
                   return "";
                 },
@@ -115,27 +127,28 @@ export default function AuthForm({ table, setRows, closeModal }) {
           </div>
         </div>
         <div className="auth-separator"></div>
-        {table.columns.map((column, idx) => {
-          return (
-            <div className="row-form-field" key={column.name}>
-              <Field
-                options={column.options}
-                {...register(
-                  column.name,
-                  column.type,
-                  (val) => {
-                    console.log("VALIDATING", val, column.type, column.options);
-                    const validatorFn = getValidator(column.type);
-                    return validatorFn(val, column.options);
-                  },
-                  column.required
-                )}
-                tabIndex={true}
-                focusOnMount={idx === 0}
-              />
-            </div>
-          );
-        })}
+        {table.columns
+          .filter((column) => column.type !== "creator")
+          .map((column, idx) => {
+            return (
+              <div className="row-form-field" key={column.name}>
+                <Field
+                  options={column.options}
+                  {...register(
+                    column.name,
+                    column.type,
+                    (val) => {
+                      const validatorFn = getValidator(column.type);
+                      return validatorFn(val, column.options);
+                    },
+                    column.required
+                  )}
+                  tabIndex={true}
+                  focusOnMount={idx === 0}
+                />
+              </div>
+            );
+          })}
       </form>
       <FormFooter>
         <Button type="confirm" onClick={handleSubmit(onSubmit)}>

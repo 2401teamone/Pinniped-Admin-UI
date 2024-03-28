@@ -84,6 +84,14 @@ class Api {
     return res.data;
   }
 
+  async changePassword(id, password) {
+    console.log(id, password, "HERE");
+    // const res = await this.axios.post(`/auth/change-password/${id}`, {
+    //   password,
+    // });
+    // return res.data;
+  }
+
   async getLogs() {
     const res = await this.axios.get("/admin/logs");
     return res.data;

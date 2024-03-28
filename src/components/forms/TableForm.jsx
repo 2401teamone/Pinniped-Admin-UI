@@ -13,6 +13,7 @@ import Button from "../utils/Button.jsx";
 import ApiRules from "./ApiRules.jsx";
 import EditTableSettings from "./misc/EditTableSettings.jsx";
 import FormFooter from "./misc/FormFooter.jsx";
+import AuthOptions from "../utils/AuthOptions.jsx";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -38,6 +39,8 @@ const reducer = (state, action) => {
       };
     case "EDIT_RULE":
       return { ...state, [action.payload.operation]: action.payload.rule };
+    case "EDIT_OPTIONS":
+      return { ...state, options: action.payload };
   }
 };
 
@@ -56,6 +59,11 @@ export default function TableForm({
     deleteRule: "admin",
   },
 }) {
+  const existingId = currentSchema.id;
+  const isNew = useCallback(() => {
+    return existingId === undefined;
+  }, [existingId]);
+
   const [tempIdsGenerated, setTempIdsGenerated] = useState(false);
   const [chosenInterface, setChosenInterface] = useState("columns");
 
@@ -80,12 +88,6 @@ export default function TableForm({
       delete column.tempId;
     });
   };
-
-  const existingId = currentSchema.id;
-
-  const isNew = useCallback(() => {
-    return existingId === undefined;
-  }, [existingId]);
 
   const handleSubmit = async (e) => {
     const validate = (schema) => {
@@ -116,7 +118,7 @@ export default function TableForm({
         errors.push("Table name must be unique.");
       }
 
-      if (!schema.columns.length) {
+      if (currentSchema.type === "base" && !schema.columns.length) {
         errors.push("At least one column is required.");
       }
       if (!schema.columns.every((column) => column.name.length)) {
@@ -203,15 +205,19 @@ export default function TableForm({
       {tempIdsGenerated && (
         <form className="table-form">
           <div className="table-form-name">
-            <Field
-              label="Table Name"
-              type="text"
-              value={schema.name}
-              onChange={(val) =>
-                dispatch({ type: "UPDATE_NAME", payload: val })
-              }
-              config={{ required: true, preventSpaces: true }}
-            />
+            {currentSchema.type === "auth" ? (
+              ""
+            ) : (
+              <Field
+                label="Table Name"
+                type="text"
+                value={schema.name}
+                onChange={(val) =>
+                  dispatch({ type: "UPDATE_NAME", payload: val })
+                }
+                config={{ required: true, preventSpaces: true }}
+              />
+            )}
           </div>
           <div className="table-form-navbar">
             <div
@@ -223,7 +229,14 @@ export default function TableForm({
               Columns
             </div>
             {currentSchema.type === "auth" ? (
-              ""
+              <div
+                className={`options-btn ${
+                  chosenInterface === "options" ? "active" : "inactive"
+                }`}
+                onClick={() => setChosenInterface("options")}
+              >
+                Options
+              </div>
             ) : (
               <div
                 className={`rules-btn ${
@@ -244,10 +257,10 @@ export default function TableForm({
                   <span className="system-field">created_at</span>
                   <span className="system-field">updated_at</span>
                   {schema.type === "auth" ? (
-                    <span>
+                    <>
                       <span className="system-field">username</span>
                       <span className="system-field">password</span>
-                    </span>
+                    </>
                   ) : (
                     ""
                   )}
@@ -262,13 +275,16 @@ export default function TableForm({
                         column={column}
                         dispatch={dispatch}
                         tables={tables}
+                        isNew={isNew}
                       />
                     );
                   })}
                 </div>
               </div>
-            ) : (
+            ) : chosenInterface === "rules" ? (
               <ApiRules schema={schema} dispatch={dispatch} />
+            ) : (
+              <AuthOptions schema={schema} dispatch={dispatch} />
             )}
           </div>
         </form>

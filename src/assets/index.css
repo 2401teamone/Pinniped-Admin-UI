@@ -1051,6 +1051,11 @@ input[type="number"]::-webkit-outer-spin-button {
         gap: 10px;
       
       }
+
+      & .change-password-btn {
+        display: flex;
+        justify-content: end;
+      }
     }
   }
 }
@@ -1080,7 +1085,7 @@ input[type="number"]::-webkit-outer-spin-button {
     & .interface {
       padding: 10px var(--modal-padding);
       background-color: white;
-      height: calc(100vh - 200px);
+      height: calc(100vh - 150px);
       border-top: 1px solid var(--light-gray);
 
       flex-grow: 1;
@@ -1145,7 +1150,7 @@ input[type="number"]::-webkit-outer-spin-button {
       justify-content: space-around;
 
       & .columns-btn,
-      .rules-btn {
+      .rules-btn, .options-btn {
         position: relative;
         margin-bottom: -0.8px;
         width: 150px;
@@ -2060,8 +2065,8 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 & .auth-separator {
-  
   width: 100%;
   height: 1px;
   background-color: var(--pk);
+  margin: 5px 0 25px 0;
 }

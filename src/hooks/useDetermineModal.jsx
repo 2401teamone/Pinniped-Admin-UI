@@ -4,6 +4,7 @@ import { MODAL_CONTENT } from "../constants/constants";
 
 import TableForm from "../components/forms/TableForm.jsx";
 import AuthForm from "../components/forms/AuthForm.jsx";
+import EditAuthForm from "../components/forms/EditAuthForm.jsx";
 import RowForm from "../components/forms/RowForm.jsx";
 import EditRowForm from "../components/forms/EditRowForm.jsx";
 import LogView from "../components/LogView";
@@ -22,6 +23,16 @@ export default function useDetermineModal() {
         <AuthForm
           setRows={data.setRows}
           table={data.table}
+          closeModal={actionCreators.close}
+        />
+      );
+      break;
+    case MODAL_CONTENT.editUser:
+      modalContent = (
+        <EditAuthForm
+          setRows={data.setRows}
+          table={data.table}
+          row={data.row}
           closeModal={actionCreators.close}
         />
       );

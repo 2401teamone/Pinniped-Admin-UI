@@ -13,6 +13,13 @@ function reducer(state, action) {
         component: MODAL_CONTENT.addUser,
         data: action.data,
       };
+    case MODAL_CONTENT.editUser:
+      return {
+        ...state,
+        isOpen: true,
+        component: MODAL_CONTENT.editUser,
+        data: action.data,
+      };
     case MODAL_CONTENT.addRecord:
       return {
         ...state,
@@ -70,6 +77,7 @@ export const ModalProvider = ({ children }) => {
   const actionCreators = {
     close: () => modalDispatch({ type: "CLOSE" }),
     addUser: (data) => modalDispatch({ type: MODAL_CONTENT.addUser, data }),
+    editUser: (data) => modalDispatch({ type: MODAL_CONTENT.editUser, data }),
     addRecord: (data) => modalDispatch({ type: MODAL_CONTENT.addRecord, data }),
     editRecord: (data) =>
       modalDispatch({ type: MODAL_CONTENT.editRecord, data }),
