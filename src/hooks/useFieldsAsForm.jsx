@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-import { handleRequiredField } from "../utils/validators";
-
 export default function useFieldsAsForm(initialState = {}) {
   const [formState, setFormState] = useState(initialState);
   const [errors, setErrors] = useState([]);
@@ -21,14 +19,6 @@ export default function useFieldsAsForm(initialState = {}) {
           const errorMessage = validator(val);
           if (errorMessage) {
             setErrors([...errors, { label, errorMessage }]);
-            return errorMessage;
-          }
-        }
-        if (required) {
-          const requiredError = handleRequiredField(type, val);
-          const errorMessage = `${label} is required`;
-          if (requiredError) {
-            setErrors((prev) => [...prev, { label, errorMessage }]);
             return errorMessage;
           }
         }

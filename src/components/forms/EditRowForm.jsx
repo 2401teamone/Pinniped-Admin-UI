@@ -17,6 +17,28 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
     actionCreators: { showError, showStatus },
   } = useNotificationContext();
 
+  const handleSubmit = (column) => async (updatedVal) => {
+    api
+      .updateOne(table.id, row.id, {
+        [column.name]: updatedVal,
+      })
+      .then((data) => {
+        const rowId = data.row.id;
+        setRows((prev) => {
+          return prev.map((row) => {
+            if (row.id === rowId) {
+              return data.row;
+            }
+            return row;
+          });
+        });
+        showStatus(`Updated ${row.id}'s ${column.name} to ${updatedVal}`);
+      })
+      .catch((err) => {
+        showError(`Failed to update column: ${err.response.data.message}`);
+      });
+  };
+
   return (
     <div className="row-form-container">
       <h2 className="row-form-header">
@@ -33,7 +55,6 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
                 value={rowState[column.name]}
                 required={column.required}
                 onChange={(val) => {
-                  console.log(val, "changing");
                   setRowState((prevState) => {
                     return {
                       ...prevState,
@@ -41,44 +62,14 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
                     };
                   });
                 }}
-                handleSubmit={async (updatedVal) => {
-                  console.log("update", updatedVal);
-                  api
-                    .updateOne(table.id, row.id, {
-                      [column.name]: updatedVal,
-                    })
-                    .then((data) => {
-                      const rowId = data.row.id;
-                      setRows((prev) => {
-                        return prev.map((row) => {
-                          if (row.id === rowId) {
-                            return data.row;
-                          }
-                          return row;
-                        });
-                      });
-
-                      showStatus(
-                        `Updated ${row.id}'s ${column.name} to ${updatedVal}`
-                      );
-                    })
-                    .catch((err) => {
-                      showError(
-                        `Failed to update column: ${err.response.data.message}`
-                      );
-                    });
-                }}
-                validator={(val) => {
-                  const validatorFn = getValidator(column.type);
-                  if (validatorFn) {
-                    const errorMessage = validatorFn(val, column.options, column.required);
-                    if (errorMessage) {
-                      return errorMessage;
-                    }
-                  }
-
-                  return "";
-                }}
+                handleSubmit={handleSubmit(column)}
+                validator={(val) =>
+                  getValidator(column.type)(
+                    val,
+                    column.options,
+                    column.required
+                  )
+                }
                 options={column.options}
                 tabIndex={true}
               />

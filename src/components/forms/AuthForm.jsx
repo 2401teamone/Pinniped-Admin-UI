@@ -4,34 +4,11 @@ import Field from "./fields/Field.jsx";
 import Button from "../utils/Button.jsx";
 import FormFooter from "./misc/FormFooter.jsx";
 
-import getValidator from "../../utils/validators";
-
 import { useNotificationContext } from "../../hooks/useNotifications";
 
 import useFieldsAsForm from "../../hooks/useFieldsAsForm";
-
-const generateInitialState = (columns) => {
-  return columns.reduce((acc, column) => {
-    switch (column.type) {
-      case "bool":
-        acc[column.name] = 0;
-        break;
-      case "date":
-        acc[column.name] = new Date().toISOString().split("T")[0];
-        break;
-      case "relation":
-        acc[column.name] = null;
-        break;
-      case "select":
-        acc[column.name] = [];
-        break;
-      default:
-        acc[column.name] = "";
-    }
-
-    return acc;
-  }, {});
-};
+import getValidator from "../../utils/validators";
+import Table from "../../utils/table";
 
 export default function AuthForm({ table, setRows, closeModal }) {
   const {
@@ -40,14 +17,15 @@ export default function AuthForm({ table, setRows, closeModal }) {
 
   const credentials = { username: "", password: "", passwordConfirm: "" };
 
+  let tableInstance = new Table(table);
+
   const { register, handleSubmit, formState } = useFieldsAsForm({
     ...credentials,
-    ...generateInitialState(table.columns),
+    ...tableInstance.generateInitialState(),
   });
 
   const onSubmit = (formState, errors) => {
     if (errors.length) {
-      console.log(errors, "ERRORS", formState);
       showError("Invalid form inputs");
       return;
     }
@@ -55,7 +33,6 @@ export default function AuthForm({ table, setRows, closeModal }) {
     api
       .registerUser(formState)
       .then((data) => {
-        console.log(data, "RETURNED");
         setRows((prev) => [...prev, data.data]);
         showStatus("User registered successfully");
         closeModal();
@@ -128,7 +105,7 @@ export default function AuthForm({ table, setRows, closeModal }) {
         </div>
         <div className="auth-separator"></div>
         {table.columns
-          .filter((column) => column.type !== "creator")
+          .filter((column) => !column.system)
           .map((column, idx) => {
             return (
               <div className="row-form-field" key={column.name}>
@@ -137,10 +114,12 @@ export default function AuthForm({ table, setRows, closeModal }) {
                   {...register(
                     column.name,
                     column.type,
-                    (val) => {
-                      const validatorFn = getValidator(column.type);
-                      return validatorFn(val, column.options);
-                    },
+                    (val) =>
+                      getValidator(column.type)(
+                        val,
+                        column.options,
+                        column.required
+                      ),
                     column.required
                   )}
                   tabIndex={true}

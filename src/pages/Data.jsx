@@ -17,10 +17,11 @@ import Table from "../components/table/Table";
 import TableDashboard from "../components/TableDashboard";
 import Footer from "../components/utils/Footer";
 
+import TableClass from "../utils/table.js";
+
 export default function Data() {
   const [tables, setTables] = useState([]);
   const [rows, setRows] = useState([]);
-
   const [footerOverlapping, setFooterOverlapping] = useState(false);
 
   const {
@@ -47,7 +48,10 @@ export default function Data() {
 
   const getTable = useCallback(
     (tableName) => {
-      return tables.find((table) => table.name === tableName);
+      let foundTable = tables.find((table) => table.name === tableName);
+      if (foundTable) {
+        return new TableClass(foundTable);
+      }
     },
     [tables]
   );

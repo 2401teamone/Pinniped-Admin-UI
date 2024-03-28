@@ -3,52 +3,29 @@ import api from "../../api/api.js";
 import Field from "./fields/Field.jsx";
 import Button from "../utils/Button.jsx";
 import FormFooter from "./misc/FormFooter.jsx";
-
 import getValidator from "../../utils/validators";
 
 import { useNotificationContext } from "../../hooks/useNotifications";
 
 import useFieldsAsForm from "../../hooks/useFieldsAsForm";
 
-const generateInitialState = (columns) => {
-  return columns.reduce((acc, column) => {
-    switch (column.type) {
-      case "bool":
-        acc[column.name] = 0;
-        break;
-      case "date":
-        acc[column.name] = new Date().toISOString().split("T")[0];
-        break;
-      case "relation":
-        acc[column.name] = null;
-        break;
-      case "select":
-        acc[column.name] = [];
-        break;
-      default:
-        acc[column.name] = "";
-    }
-
-    return acc;
-  }, {});
-};
-
 export default function RowForm({ table, setRows, closeModal, row }) {
   const isNewRow = row === null;
+
   const {
     actionCreators: { showError, showStatus },
   } = useNotificationContext();
-  const initialState = isNewRow
-    ? generateInitialState(table.columns, isNewRow)
-    : {};
+
+  const initialState = isNewRow ? table.generateInitialState() : {};
+
   const { register, handleSubmit } = useFieldsAsForm(initialState);
-  console.log(table.columns, "COLUMNNSNNSNSNSNNS");
+
   const onSubmit = (formState, errors) => {
+    console.log("formState", formState);
     if (errors.length) {
       showError("Invalid form inputs");
       return;
     }
-
     if (isNewRow) {
       api
         .createOne(table.id, formState)
@@ -58,7 +35,6 @@ export default function RowForm({ table, setRows, closeModal, row }) {
           closeModal();
         })
         .catch((err) => {
-          console.log(err);
           showError(`Invalid form inputs: ${err.response.data.message}`);
         });
     }
@@ -71,7 +47,7 @@ export default function RowForm({ table, setRows, closeModal, row }) {
       </h2>
       <form className="row-form">
         {table.columns
-          .filter((column) => column.type !== "creator")
+          .filter((column) => !column.system)
           .map((column, idx) => {
             return (
               <div className="row-form-field" key={column.name}>
@@ -80,7 +56,12 @@ export default function RowForm({ table, setRows, closeModal, row }) {
                   {...register(
                     column.name,
                     column.type,
-                    (val) => getValidator(column.type)(val, column.options),
+                    (val) =>
+                      getValidator(column.type)(
+                        val,
+                        column.options,
+                        column.required
+                      ),
                     column.required
                   )}
                   tabIndex={true}

@@ -25,7 +25,7 @@ export const validateNumber = (val, { min, max }, required) => {
   if (!required && val === "") {
     return "";
   }
-  if (isNaN(val)) {
+  if (required && isNaN(val)) {
     return "Must be a number";
   }
   if (val < min) {

@@ -35,7 +35,6 @@ export default function Field({
   required = false,
   disable = false,
   tabIndex = true,
-  focusOnMount = false,
 }) {
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState("");
@@ -55,7 +54,6 @@ export default function Field({
       if (validator) {
         const errorMessage = validator(val);
         if (errorMessage) {
-          console.log(errorMessage, "IN FIELD");
           setError(errorMessage);
           return false;
         }
@@ -288,7 +286,6 @@ export default function Field({
         </div>
         {children}
       </div>
-
       {(!!error.length || !!validatorContext) && !config.inline && (
         <div className="field-message-container">
           {error.length ? (
