@@ -7,16 +7,8 @@ import api from "../../api/api.js";
 
 import { format } from "date-fns";
 
-export default function TableCell({ table, column, row }) {
+export default function TableCell({ column, row }) {
   const [value, setValue] = useState(undefined);
-
-  const handleUpdate = async (updatedVal) => {
-    console.log("update", updatedVal);
-    const data = await api.updateOne(table.id, row.id, {
-      [column.name]: updatedVal,
-    });
-    console.log(data.row);
-  };
 
   useEffect(() => {
     setValue(row[column.name]);
@@ -36,8 +28,6 @@ export default function TableCell({ table, column, row }) {
         <Field
           type={column.type}
           value={value}
-          onChange={(val) => setValue(val)}
-          handleSubmit={handleUpdate}
           config={{
             inline: true,
           }}

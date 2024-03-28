@@ -38,7 +38,6 @@ export default function AuthForm({ table, setRows, closeModal }) {
         closeModal();
       })
       .catch((err) => {
-        console.log(err);
         showError(`Invalid form inputs: ${err.response.data.message}`);
       });
   };

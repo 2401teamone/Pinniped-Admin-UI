@@ -60,7 +60,6 @@ class Api {
 
   async checkIfAdminHasRegistered() {
     const res = await this.axios.get("/auth/admin/registered");
-    console.log(res, "HEREEE");
     return res.data;
   }
 
@@ -104,7 +103,6 @@ class Api {
   }
 
   async deleteLog(id) {
-    console.log(id, "ADMIN UI HERE");
     const res = await this.axios.delete(`/admin/logs/${id}`);
     return res.data;
   }

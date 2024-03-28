@@ -121,7 +121,6 @@ export default function Field({
 
   useEffect(() => {
     if (triggerValidation) {
-      console.log("TRIGGERED VALIDATON", value);
       handleValidation(value);
       setTriggerValidation(false);
     }
@@ -262,6 +261,7 @@ export default function Field({
               value={value}
               onChange={onChange}
               handleSubmit={handleSubmit}
+              fieldRef={fieldRef}
             />
           ) : (
             editing && (

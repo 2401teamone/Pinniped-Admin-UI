@@ -136,7 +136,6 @@ export const validateUsername = (val, { minLength }) => {
 };
 
 export const validatePassword = (val, { minLength, requiredPattern }) => {
-  console.log(requiredPattern, minLength, "REQUIRED PATTERN");
   if (val.length < minLength) {
     return `Password must be at least ${minLength} characters`;
   }

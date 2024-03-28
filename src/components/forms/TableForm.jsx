@@ -145,7 +145,6 @@ export default function TableForm({
 
     e.preventDefault();
     const clone = { ...schema };
-    console.log(clone);
 
     const errors = validate(clone);
     if (errors.length) {
@@ -158,14 +157,12 @@ export default function TableForm({
     try {
       if (isNew()) {
         const { table: createdTable } = await api.createTable(clone);
-        console.log(createdTable, "created table");
         setTables((prev) => [...prev, createdTable]);
       } else {
         const { table: editedTable } = await api.editTable(
           currentSchema.id,
           clone
         );
-        console.log(editedTable, "edited table");
         setTables((prev) => {
           return prev.map((table) =>
             table.id === editedTable.id ? editedTable : table
@@ -297,7 +294,6 @@ export default function TableForm({
           type="primary"
           onClick={(e) => {
             e.preventDefault();
-            console.log("closing");
             closeModal();
           }}
         >

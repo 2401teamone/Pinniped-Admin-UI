@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
   const adminInStorage = async () => {
     try {
       const res = await api.checkForAdmin();
-      console.log(res, "admin in storage");
+
       return res;
     } catch (err) {
       return false;
@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
 
   const adminHasRegistered = async () => {
     const res = await api.checkIfAdminHasRegistered();
-    console.log(res, "admin has registered");
+
     return res.registered;
   };
 
@@ -34,14 +34,14 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (data) => {
     const res = await api.login(data);
-    console.log(res, "logged in");
+
     setAdmin(res.admin);
     setLocation("/_/data");
   };
 
   const logout = async () => {
     const res = await api.logout();
-    console.log(res, "logged out");
+
     setAdmin(null);
   };
 

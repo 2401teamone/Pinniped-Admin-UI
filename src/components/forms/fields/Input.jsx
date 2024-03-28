@@ -78,7 +78,6 @@ export default function Input({
         }
       }}
       onBlur={(e) => {
-        console.log("blurring");
         let formattedVal = formatVal(e.target.value, type);
         if (handleValidation && validateOnBlur) handleValidation(formattedVal);
         if (handleSubmit && initialValue !== formattedVal) {

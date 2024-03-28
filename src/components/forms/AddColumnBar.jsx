@@ -29,7 +29,6 @@ const determineOptions = (type) => {
 };
 
 const creatorColumnAlreadyExists = (columns) => {
-  console.log(columns);
   for (let column of columns) {
     if (column.type === "creator") {
       return true;

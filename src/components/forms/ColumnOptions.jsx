@@ -177,7 +177,6 @@ export default function ColumnOptions({ schema, column, dispatch, tables }) {
             value={column.options.tableId}
             type="select"
             onChange={(val) => {
-              console.log("dispatching val", val);
               dispatch({
                 type: "EDIT_COLUMN",
                 payload: {

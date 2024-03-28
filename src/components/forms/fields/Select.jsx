@@ -63,11 +63,9 @@ export default function Select({
   useEffect(() => {
     const handler = (e) => {
       if (e.key === "ArrowDown") {
-        console.log(current, options.options.length, "CURRENT");
         setCurrent((prev) => (prev + 1) % options.options.length);
       }
       if (e.key === "ArrowUp") {
-        console.log(current, options.options.length, "CURRENT");
         setCurrent(
           (prev) => (prev - 1 + options.options.length) % options.options.length
         );

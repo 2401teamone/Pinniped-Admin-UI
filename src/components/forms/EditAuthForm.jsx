@@ -38,7 +38,6 @@ export default function EditAuthForm({ table, row, setRows, closeModal }) {
             value={rowState["username"]}
             required={true}
             onChange={(val) => {
-              console.log(val, "changing");
               setRowState((prevState) => {
                 return {
                   ...prevState,
@@ -47,7 +46,6 @@ export default function EditAuthForm({ table, row, setRows, closeModal }) {
               });
             }}
             handleSubmit={async (updatedVal) => {
-              console.log("update", updatedVal);
               api
                 .updateUsername(row.id, updatedVal)
                 .then((data) => {
@@ -170,7 +168,6 @@ export default function EditAuthForm({ table, row, setRows, closeModal }) {
                 value={rowState[column.name]}
                 required={column.required}
                 onChange={(val) => {
-                  console.log(val, "changing");
                   setRowState((prevState) => {
                     return {
                       ...prevState,
@@ -179,7 +176,6 @@ export default function EditAuthForm({ table, row, setRows, closeModal }) {
                   });
                 }}
                 handleSubmit={async (updatedVal) => {
-                  console.log("update", updatedVal);
                   api
                     .updateOne(table.id, row.id, {
                       [column.name]: updatedVal,

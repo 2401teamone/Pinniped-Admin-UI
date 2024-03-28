@@ -21,7 +21,6 @@ export default function RowForm({ table, setRows, closeModal, row }) {
   const { register, handleSubmit } = useFieldsAsForm(initialState);
 
   const onSubmit = (formState, errors) => {
-    console.log("formState", formState);
     if (errors.length) {
       showError("Invalid form inputs");
       return;

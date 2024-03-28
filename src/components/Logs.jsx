@@ -20,7 +20,6 @@ export default function Logs({ logs, setLogs, setSearchTerm }) {
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => {
               e.stopPropagation();
-              console.log(e);
               if (e.key === "Enter") {
                 setSearchTerm(input);
               } else if (e.key === "Escape") {
