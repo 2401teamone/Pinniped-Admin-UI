@@ -33,7 +33,7 @@ export default function DataNavbar({
             }}
           >
             <FontAwesomeIcon icon="fa-light fa-table" />
-            Tables Dashboard
+            Tables
           </div>
           <div className="separator"></div>
           {tables.length &&
