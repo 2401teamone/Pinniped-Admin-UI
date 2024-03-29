@@ -1,13 +1,14 @@
-import { useState } from 'react';
-import Button from './Button';
+import { useState } from "react";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function SearchBar({ onSearch }) {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   return (
     <form className="search-bar">
       <label htmlFor="search" className="search-icon">
-        <i className="fa-regular fa-magnifying-glass"></i>
+        <FontAwesomeIcon icon="fa-regular fa-magnifying-glass" />
       </label>
       <input
         className="search-input"

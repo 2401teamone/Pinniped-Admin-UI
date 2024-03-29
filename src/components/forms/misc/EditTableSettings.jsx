@@ -6,6 +6,8 @@ import { useNotificationContext } from "../../../hooks/useNotifications";
 
 import { useLocation } from "wouter";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export default function EditTableSettings({ tableId, setTables, closeModal }) {
   const {
     actionCreators: { showError },
@@ -30,7 +32,7 @@ export default function EditTableSettings({ tableId, setTables, closeModal }) {
             });
         }}
       >
-        <i className="fa-regular fa-trash"></i> <span>Drop</span>
+        <FontAwesomeIcon icon="fa-regular fa-trash" /> <span>Drop</span>
       </div>
     </Settings>
   );

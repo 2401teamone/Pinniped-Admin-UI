@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export default function PK({ id }) {
   const [hovering, setHovering] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -15,12 +17,13 @@ export default function PK({ id }) {
 
   return (
     <div className="pk">
-      <i
-        className="fa-light fa-copy copy-btn"
+      <FontAwesomeIcon
+        icon="fa-light fa-copy copy-btn"
         onMouseEnter={() => setHovering(true)}
         onMouseLeave={() => setHovering(false)}
         onClick={copyId}
-      ></i>
+      />
+
       {hovering && (
         <div className={`copy-tooltip ${copied && "copied"}`}>
           {copied ? "Copied" : "Copy"}

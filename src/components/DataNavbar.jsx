@@ -5,6 +5,8 @@ import SubNavbar from "./utils/SubNavbar";
 import { useModalContext } from "../hooks/useModal";
 import { useLocation } from "wouter";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export default function DataNavbar({
   tables,
   chooseTable,
@@ -21,7 +23,7 @@ export default function DataNavbar({
     <SubNavbar>
       <div className="data-page-navbar">
         <Button type="primary" onClick={() => addTable({ tables, setTables })}>
-          + New Table
+          <FontAwesomeIcon icon="fa-regular fa-plus" /> New Table
         </Button>
         <div className="nav-rows">
           <div
@@ -30,7 +32,7 @@ export default function DataNavbar({
               setLocation("/data");
             }}
           >
-            <i className="fa-light fa-table"></i>
+            <FontAwesomeIcon icon="fa-light fa-table" />
             Tables Dashboard
           </div>
           <div className="separator"></div>

@@ -5,7 +5,7 @@ import api from "../api/api.js";
 import Button from "./utils/Button.jsx";
 import Field from "./forms/fields/Field.jsx";
 
-import useFieldsAsForm from "../hooks/useFieldsAsForm.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { useConfirmModalContext } from "../hooks/useConfirmModal.jsx";
 
@@ -91,7 +91,7 @@ export default function Backup() {
           type="inherit"
           onClick={() => open(<Form close={close} setBackups={setBackups} />)}
         >
-          <i className="fa-regular fa-play"></i>
+          <FontAwesomeIcon icon="fa-regular fa-play" />
           Backup
         </Button>
       </div>
@@ -122,7 +122,7 @@ export default function Backup() {
                         });
                     }}
                   >
-                    <i className="fa-sharp fa-light fa-circle-down"></i>
+                    <FontAwesomeIcon icon="fa-sharp fa-light fa-circle-down" />
                   </div>
                   <div
                     className="backup-delete"
@@ -137,7 +137,7 @@ export default function Backup() {
                         .catch((err) => {});
                     }}
                   >
-                    <i className="fa-regular fa-trash"></i>
+                    <FontAwesomeIcon icon="fa-regular fa-trash" />
                   </div>
                 </div>
               </div>

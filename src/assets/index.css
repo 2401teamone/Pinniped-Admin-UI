@@ -753,6 +753,10 @@ input[type="number"]::-webkit-outer-spin-button {
   justify-content: center;
   height: 30px;
 
+  & svg {
+    margin-right: 5px;
+  }
+
   &:focus {
     outline: 2px dashed var(--green);
     outline-offset: 3px;
@@ -1046,6 +1050,7 @@ input[type="number"]::-webkit-outer-spin-button {
     justify-content: space-between;
     align-items: center;
     padding: 20px var(--modal-padding) 10px var(--modal-padding);
+    position: relative;
 
     & .table-form-header {
       font-size: 1.3rem;
@@ -1814,22 +1819,24 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 & .settings-container {
-  position: absolute;
+  /* position: absolute; */
   right: 2px;
   bottom: 0px;
   height: 20px;
   display: flex;
   align-items: center;
+  position: relative;
 
   & .settings-btn {
     cursor: pointer;
-    padding: 10px;
+    padding: 5px;
     border-radius: var(--min-radius);
     &:hover {
       background-color: var(--hover);
     }
   }
   & .settings {
+    position: absolute;
     background-color: white;
     width: 70px;
     padding: 2px;
@@ -2074,4 +2081,49 @@ input[type="number"]::-webkit-outer-spin-button {
   height: 1px;
   background-color: var(--pk);
   margin: 5px 0 25px 0;
+}
+
+.table-dashboard {
+  padding: 30px;
+  display: flex;
+  justify-content: space-around;
+  & .table-card {
+    width: 200px;
+    height: 300px;
+    border: 1px solid var(--pk);
+    border-radius: var(--min-radius);
+    padding: 15px;
+    cursor: pointer;
+    box-shadow: var(--shadow-3);
+    background-color: white;
+
+    &:hover {
+      border: 1px solid var(--light-gray);
+    }
+
+    & .table-card-header {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-color);
+      display: flex;
+      gap: 10px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid var(--light-gray);
+      margin-bottom: 10px;
+    }
+
+    & .table-card-schema {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      & .table-card-column {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.9rem;
+        color: var(--text-color);
+      }
+    }
+  }
 }

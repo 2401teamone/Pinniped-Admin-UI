@@ -1,5 +1,7 @@
 import SubNavbar from "./utils/SubNavbar";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export default function AdminButtons({
   currentInterface,
   setCurrentInterface,
@@ -7,8 +9,8 @@ export default function AdminButtons({
   const buttons = ["Backup", "Admins"];
 
   let icon = {
-    Backup: <i className="fa-light fa-cabinet-filing"></i>,
-    Admins: <i className="fa-light fa-user-tie"></i>,
+    Backup: <FontAwesomeIcon icon="fa-light fa-cabinet-filing" />,
+    Admins: <FontAwesomeIcon icon="fa-light fa-user-tie" />,
   };
   return (
     <SubNavbar>

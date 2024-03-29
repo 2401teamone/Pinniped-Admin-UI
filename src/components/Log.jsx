@@ -3,6 +3,8 @@ import { useState } from "react";
 import { format } from "date-fns";
 import api from "../api/api.js";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 const determineColor = (method) => {
   switch (method) {
     case "get":
@@ -49,7 +51,7 @@ export default function Log({ log, viewingLog, setViewingLog, setLogs }) {
           <span className="log-status">{log.statusCode}</span>
           {log.statusCode >= 400 ? (
             <span className="error">
-              <i className="fa-solid fa-circle-exclamation"></i>
+              <FontAwesomeIcon icon="fa-solid fa-exclamation-circle" />
             </span>
           ) : (
             ""
@@ -77,7 +79,7 @@ export default function Log({ log, viewingLog, setViewingLog, setLogs }) {
               });
           }}
         >
-          <i className="fa-duotone fa-eraser"></i>
+          <FontAwesomeIcon icon="fa-duotone fa-eraser" />
         </div>
       ) : (
         ""
