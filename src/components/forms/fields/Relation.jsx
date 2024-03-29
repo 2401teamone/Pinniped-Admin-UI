@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 
 import api from "../../../api/api";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function Relation({
   value,
   onChange,
@@ -69,7 +70,8 @@ export default function Relation({
                 onMouseOver={() => setShowContext(row.id)}
                 onMouseOut={() => setShowContext(undefined)}
               >
-                <i className="fa-sharp fa-thin fa-circle-info"></i>
+                <FontAwesomeIcon icon="fa-sharp fa-thin fa-circle-info" />
+
                 {showContext === row.id && (
                   <div className="row-context-dropdown">
                     <pre>{JSON.stringify(row, null, 2)}</pre>

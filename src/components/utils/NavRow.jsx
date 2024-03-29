@@ -1,16 +1,13 @@
-const ICONS = {
-  auth: "user",
-  resource: "folder-closed",
-};
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function NavRow({ active, table, children, onClick }) {
   return (
     <div className={`nav-row ${active && "active-nav-row"}`} onClick={onClick}>
       <span>
         {table.name === "users" || table.name === "_admins" ? (
-          <i className={`fa-light fa-${ICONS["auth"]}`} />
+          <FontAwesomeIcon icon={`fa-light fa-user`} />
         ) : (
-          <i className={`fa-light fa-${ICONS["resource"]}`} />
+          <FontAwesomeIcon icon={`fa-light fa-folder-closed`} />
         )}
       </span>
       <span>{children}</span>

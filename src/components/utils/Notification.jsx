@@ -3,6 +3,8 @@ import { createPortal } from "react-dom";
 
 import { useNotificationContext } from "../../hooks/useNotifications.jsx";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export default function Notification({ type, children }) {
   const {
     actionCreators: { closeNotification },
@@ -25,9 +27,9 @@ export default function Notification({ type, children }) {
       <div className="left">
         <div className="icon">
           {type === "error" ? (
-            <i className="fa-regular fa-circle-exclamation"></i>
+            <FontAwesomeIcon icon="fa-regular fa-circle-exclamation" />
           ) : (
-            <i className="fa-sharp fa-regular fa-check"></i>
+            <FontAwesomeIcon icon="fa-sharp fa-regular fa-check" />
           )}
         </div>
         <div className="message">{children}</div>

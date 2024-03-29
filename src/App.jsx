@@ -2,6 +2,7 @@ import { Router, Route, Switch } from "wouter";
 
 import Navbar from "./components/Navbar";
 
+
 import Data from "./pages/Data";
 import Observability from "./pages/Observability";
 import Settings from "./pages/Settings";

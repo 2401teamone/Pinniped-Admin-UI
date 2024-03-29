@@ -4,6 +4,8 @@ import Icon from "../utils/Icon";
 import ActionIcon from "../utils/ActionIcon";
 import ColumnOptions from "./ColumnOptions";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export default function ColumnInput({
   schema,
   column,
@@ -40,10 +42,12 @@ export default function ColumnInput({
           />
         </div>
         <ActionIcon onClick={() => setShowOptions((prev) => !prev)}>
-          <i className="fa-sharp fa-regular fa-gear"></i>
+          <FontAwesomeIcon icon="fa-light fa-bars" />
         </ActionIcon>
       </div>
-      <div className={`show-column-options ${showOptions ? "expanded" : "hide"}`}>
+      <div
+        className={`show-column-options ${showOptions ? "expanded" : "hide"}`}
+      >
         <ColumnOptions
           schema={schema}
           column={column}

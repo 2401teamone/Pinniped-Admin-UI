@@ -10,6 +10,8 @@ import { LINKS } from "../constants/constants.js";
 
 import pinnipedIcon from "../assets/images/pinniped_icon.png";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export default function Navbar() {
   const [hovering, setHovering] = useState("");
 
@@ -36,7 +38,7 @@ export default function Navbar() {
         onMouseOver={() => setHovering(LINKS.data)}
         onMouseLeave={() => setHovering("")}
       >
-        <i className="fa-regular fa-database"></i>
+        <FontAwesomeIcon icon="fa-light fa-database" />
       </Link>
       <Link
         to="/_/observability"
@@ -53,7 +55,7 @@ export default function Navbar() {
         onMouseOver={() => setHovering(LINKS.observability)}
         onMouseLeave={() => setHovering("")}
       >
-        <i className="fa-regular fa-chart-line"></i>
+        <FontAwesomeIcon icon="fa-regular fa-chart-line" />
       </Link>
       <Link
         to="/_/settings"
@@ -69,12 +71,12 @@ export default function Navbar() {
         onMouseOver={() => setHovering(LINKS.settings)}
         onMouseLeave={() => setHovering("")}
       >
-        <i className="fa-regular fa-gear"></i>
+        <FontAwesomeIcon icon="fa-regular fa-gear" />
       </Link>
 
       <div className="logout" onClick={logout}>
         <ActionIcon>
-          <i className="fa-regular fa-sign-out"></i>
+          <FontAwesomeIcon icon="fa-regular fa-sign-out" />
         </ActionIcon>
       </div>
     </nav>

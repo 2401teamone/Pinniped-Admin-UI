@@ -40,14 +40,14 @@ export default function Observability() {
 
   const todaysLogs = logs.filter(
     (log) =>
-      new Date(log.timestamp).getDate() === new Date().getDate() &&
-      new Date(log.timestamp).getMonth() === new Date().getMonth() &&
-      new Date(log.timestamp).getFullYear() === new Date().getFullYear()
+      log.timestamp.getDate() === new Date().getDate() &&
+      log.timestamp.getMonth() === new Date().getMonth() &&
+      log.timestamp.getFullYear() === new Date().getFullYear()
   );
 
   const requestsPerDay = () => {
     const days = logs.reduce((result, log) => {
-      const date = new Date(log.timestamp);
+      const date = log.timestamp;
       const day = new Date(
         date.getFullYear(),
         date.getMonth(),
@@ -86,16 +86,22 @@ export default function Observability() {
             <h1>Dashboard</h1>
           </PageHeader>
           <div className="observability-page-content-data">
-            <div className="cards">
-              <Card header="Requests today">{todaysLogs.length}</Card>
-              <Card header="Average Requests/day">{5}</Card>
-              <Card header="Errors">
-                {logs.filter((log) => log.statusCode >= 400).length}
-              </Card>
-            </div>
-            <div className="chart">
-              <Chart data={logs.filter(filterBySearchTerm)}></Chart>
-            </div>
+            {!logs.length ? (
+              ""
+            ) : (
+              <>
+                <div className="cards">
+                  <Card header="Requests today">{todaysLogs.length}</Card>
+                  <Card header="Average Requests/day">{requestsPerDay()}</Card>
+                  <Card header="Errors">
+                    {logs.filter((log) => log.statusCode >= 400).length}
+                  </Card>
+                </div>
+                <div className="chart">
+                  <Chart data={logs.filter(filterBySearchTerm)}></Chart>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

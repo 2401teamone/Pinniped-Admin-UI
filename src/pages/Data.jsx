@@ -5,6 +5,8 @@ import api from "../api/api";
 import { useModalContext } from "../hooks/useModal";
 import { useNotificationContext } from "../hooks/useNotifications";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import { useLocation, useSearch } from "wouter";
 
 import PageHeader from "../components/utils/PageHeader";
@@ -120,7 +122,7 @@ export default function Data() {
                     })
                   }
                 >
-                  <i className="fa-sharp fa-regular fa-gear"></i>
+                  <FontAwesomeIcon icon="fa-sharp fa-regular fa-gear" />
                 </ActionIcon>
                 <ActionIcon
                   onClick={async () => {
@@ -134,7 +136,7 @@ export default function Data() {
                       });
                   }}
                 >
-                  <i className="fa-light fa-arrows-rotate"></i>
+                  <FontAwesomeIcon icon="fa-light fa-arrows-rotate" />
                 </ActionIcon>
                 <ActionIcon
                   onClick={() => {
@@ -143,7 +145,7 @@ export default function Data() {
                     );
                   }}
                 >
-                  <i className="fa-light fa-copy copy-btn" />
+                  <FontAwesomeIcon icon="fa-light fa-copy copy-btn" />
                 </ActionIcon>
               </div>
             </div>
@@ -159,7 +161,7 @@ export default function Data() {
                   }
                 }}
               >
-                <i className="fa-regular fa-plus"></i> Add Row
+                <FontAwesomeIcon icon="fa-regular fa-plus" /> Add Row
               </Button>
             </div>
           </PageHeader>
@@ -175,7 +177,7 @@ export default function Data() {
         </div>
       )}
       <div className="data-page-content">
-        <TableDashboard />
+        <TableDashboard tables={tables} chooseTable={chooseTable} />
       </div>
     </div>
   );

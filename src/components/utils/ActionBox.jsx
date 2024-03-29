@@ -5,6 +5,8 @@ import api from "../../api/api.js";
 import { useNotificationContext } from "../../hooks/useNotifications.jsx";
 import { useConfirmModalContext } from "../../hooks/useConfirmModal.jsx";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export default function ActionBox({
   table,
   selectedRows,
@@ -51,7 +53,7 @@ export default function ActionBox({
         }}
         className="row-delete right"
       >
-        <i className="fa-regular fa-trash"></i>
+        <FontAwesomeIcon icon="fa-regular fa-trash" />
       </div>
     </div>
   );

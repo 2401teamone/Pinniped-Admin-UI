@@ -5,6 +5,8 @@ import Checkbox from "../utils/Checkbox.jsx";
 
 import { useModalContext } from "../../hooks/useModal";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export default function TableRow({
   table,
   row,
@@ -89,7 +91,7 @@ export default function TableRow({
           row={row}
         />
         <td className={`sticky-col right-arrow ${hovering ? "hovering" : ""}`}>
-          <i className="fa-regular fa-arrow-right"></i>
+          <FontAwesomeIcon icon="fa-regular fa-arrow-right" />
         </td>
       </tr>
     )

@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 const ICONS = {
   pk: "key",
   text: "text",
@@ -20,46 +22,46 @@ export default function Icon({ column }) {
 
   switch (column.type) {
     case "pk":
-      icon = <i className={`fa-light fa-${ICONS.pk}`}></i>;
+      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.pk} />;
       break;
     case "text":
-      icon = <i className={`fa-light fa-${ICONS.text}`}></i>;
+      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.text} />;
       break;
     case "number":
-      icon = <i className={`fa-light fa-${ICONS.number}`}></i>;
+      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.number} />;
       break;
     case "bool":
-      icon = <i className={`fa-light fa-${ICONS.bool}`}></i>;
+      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.bool} />;
       break;
     case "date":
-      icon = <i className={`fa-light fa-${ICONS.date}`}></i>;
+      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.date} />;
       break;
     case "email":
-      icon = <i className={`fa-light fa-${ICONS.email}`}></i>;
+      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.email} />;
       break;
     case "url":
-      icon = <i className={`fa-light fa-${ICONS.url}`}></i>;
+      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.url} />;
       break;
     case "select":
-      icon = <i className={`fa-light fa-${ICONS.select}`}></i>;
+      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.select} />;
       break;
     case "relation":
-      icon = <i className={`fa-light fa-${ICONS.relation}`}></i>;
+      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.relation} />;
       break;
     case "json":
-      icon = <i className={`fa-light fa-${ICONS.json}`}></i>;
+      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.json} />;
       break;
     case "creator":
-      icon = <i className={`fa-light fa-${ICONS.creator}`}></i>;
+      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.creator} />;
       break;
     case "password":
-      icon = <i className={`fa-light fa-${ICONS.password}`}></i>;
+      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.password} />;
       break;
     case "username":
-      icon = <i className={`fa-light fa-${ICONS.username}`}></i>;
+      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.username} />;
       break;
     case "csv":
-      icon = <i className={`fa-light fa-${ICONS.csv}`}></i>;
+      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.csv} />;
       break;
     default:
       icon = <div></div>;
