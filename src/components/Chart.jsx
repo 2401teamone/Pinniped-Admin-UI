@@ -67,9 +67,9 @@ export default function Chart({ data }) {
       <Line
         type="natural"
         dataKey="count"
-        stroke="rgba(215, 122, 97, 0.5)"
+        stroke="#56e4b7"
         dot={false}
-        strokeWidth={2}
+        strokeWidth={3}
       />
       <XAxis dataKey="formattedTimeBucket" />
       <YAxis interval={1} />
