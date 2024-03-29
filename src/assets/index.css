@@ -24,6 +24,11 @@
   --brown: #423629;
   --brown-light: rgba(66, 54, 41, 0.5);
 
+  --foreground: #85859c;
+  --accent1: #56e4b7;
+  --accent2: #66c4ae;
+  --accent3: #75a5a5;
+
   --error-background: #ffcdd2;
   --error-font: #e53935;
 
@@ -115,7 +120,7 @@ input[type="number"]::-webkit-outer-spin-button {
       }
 
       &.active {
-        border: 2px solid var(--black);
+        border: 2px solid var(--foreground);
       }
     }
   }
@@ -805,7 +810,7 @@ input[type="number"]::-webkit-outer-spin-button {
   }
 
   &.confirm {
-    background-color: var(--green);
+    background-color: var(--accent3);
     color: white;
     border: 1px solid black;
 
@@ -1101,7 +1106,7 @@ input[type="number"]::-webkit-outer-spin-button {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          /* width: 200px; */
+
           & .method-for-rule {
             color: var(--text-color);
             font-weight: 600;
@@ -1122,7 +1127,8 @@ input[type="number"]::-webkit-outer-spin-button {
                 color: var(--blue-light);
               }
               &.active {
-                color: var(--blue);
+                color: var(--accent2);
+                font-weight: 600;
               }
             }
           }
@@ -1184,7 +1190,7 @@ input[type="number"]::-webkit-outer-spin-button {
         transition: all 0.3s ease;
 
         &:hover {
-          background-color: var(--green);
+          background-color: var(--accent2);
         }
 
         &:active {
@@ -1398,7 +1404,7 @@ input[type="number"]::-webkit-outer-spin-button {
           background-color: var(--secondary-background);
 
           &.active {
-            background-color: var(--green);
+            background-color: var(--accent1);
           }
 
           & .field-bool-toggle-circle {
@@ -1730,7 +1736,7 @@ input[type="number"]::-webkit-outer-spin-button {
 
 /* When the checkbox is checked, change background and add a checkmark */
 .custom-checkbox input:checked ~ .checkmark {
-  background-color: rgb(50, 173, 132);
+  background-color: var(--accent2);
 
   &:active {
     transform: scale(0.9);
