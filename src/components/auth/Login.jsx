@@ -24,28 +24,30 @@ export default function Login() {
     <Auth>
       <div className="auth-form">
         <p className="instructions">Admin Signin</p>
-        <Field
-          config={{ required: true, preventSpaces: true }}
-          {...register("username", "text")}
-        />
+        <form>
+          <Field
+            config={{ required: true, preventSpaces: true }}
+            {...register("username", "text")}
+          />
 
-        <Field
-          config={{ required: true, preventSpaces: true }}
-          {...register("password", "password")}
-        />
+          <Field
+            config={{ required: true, preventSpaces: true }}
+            {...register("password", "password")}
+          />
 
-        <Button
-          type="primary"
-          onClick={handleSubmit(async (formState) => {
-            try {
-              await login(formState);
-            } catch (err) {
-              showError(err.response.data.detail);
-            }
-          })}
-        >
-          Log In
-        </Button>
+          <Button
+            type="primary"
+            onClick={handleSubmit(async (formState) => {
+              try {
+                await login(formState);
+              } catch (err) {
+                showError(err.response.data.detail);
+              }
+            })}
+          >
+            Log In
+          </Button>
+        </form>
       </div>
     </Auth>
   );

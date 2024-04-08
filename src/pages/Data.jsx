@@ -1,15 +1,20 @@
+// Dependencies
 import { useState, useEffect, useCallback } from "react";
-
-import api from "../api/api";
-
-import { useModalContext } from "../hooks/useModal";
-import { useNotificationContext } from "../hooks/useNotifications";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import styled from "styled-components";
 import { useLocation, useSearch } from "wouter";
 
-import PageHeader from "../components/utils/PageHeader";
+// API
+import api from "../api/api";
+
+// Hooks
+import { useModalContext } from "../hooks/useModal";
+import { useNotificationContext } from "../hooks/useNotifications";
+import useFooterOverlapping from "../hooks/ui/useFooterOverlapping";
+
+// Utils
+import TableClass from "../utils/table.js";
+
+// Components/styling
 import Crumbs from "../components/utils/Crumbs";
 import Button from "../components/utils/Button";
 import ActionIcon from "../components/utils/ActionIcon";
@@ -19,12 +24,11 @@ import Table from "../components/table/Table";
 import TableDashboard from "../components/TableDashboard";
 import Footer from "../components/utils/Footer";
 
-import TableClass from "../utils/table.js";
+import { Plus, Settings, RefreshCw, Copy } from "react-feather";
 
 export default function Data() {
   const [tables, setTables] = useState([]);
   const [rows, setRows] = useState([]);
-  const [footerOverlapping, setFooterOverlapping] = useState(false);
 
   const {
     actionCreators: { addUser, addRecord, editTable },
@@ -58,6 +62,8 @@ export default function Data() {
     [tables]
   );
 
+  const footerOverlapping = useFooterOverlapping(getTable(tableName));
+
   useEffect(() => {
     async function getTables() {
       const data = await api.getTables();
@@ -72,47 +78,20 @@ export default function Data() {
       });
   }, [showError]);
 
-  useEffect(() => {
-    if (getTable(tableName)) {
-      const footerIsOverlapping = () => {
-        const table = document
-          .querySelector(".table-wrapper")
-          .getBoundingClientRect();
-        const footer = document
-          .querySelector(".footer")
-          .getBoundingClientRect();
-
-        const overlapping = !(footer.top > table.bottom);
-
-        if (overlapping) {
-          setFooterOverlapping(true);
-        } else setFooterOverlapping(false);
-      };
-
-      footerIsOverlapping();
-
-      window.addEventListener("resize", footerIsOverlapping);
-      return () => {
-        window.removeEventListener("resize", footerIsOverlapping);
-      };
-    }
-  }, [tableName, setFooterOverlapping, tables, getTable]);
-
   return (
-    <div className="data-page">
-      <DataNavbar
-        tables={tables}
-        chooseTable={chooseTable}
-        setTables={setTables}
-        currentTable={tableName}
-      />
-
-      {tableName && (
-        <div className="data-page-content">
-          <PageHeader>
-            <div className="left">
+    <>
+      <DataPage className="data-page">
+        <DataNavbar
+          tables={tables}
+          chooseTable={chooseTable}
+          setTables={setTables}
+          currentTable={tableName}
+        />
+        {tableName ? (
+          <DataPageContent className="data-page-content">
+            <PageHeaderWrapper>
               <Crumbs crumbs={["Data", `${tableName}`]} />
-              <div className="data-page-action-icons">
+              <ActionIconsWrapper>
                 <ActionIcon
                   onClick={() =>
                     editTable({
@@ -122,7 +101,7 @@ export default function Data() {
                     })
                   }
                 >
-                  <FontAwesomeIcon icon="fa-sharp fa-regular fa-gear" />
+                  <Settings size={15} />
                 </ActionIcon>
                 <ActionIcon
                   onClick={async () => {
@@ -136,7 +115,7 @@ export default function Data() {
                       });
                   }}
                 >
-                  <FontAwesomeIcon icon="fa-light fa-arrows-rotate" />
+                  <RefreshCw size={15} />
                 </ActionIcon>
                 <ActionIcon
                   onClick={() => {
@@ -145,11 +124,10 @@ export default function Data() {
                     );
                   }}
                 >
-                  <FontAwesomeIcon icon="fa-light fa-copy copy-btn" />
+                  <Copy size={15} />
                 </ActionIcon>
-              </div>
-            </div>
-            <div className="right">
+              </ActionIconsWrapper>
+
               <Button
                 type="confirm"
                 onClick={() => {
@@ -161,24 +139,72 @@ export default function Data() {
                   }
                 }}
               >
-                <FontAwesomeIcon icon="fa-regular fa-plus" /> Add Row
+                <Plus size={15} /> Add Row
               </Button>
-            </div>
-          </PageHeader>
-          <SearchBar />
-          {getTable(tableName) ? (
-            <Table table={getTable(tableName)} rows={rows} setRows={setRows} />
-          ) : (
-            ""
-          )}
-          <Footer overlapping={footerOverlapping}>
-            Total Found: {rows.length}
-          </Footer>
-        </div>
-      )}
-      <div className="data-page-content">
-        <TableDashboard tables={tables} chooseTable={chooseTable} />
-      </div>
-    </div>
+            </PageHeaderWrapper>
+            {/* <SearchBar /> */}
+            {getTable(tableName) ? (
+              <Table
+                table={getTable(tableName)}
+                rows={rows}
+                setRows={setRows}
+              />
+            ) : (
+              ""
+            )}
+            <Footer overlapping={footerOverlapping}>
+              Total Found: {rows.length}
+            </Footer>
+          </DataPageContent>
+        ) : (
+          <DataPageContent>
+            <TableDashboard tables={tables} chooseTable={chooseTable} />
+          </DataPageContent>
+        )}
+      </DataPage>
+    </>
   );
 }
+
+const DataPage = styled.div`
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: var(--subnavbar-width) minmax(0, 1fr);
+  grid-template-rows: auto;
+  grid-template-areas: "subnavbar data-page-content";
+`;
+
+const DataPageContent = styled.div`
+  grid-area: data-page-content;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 100vh;
+`;
+
+const PageHeaderWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 10px;
+  padding: 20px 40px;
+
+  & button {
+    margin-left: auto;
+  }
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+    align-items: start;
+
+    & button {
+      margin-left: 0;
+      margin-top: 10px;
+    }
+  }
+`;
+
+const ActionIconsWrapper = styled.div`
+  display: flex;
+  gap: 10px;
+`;

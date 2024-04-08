@@ -1,8 +1,15 @@
+// Dependencies
 import { useState } from "react";
+import styled from "styled-components";
 
-import { TYPES } from "../../constants/constants";
-import Icon from "../utils/Icon.jsx";
+// Hooks
 import { useConfirmModalContext } from "../../hooks/useConfirmModal";
+
+// Constants
+import { TYPES } from "../../constants/constants";
+
+// Components/styling
+import Icon from "../utils/Icon.jsx";
 
 const determineOptions = (type) => {
   switch (type) {
@@ -80,5 +87,45 @@ export default function AddColumnBar({ dispatch, columns }) {
     );
   });
 
-  return <div className="add-column-bar">{addColumnBar}</div>;
+  return <AddColumnBarWrapper>{addColumnBar}</AddColumnBarWrapper>;
 }
+
+const AddColumnBarWrapper = styled.div`
+  display: flex;
+  justify-content: space-around;
+  margin: 5px 0;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  border-top: 2px dashed var(--pk);
+  border-bottom: 2px dashed var(--pk);
+
+  & .add-column-btn {
+    position: relative;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    border: 1px solid var(--light-gray);
+    color: var(--text-color);
+    padding: 5px 10px;
+    cursor: pointer;
+    box-shadow: var(--shadow-3);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: var(--accent2);
+    }
+
+    &:active {
+      transform: scale(0.9);
+    }
+
+    & .context {
+      position: absolute;
+      top: 115%;
+      left: 0;
+      background-color: white;
+      padding: 4px 10px;
+      border: 1px solid var(--light-gray);
+      border-radius: 5px;
+    }
+  }
+`;

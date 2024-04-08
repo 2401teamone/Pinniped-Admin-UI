@@ -1,9 +1,9 @@
+// Dependencies
 import { useState, useEffect, useCallback, useRef } from "react";
-
+import styled from "styled-components";
 import { format } from "date-fns";
 
-import Type from "../../utils/Type";
-
+// Components/styling
 import Input from "./Input";
 import Select from "./Select";
 import Bool from "./Bool";
@@ -11,6 +11,7 @@ import Calendar from "./Calendar";
 import Relation from "./Relation";
 import Json from "./Json";
 
+import Type from "../../utils/Type";
 import Panel from "../../utils/Panel";
 
 export default function Field({
@@ -231,7 +232,7 @@ export default function Field({
   }
 
   return (
-    <div
+    <FieldContainer
       className="field-container"
       ref={fieldRef}
       tabIndex={tabIndex ? "0" : "-1"}
@@ -303,6 +304,27 @@ export default function Field({
       {!config.inline && !error.length && !validatorContext && (
         <div className="field-message-container"></div>
       )}
-    </div>
+    </FieldContainer>
   );
 }
+
+const FieldContainer = styled.div`
+  width: 100%;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+
+  &:focus {
+    border: none;
+    outline: none;
+
+    & .field {
+      background-color: var(--editing-background);
+    }
+  }
+
+  & * {
+    cursor: pointer;
+  }
+`;

@@ -1,3 +1,5 @@
+import styled from "styled-components";
+
 import Settings from "../utils/Settings";
 import Field from "./fields/Field.jsx";
 
@@ -216,7 +218,7 @@ export default function ColumnOptions({ schema, column, dispatch, tables }) {
   }
 
   return (
-    <div className="column-options-container">
+    <ColumnOptionsWrapper>
       <div className="column-options">
         <div className="column-options-custom">
           <div>{columnOptions}</div>
@@ -249,6 +251,37 @@ export default function ColumnOptions({ schema, column, dispatch, tables }) {
           </Settings>
         </div>
       </div>
-    </div>
+    </ColumnOptionsWrapper>
   );
 }
+
+const ColumnOptionsWrapper = styled.div`
+  & .column-options {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    border-top: 1px solid var(--pk);
+    width: 100%;
+    padding: 15px;
+
+    & .column-options-custom {
+      & .column-options-custom-row {
+        display: flex;
+        flex-grow: 1;
+        gap: 25px;
+      }
+    }
+
+    & .column-options-custom {
+      margin-bottom: 10px;
+    }
+
+    & .column-options-standard {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+  }
+`;

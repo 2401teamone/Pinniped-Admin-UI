@@ -1,14 +1,21 @@
+// Dependencies
 import { useState } from "react";
 
+// API
 import api from "../../api/api.js";
 
+// Hooks
+import { useNotificationContext } from "../../hooks/useNotifications";
+
+// Components/styling
 import Field from "./fields/Field.jsx";
 import Button from "../utils/Button.jsx";
 import FormFooter from "./misc/FormFooter.jsx";
 
-import getValidator from "../../utils/validators";
+import { RowFormWrapper } from "./RowForm";
 
-import { useNotificationContext } from "../../hooks/useNotifications";
+// Utils
+import getValidator from "../../utils/validators";
 
 export default function EditRowForm({ table, row, setRows, closeModal }) {
   const [rowState, setRowState] = useState({ ...row });
@@ -40,7 +47,7 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
   };
 
   return (
-    <div className="row-form-container">
+    <RowFormWrapper>
       <h2 className="row-form-header">
         Edit <span>{table.name}</span> Row <span>{row.id}</span>
       </h2>
@@ -82,6 +89,6 @@ export default function EditRowForm({ table, row, setRows, closeModal }) {
           Exit
         </Button>
       </FormFooter>
-    </div>
+    </RowFormWrapper>
   );
 }

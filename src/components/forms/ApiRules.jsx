@@ -1,6 +1,10 @@
-const RULES = ["public", "user", "creator", "admin"];
+// Dependencies
+import styled from "styled-components";
 
+// Hooks
 import { useConfirmModalContext } from "../../hooks/useConfirmModal";
+
+const RULES = ["public", "user", "creator", "admin"];
 
 export default function ApiRules({ schema, dispatch }) {
   const {
@@ -37,7 +41,7 @@ export default function ApiRules({ schema, dispatch }) {
     );
   };
   return (
-    <div className="api-rules">
+    <ApiInterface>
       <div className="get-all-rule">
         <span className="method-for-rule">Get All Rule:</span>{" "}
         {rule("getAllRule", schema.getAllRule)}
@@ -58,6 +62,45 @@ export default function ApiRules({ schema, dispatch }) {
         <span className="method-for-rule">Delete Rule:</span>{" "}
         {rule("deleteRule", schema.deleteRule)}
       </div>
-    </div>
+    </ApiInterface>
   );
 }
+
+const ApiInterface = styled.div`
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  & div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    & .method-for-rule {
+      color: var(--text-color);
+      font-weight: 600;
+      padding: 3px;
+      border-bottom: 1px solid var(--light-gray);
+    }
+    & .rule {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      border: 1px solid var(--light-gray);
+      padding: 10px;
+      border-radius: var(--min-radius);
+
+      & .rule-btn {
+        cursor: pointer;
+        &:hover {
+          color: var(--blue-light);
+        }
+        &.active {
+          color: var(--accent2);
+          font-weight: 600;
+        }
+      }
+    }
+  }
+`;

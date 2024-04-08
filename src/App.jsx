@@ -1,7 +1,7 @@
+import styled from "styled-components";
 import { Router, Route, Switch } from "wouter";
 
 import Navbar from "./components/Navbar";
-
 
 import Data from "./pages/Data";
 import Observability from "./pages/Observability";
@@ -18,16 +18,18 @@ import useRouteOnAuth from "./hooks/useRouteOnAuth";
 import useDetermineModal from "./hooks/useDetermineModal";
 import { useConfirmModalContext } from "./hooks/useConfirmModal";
 
+import GlobalStyles from "./assets/global.js";
+
 import { LINKS } from "./constants/constants";
 
-function App() {
+export default function App() {
   const { notificationState } = useNotificationContext();
   const { admin } = useRouteOnAuth();
   const { isOpen, modalContent, close } = useDetermineModal();
   const { confirmModalState, actionCreators } = useConfirmModalContext();
 
   return (
-    <div id="app">
+    <AppWrapper id="app">
       {!admin && (
         <Switch>
           <Router base="/_">
@@ -36,11 +38,11 @@ function App() {
           </Router>
         </Switch>
       )}
-      <div className="main">
+      <Main className="main">
         {admin && (
-          <div>
+          <>
             <Navbar />
-            <div className="page">
+            <Page className="page">
               <Switch>
                 <Router base="/_">
                   <Route path={`/${LINKS.data}`} component={Data} />
@@ -51,13 +53,13 @@ function App() {
                   <Route path={`/${LINKS.settings}`} component={Settings} />
                 </Router>
               </Switch>
-            </div>
-          </div>
+            </Page>
+          </>
         )}
         <div>
           {isOpen && <SideModal onClose={close}>{modalContent}</SideModal>}
         </div>
-      </div>
+      </Main>
       <div>
         {confirmModalState.isOpen && (
           <ConfirmModal
@@ -79,8 +81,25 @@ function App() {
           </Notification>
         )}
       </div>
-    </div>
+      <GlobalStyles />
+    </AppWrapper>
   );
 }
 
-export default App;
+const AppWrapper = styled.div`
+  min-height: 100vh;
+`;
+
+const Main = styled.main`
+  display: grid;
+  grid-template-columns: var(--navbar-width) 1fr;
+  grid-template-rows: auto;
+  grid-template-areas: "navbar page";
+  min-height: inherit;
+`;
+
+const Page = styled.section`
+  grid-area: page;
+  min-height: 100vh;
+  background-color: var(--background);
+`;

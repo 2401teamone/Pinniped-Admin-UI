@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import styled from "styled-components";
 
 export default function Panel({
   setIsOpen,
@@ -25,8 +26,25 @@ export default function Panel({
   }, [setIsOpen, excludeClicksOn]);
 
   return (
-    <div className={`panel ${position}`} ref={panelRef}>
+    <PanelWrapper className={position} ref={panelRef}>
       {children}
-    </div>
+    </PanelWrapper>
   );
 }
+
+const PanelWrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  z-index: 200;
+  background-color: inherit;
+  /* overflow-y: scroll; */
+
+  &.left {
+    left: 0px;
+  }
+
+  &.right {
+    left: -40px;
+    top: 20px;
+  }
+`;
