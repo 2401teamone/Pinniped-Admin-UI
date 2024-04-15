@@ -1,11 +1,16 @@
 import { useRef } from "react";
 import styled from "styled-components";
 
-export default function Button({ type, children, ...props }) {
+export default function Button({ type, children, expand, ...props }) {
   const buttonRef = useRef();
 
   return (
-    <ButtonWrapper className={`btn ${type}`} {...props} ref={buttonRef}>
+    <ButtonWrapper
+      className={`btn ${type}`}
+      {...props}
+      ref={buttonRef}
+      $expand={expand}
+    >
       {children}
     </ButtonWrapper>
   );
@@ -22,6 +27,7 @@ const ButtonWrapper = styled.button`
   display: flex;
   flex-wrap: no-wrap;
   justify-content: center;
+  width: ${({ $expand }) => ($expand ? "100%" : "auto")};
   height: 30px;
 
   & svg {

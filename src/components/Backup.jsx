@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import styled from "styled-components";
 
 import api from "../api/api.js";
 
@@ -84,7 +85,7 @@ export default function Backup() {
   }, []);
 
   return (
-    <div className="backup">
+    <Container className="backup">
       <div className="backup-console">
         <h2 className="backup-header">Backup your Pinniped data</h2>
         <Button
@@ -145,6 +146,74 @@ export default function Backup() {
           })
         )}
       </div>
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  & .backup-console {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    & .backup-header {
+      font-size: 1.3rem;
+    }
+
+    & button {
+      & i {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  & .backups-log {
+    border: 1px solid var(--pk);
+    min-height: 200px;
+    border-radius: var(--min-radius);
+    padding: 10px;
+
+    & .no-backups {
+      font-size: 1.3rem;
+      color: var(--text-color);
+      & p {
+        margin: 10px;
+      }
+    }
+
+    & .backup-log {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      cursor: default;
+      border-radius: var(--min-radius);
+      &:hover {
+        background-color: var(--hover);
+      }
+
+      & .backup-actions {
+        display: flex;
+        gap: 20px;
+
+        & div {
+          cursor: pointer;
+          & i {
+            font-size: 1.5rem;
+          }
+        }
+        & .backup-download {
+          &:hover {
+            color: var(--blue);
+          }
+        }
+
+        & .backup-delete {
+          &:hover {
+            color: var(--red);
+          }
+        }
+      }
+    }
+  }
+`;

@@ -1,5 +1,6 @@
 // import { format } from 'date-fns';
 import { DayPicker } from "react-day-picker";
+import styled from "styled-components";
 
 export default function Calendar({
   value,
@@ -10,7 +11,7 @@ export default function Calendar({
 }) {
   if (!value) value = new Date();
   return (
-    <div className="field-calendar">
+    <Container className="field-calendar">
       <DayPicker
         mode="single"
         selected={value}
@@ -22,6 +23,17 @@ export default function Calendar({
           setEditing(false);
         }}
       />
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  position: absolute;
+  top: 20px;
+  box-shadow: var(--shadow-1);
+  border: 1px solid var(--light-gray);
+  z-index: 10000;
+  background-color: white;
+  padding: 5px;
+  border-radius: var(--min-radius);
+`;

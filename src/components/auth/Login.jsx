@@ -1,3 +1,5 @@
+import styled from "styled-components";
+
 import Auth from "./Auth.jsx";
 import Field from "../forms/fields/Field.jsx";
 import Button from "../utils/Button.jsx";
@@ -22,33 +24,38 @@ export default function Login() {
 
   return (
     <Auth>
-      <div className="auth-form">
-        <p className="instructions">Admin Signin</p>
-        <form>
-          <Field
-            config={{ required: true, preventSpaces: true }}
-            {...register("username", "text")}
-          />
+      <p>Admin Signin</p>
+      <Form>
+        <Field
+          config={{ required: true, preventSpaces: true }}
+          {...register("username", "text")}
+        />
 
-          <Field
-            config={{ required: true, preventSpaces: true }}
-            {...register("password", "password")}
-          />
+        <Field
+          config={{ required: true, preventSpaces: true }}
+          {...register("password", "password")}
+        />
 
-          <Button
-            type="primary"
-            onClick={handleSubmit(async (formState) => {
-              try {
-                await login(formState);
-              } catch (err) {
-                showError(err.response.data.detail);
-              }
-            })}
-          >
-            Log In
-          </Button>
-        </form>
-      </div>
+        <Button
+          type="primary"
+          expand={true}
+          onClick={handleSubmit(async (formState) => {
+            try {
+              await login(formState);
+            } catch (err) {
+              showError(err.response.data.detail);
+            }
+          })}
+        >
+          Log In
+        </Button>
+      </Form>
     </Auth>
   );
 }
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;

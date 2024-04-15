@@ -31,35 +31,35 @@ export default function App() {
   return (
     <AppWrapper id="app">
       {!admin && (
-        <Switch>
-          <Router base="/_">
+        <Router base="/_">
+          <Switch>
             <Route path={`/login`} component={Login} />
             <Route path={`/register`} component={Register} />
-          </Router>
-        </Switch>
+          </Switch>
+        </Router>
       )}
-      <Main className="main">
-        {admin && (
+      {admin && (
+        <Main className="main">
           <>
             <Navbar />
             <Page className="page">
-              <Switch>
-                <Router base="/_">
+              <Router base="/_">
+                <Switch>
                   <Route path={`/${LINKS.data}`} component={Data} />
                   <Route
                     path={`/${LINKS.observability}`}
                     component={Observability}
                   />
                   <Route path={`/${LINKS.settings}`} component={Settings} />
-                </Router>
-              </Switch>
+                </Switch>
+              </Router>
             </Page>
           </>
-        )}
-        <div>
-          {isOpen && <SideModal onClose={close}>{modalContent}</SideModal>}
-        </div>
-      </Main>
+        </Main>
+      )}
+      <div>
+        {isOpen && <SideModal onClose={close}>{modalContent}</SideModal>}
+      </div>
       <div>
         {confirmModalState.isOpen && (
           <ConfirmModal

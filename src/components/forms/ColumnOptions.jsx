@@ -191,9 +191,11 @@ export default function ColumnOptions({ schema, column, dispatch, tables }) {
               required: true,
             }}
             options={{
-              options: tables.map((table) => {
-                return { label: table.name, val: table.id };
-              }),
+              options: tables
+                .filter((table) => table.name !== "admins")
+                .map((table) => {
+                  return { label: table.name, val: table.id };
+                }),
               maxSelect: 1,
             }}
           />

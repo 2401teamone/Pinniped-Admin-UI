@@ -65,7 +65,7 @@ export default function Chart({ data }) {
       margin={{ top: 5, right: 5, tottom: 5, left: 5 }}
     >
       <Line
-        type="natural"
+        type="linear"
         dataKey="count"
         stroke="#56e4b7"
         dot={false}

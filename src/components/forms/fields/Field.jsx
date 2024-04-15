@@ -144,9 +144,7 @@ export default function Field({
           break;
         default:
           displayComponent = (
-            <span>
-              {value || <span className="placeholder">{placeholder}</span>}
-            </span>
+            <span>{value || <Placeholder>{placeholder}</Placeholder>}</span>
           );
       }
       editComponent = (
@@ -243,10 +241,13 @@ export default function Field({
         }
       }}
     >
-      <div
+      <FieldWrapper
+        $editing={editing}
+        $bool={type === "bool"}
+        $inline={config.inline}
         className={`field ${config.inline === true && "inline"} ${
-          editing && "editing"
-        } ${!label && "cell"} ${type === "bool" && "bool-it"}`}
+          !label && "cell"
+        }`}
       >
         <label className="field-label" htmlFor={label}>
           {label !== undefined && (
@@ -256,7 +257,7 @@ export default function Field({
           )}
           {required ? <span className="required">*</span> : ""}
         </label>
-        <div className="content">
+        <Content className="content">
           {type === "bool" ? (
             <Bool
               value={value}
@@ -266,7 +267,7 @@ export default function Field({
             />
           ) : (
             editing && (
-              <div className="content-edit">
+              <Edit className="content-edit">
                 <Panel
                   isOpen={editing}
                   setIsOpen={setEditing}
@@ -274,7 +275,7 @@ export default function Field({
                 >
                   {editComponent}
                 </Panel>
-              </div>
+              </Edit>
             )
           )}
           {(!editing ||
@@ -282,13 +283,13 @@ export default function Field({
             type === "relation" ||
             type === "date") &&
             type !== "bool" && (
-              <div className="content-display">{displayComponent}</div>
+              <Display className="content-display">{displayComponent}</Display>
             )}
-        </div>
+        </Content>
         {children}
-      </div>
+      </FieldWrapper>
       {(!!error.length || !!validatorContext) && !config.inline && (
-        <div className="field-message-container">
+        <MessageContainer className="field-message-container">
           {error.length ? (
             <div className="field-error-message">{error}</div>
           ) : (
@@ -299,10 +300,10 @@ export default function Field({
           ) : (
             ""
           )}
-        </div>
+        </MessageContainer>
       )}
       {!config.inline && !error.length && !validatorContext && (
-        <div className="field-message-container"></div>
+        <MessageContainer className="field-message-container"></MessageContainer>
       )}
     </FieldContainer>
   );
@@ -326,5 +327,117 @@ const FieldContainer = styled.div`
 
   & * {
     cursor: pointer;
+  }
+`;
+
+const FieldWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  flex-grow: 1;
+  gap: 3px;
+  width: inherit;
+  padding: 5px;
+  border: 1px solid var(--pk);
+  border-radius: 2px;
+  background-color: ${({ $editing }) =>
+    $editing ? "var(--editing-background)" : "var(--secondary-background)"};
+  transition: background-color 0.4s ease;
+
+  & * {
+    cursor: pointer;
+  }
+
+  &.cell {
+    padding: 3px;
+    border: none;
+    background-color: inherit;
+  }
+
+  & label {
+    display: flex;
+
+    gap: 3px;
+    color: var(--text-color);
+
+    & .required {
+      color: var(--red);
+      font-size: 1.5rem;
+    }
+  }
+
+  ${({ $bool }) =>
+    $bool &&
+    `
+    background-color: white;
+    width: max-content;
+    border: none;
+  `}
+`;
+
+const Placeholder = styled.span`
+  color: var(--text-color);
+`;
+
+const Content = styled.div`
+  display: flex;
+  align-items: center;
+  min-height: 22px;
+  min-width: 100%;
+`;
+
+const Display = styled.div`
+  position: relative;
+  min-height: inherit;
+  min-width: 100%;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+
+  & span {
+    min-width: fit-content;
+    white-space: nowrap;
+  }
+
+  & .content-display-select {
+    display: flex;
+    gap: 10px;
+    & .content-display-selection {
+      display: flex;
+      align-items: center;
+      border-radius: 4px;
+      padding: 4px 8px;
+      border: 1px solid var(--light-gray);
+      background-color: white;
+    }
+  }
+`;
+
+const Edit = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: left;
+  min-height: inherit;
+  min-width: inherit;
+  background-color: inherit;
+  z-index: 10;
+  padding: 5px;
+`;
+
+const MessageContainer = styled.div`
+  padding: 3px 0;
+  font-size: 0.9rem;
+  min-height: 20px;
+
+  & .field-validator-context {
+    color: var(--text-color);
+  }
+
+  & .field-error-message {
+    color: var(--error-font);
+    animation: slideErrorMessage 0.3s ease;
   }
 `;
