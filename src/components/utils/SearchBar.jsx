@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Search } from "react-feather";
 
 export default function SearchBar({ onSearch }) {
   const [search, setSearch] = useState("");
@@ -8,7 +8,7 @@ export default function SearchBar({ onSearch }) {
   return (
     <form className="search-bar">
       <label htmlFor="search" className="search-icon">
-        <FontAwesomeIcon icon="fa-regular fa-magnifying-glass" />
+        <Search></Search>
       </label>
       <input
         className="search-input"

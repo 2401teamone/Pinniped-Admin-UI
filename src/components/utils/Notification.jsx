@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import { createPortal } from "react-dom";
 
-import { useNotificationContext } from "../../hooks/useNotifications.jsx";
+import { AlertCircle, CheckCircle } from "react-feather";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNotificationContext } from "../../hooks/useNotifications.jsx";
 
 export default function Notification({ type, children }) {
   const {
@@ -28,9 +28,9 @@ export default function Notification({ type, children }) {
       <div className="left">
         <div className="icon">
           {type === "error" ? (
-            <FontAwesomeIcon icon="fa-regular fa-circle-exclamation" />
+            <AlertCircle size={15} />
           ) : (
-            <FontAwesomeIcon icon="fa-sharp fa-regular fa-check" />
+            <CheckCircle size={15} />
           )}
         </div>
         <div className="message">{children}</div>

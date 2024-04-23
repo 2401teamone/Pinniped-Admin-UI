@@ -11,9 +11,7 @@ import { LINKS } from "../constants/constants.js";
 
 import pinnipedIcon from "../assets/images/pinniped_icon.png";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import { Database, BarChart, Settings } from "react-feather";
+import { Database, BarChart, Settings, LogOut } from "react-feather";
 
 export default function Navbar() {
   const [hovering, setHovering] = useState("");
@@ -84,7 +82,7 @@ export default function Navbar() {
 
       <LogoutButton onClick={logout}>
         <ActionIcon>
-          <FontAwesomeIcon icon="fa-regular fa-sign-out" />
+          <LogOut size={15} />
         </ActionIcon>
       </LogoutButton>
     </NavbarWrapper>

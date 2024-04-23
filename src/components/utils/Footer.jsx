@@ -4,7 +4,7 @@ export default function Footer({ overlapping, children }) {
   return (
     <Container className={`footer ${overlapping && "overlapping"}`}>
       <div className="content">{children}</div>
-      <div className="standard">Pinniped v0.0.1</div>
+      <div className="standard">Pinniped v0.5.2</div>
     </Container>
   );
 }

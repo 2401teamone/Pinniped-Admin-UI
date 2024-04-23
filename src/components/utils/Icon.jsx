@@ -1,67 +1,65 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-const ICONS = {
-  pk: "key",
-  text: "text",
-  number: "hashtag",
-  bool: "check-square",
-  date: "calendar",
-  email: "envelope",
-  url: "link",
-  select: "list",
-  relation: "arrows-repeat",
-  json: "code",
-  creator: "signature",
-  password: "lock",
-  username: "user",
-  csv: "file-csv",
-};
+import {
+  Key,
+  Type,
+  Hash,
+  CheckSquare,
+  Calendar,
+  AtSign,
+  Link,
+  List,
+  Repeat,
+  Code,
+  Edit2,
+  Lock,
+  User,
+  FileText,
+} from "react-feather";
 
 export default function Icon({ column }) {
   let icon;
 
   switch (column.type) {
     case "pk":
-      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.pk} />;
+      icon = <Key size={10}></Key>;
       break;
     case "text":
-      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.text} />;
+      icon = <Type size={10}></Type>;
       break;
     case "number":
-      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.number} />;
+      icon = <Hash size={10}></Hash>;
       break;
     case "bool":
-      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.bool} />;
+      icon = <CheckSquare size={10}></CheckSquare>;
       break;
     case "date":
-      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.date} />;
+      icon = <Calendar size={10}></Calendar>;
       break;
     case "email":
-      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.email} />;
+      icon = <AtSign size={10}></AtSign>;
       break;
     case "url":
-      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.url} />;
+      icon = <Link size={10}></Link>;
       break;
     case "select":
-      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.select} />;
+      icon = <List size={10}></List>;
       break;
     case "relation":
-      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.relation} />;
+      icon = <Repeat size={10}></Repeat>;
       break;
     case "json":
-      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.json} />;
+      icon = <Code size={10}></Code>;
       break;
     case "creator":
-      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.creator} />;
+      icon = <Edit2 size={10}></Edit2>;
       break;
     case "password":
-      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.password} />;
+      icon = <Lock size={10}></Lock>;
       break;
     case "username":
-      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.username} />;
+      icon = <User size={10}></User>;
       break;
     case "csv":
-      icon = <FontAwesomeIcon icon={"fa-light fa-" + ICONS.csv} />;
+      icon = <FileText size={10}></FileText>;
       break;
     default:
       icon = <div></div>;

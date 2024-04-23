@@ -1,7 +1,15 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  User,
+  Folder,
+  Edit,
+  Copy,
+  Eye,
+  ChevronDown,
+  ChevronRight,
+} from "react-feather";
 
 const TableCard = ({
   tables,
@@ -24,26 +32,26 @@ const TableCard = ({
       <div className="table-card-header">
         <div className="name">
           {table.name === "users" || table.name === "_admins" ? (
-            <FontAwesomeIcon icon={`fa-light fa-user`} />
+            <User size={15}></User>
           ) : (
-            <FontAwesomeIcon icon={`fa-light fa-folder-closed`} />
+            <Folder size={15}></Folder>
           )}
           <h3>{table.name}</h3>
         </div>
         <div className="actions">
-          <FontAwesomeIcon
+          <Edit
             className="edit-icon"
             icon={`fa-light fa-edit`}
             onClick={() => chooseTable(table.name)}
           />
-          <FontAwesomeIcon
+          <Copy
             icon={`fa-light fa-copy`}
             className="copy"
             onClick={() => {
               window.navigator.clipboard.writeText(table.id);
             }}
           />
-          <FontAwesomeIcon
+          <Eye
             icon="fa-light fa-eye"
             className="view"
             onClick={() => {
@@ -71,9 +79,11 @@ const TableCard = ({
           }}
         >
           <h2>System Fields</h2>
-          <FontAwesomeIcon
-            icon={`fa-light fa-chevron-${showSystemFields ? "down" : "right"}`}
-          />
+          {showSystemFields ? (
+            <ChevronDown size={15} />
+          ) : (
+            <ChevronRight size={15} />
+          )}
         </div>
         {!showSystemFields ? (
           ""
@@ -121,9 +131,11 @@ const TableCard = ({
           }}
         >
           <h2>Custom Fields</h2>
-          <FontAwesomeIcon
-            icon={`fa-light fa-chevron-${showCustomFields ? "down" : "right"}`}
-          />
+          {showCustomFields ? (
+            <ChevronDown size={15} />
+          ) : (
+            <ChevronRight size={15} />
+          )}
         </div>
         {!showCustomFields ? (
           ""
@@ -164,9 +176,11 @@ const TableCard = ({
           onClick={() => setShowApiRules(!showApiRules)}
         >
           <h2>API Rules</h2>
-          <FontAwesomeIcon
-            icon={`fa-light fa-chevron-${showApiRules ? "down" : "right"}`}
-          />
+          {showApiRules ? (
+            <ChevronDown size={15} />
+          ) : (
+            <ChevronRight size={15} />
+          )}
         </div>
         {!showApiRules ? (
           ""

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { format } from "date-fns";
 import api from "../api/api.js";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { AlertCircle, MinusCircle } from "react-feather";
 
 const determineColor = (method) => {
   switch (method) {
@@ -51,7 +51,7 @@ export default function Log({ log, viewingLog, setViewingLog, setLogs }) {
           <span className="log-status">{log.statusCode}</span>
           {log.statusCode >= 400 ? (
             <span className="error">
-              <FontAwesomeIcon icon="fa-solid fa-exclamation-circle" />
+              <AlertCircle size={12} />
             </span>
           ) : (
             ""
@@ -79,7 +79,7 @@ export default function Log({ log, viewingLog, setViewingLog, setLogs }) {
               });
           }}
         >
-          <FontAwesomeIcon icon="fa-duotone fa-eraser" />
+          <MinusCircle size={12} />
         </div>
       ) : (
         ""

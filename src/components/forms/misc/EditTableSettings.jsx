@@ -6,7 +6,7 @@ import { useNotificationContext } from "../../../hooks/useNotifications";
 
 import { useLocation } from "wouter";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Trash } from "react-feather";
 
 export default function EditTableSettings({ tableId, setTables, closeModal }) {
   const {
@@ -32,7 +32,7 @@ export default function EditTableSettings({ tableId, setTables, closeModal }) {
             });
         }}
       >
-        <FontAwesomeIcon icon="fa-regular fa-trash" /> <span>Drop</span>
+        <Trash size={15}></Trash> <span>Drop</span>
       </div>
     </Settings>
   );

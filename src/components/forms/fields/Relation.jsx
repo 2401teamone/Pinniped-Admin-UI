@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import api from "../../../api/api";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Info } from "react-feather";
 export default function Relation({
   value,
   onChange,
@@ -71,7 +71,7 @@ export default function Relation({
                 onMouseOver={() => setShowContext(row.id)}
                 onMouseOut={() => setShowContext(undefined)}
               >
-                <FontAwesomeIcon icon="fa-sharp fa-thin fa-circle-info" />
+                <Info size={15}></Info>
 
                 {showContext === row.id && (
                   <div className="row-context-dropdown">

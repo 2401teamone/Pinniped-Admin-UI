@@ -11,9 +11,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@awesome.me/kit-9d86f6836c": "^1.0.10",
-    "@fortawesome/fontawesome-svg-core": "^6.5.1",
-    "@fortawesome/react-fontawesome": "^0.2.0",
     "axios": "^1.6.7",
     "date-fns": "^3.4.0",
     "react": "^18.2.0",

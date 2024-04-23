@@ -6,7 +6,6 @@ import Checkbox from "../utils/Checkbox.jsx";
 
 import { useModalContext } from "../../hooks/useModal";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { ArrowRight } from "react-feather";
 

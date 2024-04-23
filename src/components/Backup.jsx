@@ -6,7 +6,7 @@ import api from "../api/api.js";
 import Button from "./utils/Button.jsx";
 import Field from "./forms/fields/Field.jsx";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Play, Trash, Download } from "react-feather";
 
 import { useConfirmModalContext } from "../hooks/useConfirmModal.jsx";
 
@@ -92,7 +92,7 @@ export default function Backup() {
           type="inherit"
           onClick={() => open(<Form close={close} setBackups={setBackups} />)}
         >
-          <FontAwesomeIcon icon="fa-regular fa-play" />
+          <Play size={15}></Play>
           Backup
         </Button>
       </div>
@@ -123,7 +123,7 @@ export default function Backup() {
                         });
                     }}
                   >
-                    <FontAwesomeIcon icon="fa-sharp fa-light fa-circle-down" />
+                    <Download size={15} />
                   </div>
                   <div
                     className="backup-delete"
@@ -138,7 +138,7 @@ export default function Backup() {
                         .catch((err) => {});
                     }}
                   >
-                    <FontAwesomeIcon icon="fa-regular fa-trash" />
+                    <Trash size={15}></Trash>
                   </div>
                 </div>
               </div>

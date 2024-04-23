@@ -3,14 +3,14 @@ import styled from "styled-components";
 
 import Panel from "./Panel";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { MoreHorizontal } from "react-feather";
 
 export default function Settings({ children }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Container className="settings-container">
       <div className="settings-btn" onClick={() => setIsOpen(!isOpen)}>
-        <FontAwesomeIcon icon="fa-regular fa-ellipsis" />
+        <MoreHorizontal size={12}></MoreHorizontal>
       </div>
       {isOpen && (
         <Panel setIsOpen={setIsOpen} position="right">
