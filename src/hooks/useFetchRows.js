@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNotificationContext } from "./useNotifications";
 import api from "../api/api";
 
-export default function useFetchRows(table, rows, setRows) {
+export default function useFetchRows(table, setRows) {
   const [loading, setLoading] = useState(false);
   const [hasQueried, setHasQueried] = useState(false);
 
@@ -31,7 +31,7 @@ export default function useFetchRows(table, rows, setRows) {
         setLoading(false);
         setHasQueried(true);
       });
-  }, [setRows, showError, table.id]);
+  }, [setRows, showError, table.id, table.columns]);
 
   return {
     loading,

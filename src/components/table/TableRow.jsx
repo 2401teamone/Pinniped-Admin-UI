@@ -1,11 +1,13 @@
 import { useState } from "react";
+import styled from "styled-components";
 
 import TableCell from "./TableCell";
 import Checkbox from "../utils/Checkbox.jsx";
 
 import { useModalContext } from "../../hooks/useModal";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
+import { ArrowRight } from "react-feather";
 
 export default function TableRow({
   table,
@@ -23,8 +25,8 @@ export default function TableRow({
 
   return (
     table && (
-      <tr
-        className={`tr ${hovering ? "hovering" : ""}`}
+      <TableRowWrapper
+        className={hovering ? "hovering" : ""}
         onClick={() => {
           if (table.type === "auth") {
             editUser({ table, row, setRows });
@@ -90,10 +92,27 @@ export default function TableRow({
           column={{ type: "updated_at", name: "updated_at" }}
           row={row}
         />
-        <td className={`sticky-col right-arrow ${hovering ? "hovering" : ""}`}>
-          <FontAwesomeIcon icon="fa-regular fa-arrow-right" />
+        <td className={`right-arrow ${hovering ? "hovering" : ""}`}>
+          <ArrowRight size={10} />
         </td>
-      </tr>
+      </TableRowWrapper>
     )
   );
 }
+
+const TableRowWrapper = styled.tr`
+  border-bottom: 1px solid var(--pk);
+  cursor: pointer;
+  z-index: 80;
+  height: 45px;
+
+  &.hovering {
+    background-color: var(--secondary-background);
+  }
+
+  & .right-arrow {
+    width: 50px;
+    text-align: center;
+    color: var(--text-color);
+  }
+`;

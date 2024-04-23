@@ -1,8 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
+import styled from "styled-components";
 
 import api from "../../../api/api";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Info } from "react-feather";
 export default function Relation({
   value,
   onChange,
@@ -54,7 +55,7 @@ export default function Relation({
   }, [current, handleSelection, rows, setEditing]);
 
   return (
-    <div className="field-relation">
+    <Container className="field-relation">
       {rows.length &&
         rows.map((row, idx) => {
           return (
@@ -70,7 +71,7 @@ export default function Relation({
                 onMouseOver={() => setShowContext(row.id)}
                 onMouseOut={() => setShowContext(undefined)}
               >
-                <FontAwesomeIcon icon="fa-sharp fa-thin fa-circle-info" />
+                <Info size={15}></Info>
 
                 {showContext === row.id && (
                   <div className="row-context-dropdown">
@@ -82,6 +83,73 @@ export default function Relation({
             </div>
           );
         })}
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  position: absolute;
+    width: inherit;
+    min-width: max-content;
+    top: 15px;
+    box-shadow: var(--shadow-1);
+    border: 1px solid var(--light-gray);
+    z-index: 10000;
+    background-color: white;
+    padding: 5px;
+    border-radius: var(--min-radius);
+
+    &.active {
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    & .field-relation-option {
+      display: flex;
+      gap: 10px;
+      cursor: pointer;
+      padding: 5px 40px 5px 3px;
+      border-radius: var(--min-radius);
+      position: relative;
+      border-bottom: 1px solid var(--pk);
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &.active {
+        color: var(--blue);
+      }
+
+      &:hover {
+        background-color: var(--hover);
+      }
+
+      &.highlight {
+        background-color: var(--hover);
+      }
+
+      & .row-context {
+        & .row-context-dropdown {
+          width: max-content;
+          height: max-content;
+          position: absolute;
+          left: 20px;
+          top: 20px;
+          z-index: 100000000000000;
+          background-color: var(--blue);
+          color: white;
+          font-weight: 600;
+
+          box-shadow: var(--shadow-3);
+          border: 1px solid var(--light-gray);
+          padding: 10px;
+
+          & pre {
+            line-height: 1.5;
+          }
+        }
+      }
+    }
+  }
+`;

@@ -25,7 +25,7 @@ export const TYPES = {
   select: "select",
   relation: "relation",
   creator: "creator",
-  password: "password",
+  // password: "password",
 };
 
 export const NOTIFICATION_TYPES = {

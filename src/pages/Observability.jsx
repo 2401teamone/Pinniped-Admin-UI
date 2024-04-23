@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import styled from "styled-components";
 
 import PageHeader from "../components/utils/PageHeader";
 import Logs from "../components/Logs";
@@ -74,18 +75,18 @@ export default function Observability() {
 
   return (
     logs && (
-      <div className="observability-page">
+      <PageContainer className="observability-page">
         <Logs
           logs={logs.filter(filterBySearchTerm)}
           setLogs={setLogs}
           setSearchTerm={setSearchTerm}
         />
 
-        <div className="observability-page-content">
+        <Container className="observability-page-content">
           <PageHeader>
             <h1>Dashboard</h1>
           </PageHeader>
-          <div className="observability-page-content-data">
+          <Content className="observability-page-content-data">
             {!logs.length ? (
               ""
             ) : (
@@ -102,9 +103,77 @@ export default function Observability() {
                 </div>
               </>
             )}
-          </div>
-        </div>
-      </div>
+          </Content>
+        </Container>
+      </PageContainer>
     )
   );
 }
+
+const PageContainer = styled.div`
+  min-height: 100vh;
+
+  display: grid;
+  grid-template-columns: var(--subnavbar-width) minmax(0, 1fr);
+  grid-template-rows: auto;
+  grid-template-areas: "subnavbar observability-page-content";
+
+  overflow: scroll;
+`;
+
+const Container = styled.div`
+  grid-area: observability-page-content;
+  min-height: 100vh;
+
+  h1 {
+    font-size: 2rem;
+    color: var(--text-color);
+  }
+`;
+
+const Content = styled.div`
+  padding: 40px;
+  
+  & .cards {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 20px;
+
+    & .card {
+      width: 250px;
+      height: 90px;
+      border-radius: var(--min-radius);
+      border: 1px solid var(--pk);
+      box-shadow: var(--shadow-4);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background-color: white;
+
+      & .card-header {
+        font-size: 1.2rem;
+        border-bottom: 1px solid var(--pk);
+        padding-bottom: 2px;
+      }
+
+      & .data {
+        color: var(--text-color);
+        font-weight: 600;
+        font-size: 1.8rem;
+      }
+    }
+  }
+
+  & .chart {
+    display: flex;
+    justify-content: start;
+    border: 1px solid var(--pk);
+    padding: 20px;
+    border-radius: var(--min-radius);
+    box-shadow: var(--shadow-4);
+    background-color: white;
+  }
+}`;

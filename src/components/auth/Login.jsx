@@ -1,3 +1,5 @@
+import styled from "styled-components";
+
 import Auth from "./Auth.jsx";
 import Field from "../forms/fields/Field.jsx";
 import Button from "../utils/Button.jsx";
@@ -22,8 +24,8 @@ export default function Login() {
 
   return (
     <Auth>
-      <div className="auth-form">
-        <p className="instructions">Admin Signin</p>
+      <p>Admin Signin</p>
+      <Form>
         <Field
           config={{ required: true, preventSpaces: true }}
           {...register("username", "text")}
@@ -36,6 +38,7 @@ export default function Login() {
 
         <Button
           type="primary"
+          expand={true}
           onClick={handleSubmit(async (formState) => {
             try {
               await login(formState);
@@ -46,7 +49,13 @@ export default function Login() {
         >
           Log In
         </Button>
-      </div>
+      </Form>
     </Auth>
   );
 }
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;

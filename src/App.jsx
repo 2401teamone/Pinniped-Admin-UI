@@ -1,7 +1,7 @@
+import styled from "styled-components";
 import { Router, Route, Switch } from "wouter";
 
 import Navbar from "./components/Navbar";
-
 
 import Data from "./pages/Data";
 import Observability from "./pages/Observability";
@@ -18,45 +18,47 @@ import useRouteOnAuth from "./hooks/useRouteOnAuth";
 import useDetermineModal from "./hooks/useDetermineModal";
 import { useConfirmModalContext } from "./hooks/useConfirmModal";
 
+import GlobalStyles from "./assets/global.js";
+
 import { LINKS } from "./constants/constants";
 
-function App() {
+export default function App() {
   const { notificationState } = useNotificationContext();
   const { admin } = useRouteOnAuth();
   const { isOpen, modalContent, close } = useDetermineModal();
   const { confirmModalState, actionCreators } = useConfirmModalContext();
 
   return (
-    <div id="app">
+    <AppWrapper id="app">
       {!admin && (
-        <Switch>
-          <Router base="/_">
+        <Router base="/_">
+          <Switch>
             <Route path={`/login`} component={Login} />
             <Route path={`/register`} component={Register} />
-          </Router>
-        </Switch>
+          </Switch>
+        </Router>
       )}
-      <div className="main">
-        {admin && (
-          <div>
+      {admin && (
+        <Main className="main">
+          <>
             <Navbar />
-            <div className="page">
-              <Switch>
-                <Router base="/_">
+            <Page className="page">
+              <Router base="/_">
+                <Switch>
                   <Route path={`/${LINKS.data}`} component={Data} />
                   <Route
                     path={`/${LINKS.observability}`}
                     component={Observability}
                   />
                   <Route path={`/${LINKS.settings}`} component={Settings} />
-                </Router>
-              </Switch>
-            </div>
-          </div>
-        )}
-        <div>
-          {isOpen && <SideModal onClose={close}>{modalContent}</SideModal>}
-        </div>
+                </Switch>
+              </Router>
+            </Page>
+          </>
+        </Main>
+      )}
+      <div>
+        {isOpen && <SideModal onClose={close}>{modalContent}</SideModal>}
       </div>
       <div>
         {confirmModalState.isOpen && (
@@ -79,8 +81,25 @@ function App() {
           </Notification>
         )}
       </div>
-    </div>
+      <GlobalStyles />
+    </AppWrapper>
   );
 }
 
-export default App;
+const AppWrapper = styled.div`
+  min-height: 100vh;
+`;
+
+const Main = styled.main`
+  display: grid;
+  grid-template-columns: var(--navbar-width) 1fr;
+  grid-template-rows: auto;
+  grid-template-areas: "navbar page";
+  min-height: inherit;
+`;
+
+const Page = styled.section`
+  grid-area: page;
+  min-height: 100vh;
+  background-color: var(--background);
+`;

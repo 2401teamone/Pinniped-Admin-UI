@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import styled from "styled-components";
 
 const formatVal = (val, type) => {
   let formattedVal;
@@ -54,7 +55,7 @@ export default function Input({
   });
 
   return (
-    <input
+    <InputContainer
       ref={inputRef}
       onKeyPressCapture={(e) => {
         if (e.key === "Enter") {
@@ -87,3 +88,10 @@ export default function Input({
     />
   );
 }
+
+const InputContainer = styled.input`
+  font-size: 1rem;
+  background-color: inherit;
+  width: 100%;
+  height: inherit;
+`;

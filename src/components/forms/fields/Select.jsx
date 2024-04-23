@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import styled from "styled-components";
 
 export default function Select({
   options,
@@ -94,20 +95,59 @@ export default function Select({
     }
 
     return (
-      <div
+      <SelectOption
         key={option}
-        className={`field-select-option ${
-          value.includes(option) ? "active" : ""
-        } ${current === idx ? "highlight" : ""}`}
+        $active={value.includes(option)}
+        $highlight={current === idx}
         onClick={(e) => {
           e.stopPropagation();
           handleSelection(val);
         }}
       >
         {option}
-      </div>
+      </SelectOption>
     );
   });
 
-  return <div className="field-select">{renderedOptions}</div>;
+  return (
+    <SelectContainer className="field-select">
+      {renderedOptions}
+    </SelectContainer>
+  );
 }
+
+const SelectContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  width: inherit;
+  top: 15px;
+  box-shadow: var(--shadow-1);
+  border: 1px solid var(--light-gray);
+  background-color: white;
+  padding: 5px;
+  border-radius: var(--min-radius);
+`;
+
+const SelectOption = styled.div`
+  cursor: pointer;
+  padding: 10px;
+  border-radius: var(--min-radius);
+
+  &:hover {
+    background-color: var(--secondary-background);
+  }
+
+  ${({ $active }) =>
+    $active &&
+    `
+    color: var(--blue);
+    font-weight: 600;
+  `}
+
+  ${({ $highlight }) =>
+    $highlight &&
+    `
+    background-color: var(--hover);
+  `}
+`;

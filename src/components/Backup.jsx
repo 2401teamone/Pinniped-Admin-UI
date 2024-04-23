@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
+import styled from "styled-components";
 
 import api from "../api/api.js";
 
 import Button from "./utils/Button.jsx";
 import Field from "./forms/fields/Field.jsx";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Play, Trash, Download } from "react-feather";
 
 import { useConfirmModalContext } from "../hooks/useConfirmModal.jsx";
 
@@ -84,14 +85,14 @@ export default function Backup() {
   }, []);
 
   return (
-    <div className="backup">
+    <Container className="backup">
       <div className="backup-console">
         <h2 className="backup-header">Backup your Pinniped data</h2>
         <Button
           type="inherit"
           onClick={() => open(<Form close={close} setBackups={setBackups} />)}
         >
-          <FontAwesomeIcon icon="fa-regular fa-play" />
+          <Play size={15}></Play>
           Backup
         </Button>
       </div>
@@ -122,7 +123,7 @@ export default function Backup() {
                         });
                     }}
                   >
-                    <FontAwesomeIcon icon="fa-sharp fa-light fa-circle-down" />
+                    <Download size={15} />
                   </div>
                   <div
                     className="backup-delete"
@@ -137,7 +138,7 @@ export default function Backup() {
                         .catch((err) => {});
                     }}
                   >
-                    <FontAwesomeIcon icon="fa-regular fa-trash" />
+                    <Trash size={15}></Trash>
                   </div>
                 </div>
               </div>
@@ -145,6 +146,74 @@ export default function Backup() {
           })
         )}
       </div>
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  & .backup-console {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    & .backup-header {
+      font-size: 1.3rem;
+    }
+
+    & button {
+      & i {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  & .backups-log {
+    border: 1px solid var(--pk);
+    min-height: 200px;
+    border-radius: var(--min-radius);
+    padding: 10px;
+
+    & .no-backups {
+      font-size: 1.3rem;
+      color: var(--text-color);
+      & p {
+        margin: 10px;
+      }
+    }
+
+    & .backup-log {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      cursor: default;
+      border-radius: var(--min-radius);
+      &:hover {
+        background-color: var(--hover);
+      }
+
+      & .backup-actions {
+        display: flex;
+        gap: 20px;
+
+        & div {
+          cursor: pointer;
+          & i {
+            font-size: 1.5rem;
+          }
+        }
+        & .backup-download {
+          &:hover {
+            color: var(--blue);
+          }
+        }
+
+        & .backup-delete {
+          &:hover {
+            color: var(--red);
+          }
+        }
+      }
+    }
+  }
+`;

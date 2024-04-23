@@ -1,11 +1,15 @@
+// Dependencies
 import { useState, useEffect, useReducer, useCallback } from "react";
-
+import styled from "styled-components";
 import { useLocation } from "wouter";
 
+// API
 import api from "../../api/api.js";
 
+// Hooks
 import { useNotificationContext } from "../../hooks/useNotifications";
 
+// Components/styling
 import AddColumnBar from "./AddColumnBar.jsx";
 import ColumnInput from "./ColumnInput.jsx";
 import Field from "./fields/Field.jsx";
@@ -14,6 +18,9 @@ import ApiRules from "./ApiRules.jsx";
 import EditTableSettings from "./misc/EditTableSettings.jsx";
 import FormFooter from "./misc/FormFooter.jsx";
 import AuthOptions from "../utils/AuthOptions.jsx";
+
+// Utils
+import { validate } from "../../utils/table_form_validation.js";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -68,7 +75,6 @@ export default function TableForm({
   const [chosenInterface, setChosenInterface] = useState("columns");
 
   const [schema, dispatch] = useReducer(reducer, currentSchema);
-  console.log("received", schema, currentSchema);
 
   const [, setLocation] = useLocation();
 
@@ -91,63 +97,9 @@ export default function TableForm({
   };
 
   const handleSubmit = async (e) => {
-    const validate = (schema) => {
-      const errors = [];
-      if (!schema.name.length) {
-        errors.push("Table name is required.");
-      }
-      if (!schema.name.match(/^[a-zA-Z0-9_]+$/)) {
-        errors.push("Table name must be alphanumeric and contain no spaces.");
-      }
-      if (schema.name.length > 20) {
-        errors.push("Table name must be 20 characters or less.");
-      }
-
-      if (
-        tables.some((table) => {
-          if (isNew() && table.name === schema.name) {
-            return true;
-          } else if (
-            !isNew() &&
-            table.name === schema.name &&
-            table.id !== existingId
-          ) {
-            return true;
-          }
-        })
-      ) {
-        errors.push("Table name must be unique.");
-      }
-
-      if (currentSchema.type === "base" && !schema.columns.length) {
-        errors.push("At least one column is required.");
-      }
-      if (!schema.columns.every((column) => column.name.length)) {
-        errors.push("All columns must have a name.");
-      }
-      if (!schema.columns.every((column) => column.type)) {
-        errors.push("All columns must have a type.");
-      }
-
-      let colNames = schema.columns.map((column) => column.name);
-      if (colNames.length !== new Set(colNames).size) {
-        errors.push("Column names must be unique.");
-      }
-
-      for (let col of schema.columns) {
-        if (col.type !== "relation") continue;
-        if (!col.options.tableId) {
-          errors.push("Relation columns must have a table selected.");
-        }
-      }
-
-      return errors;
-    };
-
     e.preventDefault();
     const clone = { ...schema };
-
-    const errors = validate(clone);
+    const errors = validate(clone, tables, existingId, isNew, currentSchema);
     if (errors.length) {
       showError(errors);
       return;
@@ -187,8 +139,8 @@ export default function TableForm({
   }, [isNew]);
 
   return (
-    <div className="table-form-container">
-      <div className="table-form-header-container">
+    <TableFormContainer>
+      <TableFormHeaderWrapper>
         <h2 className="table-form-header">
           {`${isNew() ? "New" : `Edit ${tableName}`} Table`}
         </h2>{" "}
@@ -199,9 +151,9 @@ export default function TableForm({
             setTables={setTables}
           />
         )}
-      </div>
+      </TableFormHeaderWrapper>
       {tempIdsGenerated && (
-        <form className="table-form">
+        <TableFormWrapper>
           <div className="table-form-name">
             {currentSchema.type === "auth" ? (
               ""
@@ -217,7 +169,7 @@ export default function TableForm({
               />
             )}
           </div>
-          <div className="table-form-navbar">
+          <TableFormNavbar>
             <div
               className={`columns-btn ${
                 chosenInterface === "columns" ? "active" : "inactive"
@@ -245,10 +197,10 @@ export default function TableForm({
                 API Rules
               </div>
             )}
-          </div>
-          <div className="interface">
+          </TableFormNavbar>
+          <Interface>
             {chosenInterface === "columns" ? (
-              <div className="columns-interface">
+              <ColumnsInterface>
                 <p className="system-fields">
                   <span>System fields</span>
                   <span className="system-field">id</span>
@@ -278,14 +230,14 @@ export default function TableForm({
                     );
                   })}
                 </div>
-              </div>
+              </ColumnsInterface>
             ) : chosenInterface === "rules" ? (
               <ApiRules schema={schema} dispatch={dispatch} />
             ) : (
               <AuthOptions schema={schema} dispatch={dispatch} />
             )}
-          </div>
-        </form>
+          </Interface>
+        </TableFormWrapper>
       )}
       <FormFooter>
         <Button type="confirm" onClick={handleSubmit}>
@@ -301,6 +253,90 @@ export default function TableForm({
           Cancel
         </Button>
       </FormFooter>
-    </div>
+    </TableFormContainer>
   );
 }
+
+const TableFormContainer = styled.div`
+  background-color: var(--background);
+`;
+
+const TableFormHeaderWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px var(--modal-padding) 10px var(--modal-padding);
+  position: relative;
+
+  & .table-form-header {
+    font-size: 1.3rem;
+    font-weight: 800;
+  }
+`;
+
+const TableFormWrapper = styled.form`
+  display: flex;
+  flex-direction: column;
+
+  & .table-form-name {
+    padding: 0 30px;
+    margin-bottom: 30px;
+  }
+}`;
+
+const Interface = styled.div`
+  padding: 10px var(--modal-padding);
+  background-color: white;
+  height: calc(100vh - 250px);
+  border-top: 1px solid var(--pk);
+  flex-grow: 1;
+  overflow-y: scroll;
+`;
+
+const ColumnsInterface = styled.div`
+  & .system-fields {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin: 15px 0;
+
+    & .system-field {
+      padding: 2px 5px;
+      background-color: var(--pk);
+      border-radius: 5px;
+    }
+  }
+`;
+
+const TableFormNavbar = styled.div`
+  display: flex;
+  justify-content: space-around;
+
+  & .columns-btn,
+  .rules-btn,
+  .options-btn {
+    position: relative;
+    margin-bottom: -0.8px;
+    width: 150px;
+    border-radius: 2px;
+    padding: 10px 30px;
+    text-align: center;
+    cursor: pointer;
+    color: var(--text-color);
+
+    &.active {
+      font-weight: 600;
+      background-color: white;
+      border-left: 1px solid var(--pk);
+      border-top: 1px solid var(--pk);
+      border-right: 1px solid var(--pk);
+      border-bottom: 1px solid var(--white);
+    }
+
+    &.inactive {
+      &:hover {
+        background-color: var(--hover);
+      }
+    }
+  }
+`;

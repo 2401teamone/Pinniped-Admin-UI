@@ -1,4 +1,5 @@
 import api from "../../api/api.js";
+import styled from "styled-components";
 
 import Field from "./fields/Field.jsx";
 import Button from "../utils/Button.jsx";
@@ -43,7 +44,7 @@ export default function AuthForm({ table, setRows, closeModal }) {
   };
 
   return (
-    <div className="row-form-container">
+    <RowFormWrapper className="row-form-container">
       <h2 className="row-form-header">Add User</h2>
       <form className="row-form">
         <div className="row-form-field">
@@ -102,7 +103,7 @@ export default function AuthForm({ table, setRows, closeModal }) {
             />
           </div>
         </div>
-        <div className="auth-separator"></div>
+        <Separator></Separator>
         {table.columns
           .filter((column) => !column.system)
           .map((column, idx) => {
@@ -142,6 +143,53 @@ export default function AuthForm({ table, setRows, closeModal }) {
           Cancel
         </Button>
       </FormFooter>
-    </div>
+    </RowFormWrapper>
   );
 }
+
+export const RowFormWrapper = styled.div`
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  & .row-form-header {
+    margin: 20px 0 30px 0;
+    padding: 0 var(--modal-padding);
+    font-size: 1.5rem;
+
+    & span {
+      font-weight: 800;
+    }
+  }
+
+  & .row-form {
+    padding: 0 var(--modal-padding);
+    margin-bottom: 50px;
+    flex-grow: 1;
+    overflow-y: scroll;
+    height: inherit;
+
+    & .row-form-field {
+      margin: 10px 0;
+
+      & .row-form-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+
+      & .change-password-btn {
+        display: flex;
+        justify-content: end;
+      }
+    }
+  }
+`;
+
+const Separator = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: var(--pk);
+  margin: 5px 0 25px 0;
+`;

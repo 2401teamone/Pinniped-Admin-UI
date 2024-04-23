@@ -1,6 +1,15 @@
 import { useState } from "react";
+import styled from "styled-components";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  User,
+  Folder,
+  Edit,
+  Copy,
+  Eye,
+  ChevronDown,
+  ChevronRight,
+} from "react-feather";
 
 const TableCard = ({
   tables,
@@ -23,26 +32,26 @@ const TableCard = ({
       <div className="table-card-header">
         <div className="name">
           {table.name === "users" || table.name === "_admins" ? (
-            <FontAwesomeIcon icon={`fa-light fa-user`} />
+            <User size={15}></User>
           ) : (
-            <FontAwesomeIcon icon={`fa-light fa-folder-closed`} />
+            <Folder size={15}></Folder>
           )}
           <h3>{table.name}</h3>
         </div>
         <div className="actions">
-          <FontAwesomeIcon
+          <Edit
             className="edit-icon"
             icon={`fa-light fa-edit`}
             onClick={() => chooseTable(table.name)}
           />
-          <FontAwesomeIcon
+          <Copy
             icon={`fa-light fa-copy`}
             className="copy"
             onClick={() => {
               window.navigator.clipboard.writeText(table.id);
             }}
           />
-          <FontAwesomeIcon
+          <Eye
             icon="fa-light fa-eye"
             className="view"
             onClick={() => {
@@ -70,9 +79,11 @@ const TableCard = ({
           }}
         >
           <h2>System Fields</h2>
-          <FontAwesomeIcon
-            icon={`fa-light fa-chevron-${showSystemFields ? "down" : "right"}`}
-          />
+          {showSystemFields ? (
+            <ChevronDown size={15} />
+          ) : (
+            <ChevronRight size={15} />
+          )}
         </div>
         {!showSystemFields ? (
           ""
@@ -120,9 +131,11 @@ const TableCard = ({
           }}
         >
           <h2>Custom Fields</h2>
-          <FontAwesomeIcon
-            icon={`fa-light fa-chevron-${showCustomFields ? "down" : "right"}`}
-          />
+          {showCustomFields ? (
+            <ChevronDown size={15} />
+          ) : (
+            <ChevronRight size={15} />
+          )}
         </div>
         {!showCustomFields ? (
           ""
@@ -163,9 +176,11 @@ const TableCard = ({
           onClick={() => setShowApiRules(!showApiRules)}
         >
           <h2>API Rules</h2>
-          <FontAwesomeIcon
-            icon={`fa-light fa-chevron-${showApiRules ? "down" : "right"}`}
-          />
+          {showApiRules ? (
+            <ChevronDown size={15} />
+          ) : (
+            <ChevronRight size={15} />
+          )}
         </div>
         {!showApiRules ? (
           ""
@@ -204,7 +219,7 @@ export default function TableDashboard({ tables, chooseTable }) {
   const [relatedTable, setRelatedTable] = useState(null);
 
   return (
-    <div className="table-dashboard">
+    <Container className="table-dashboard">
       {tables
         .filter((table) => table.name !== "admins")
         .map((table) => (
@@ -217,6 +232,131 @@ export default function TableDashboard({ tables, chooseTable }) {
             setRelatedTable={setRelatedTable}
           />
         ))}
-    </div>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  height: 100vh;
+  padding: 30px;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 30px;
+
+  & .table-card {
+    width: 200px;
+    height: 350px;
+
+    border: 1px solid var(--pk);
+    border-radius: var(--min-radius);
+    padding: 15px;
+    cursor: pointer;
+    box-shadow: var(--shadow-3);
+    background-color: white;
+    &.highlight-relation {
+      background-color: var(--highlight);
+    }
+
+    &:hover {
+      border: 1px solid var(--light-gray);
+    }
+
+    & .table-card-header {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-color);
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 5px;
+      border-bottom: 1px solid var(--light-gray);
+      margin-bottom: 15px;
+
+      & div {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      & .actions {
+        & * {
+          transition: 0.2s all;
+        }
+
+        & *:active {
+          transform: scale(0.9);
+        }
+        & .edit-icon {
+          &:hover {
+            color: var(--green);
+          }
+        }
+
+        & .copy {
+          &:hover {
+            color: var(--blue);
+          }
+        }
+        & .view {
+          &:hover {
+            color: var(--sage);
+          }
+        }
+      }
+    }
+    & .table {
+      height: 300px;
+      overflow-y: scroll;
+      & .fields-header {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        margin-bottom: 10px;
+
+        border-bottom: 2px solid var(--light-gray);
+        & h2 {
+          font-size: 1.1rem;
+          color: var(--light-gray);
+          font-weight: 700;
+        }
+      }
+
+      & .table-card-schema,
+      .table-card-system {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin: 10px 0;
+        margin-left: 5px;
+
+        & .no-custom-fields {
+          font-size: 0.9rem;
+          color: var(--text-color);
+        }
+
+        & .table-card-column {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 0.9rem;
+          color: var(--text-color);
+          padding: 2px 0;
+
+          &:hover {
+            border-bottom: 2px solid var(--pk);
+            font-weight: 600;
+          }
+        }
+      }
+
+      & .api-rules {
+        & div {
+          display: flex;
+          justify-content: space-between;
+          color: var(--text-color);
+          margin: 5px 0;
+        }
+      }
+    }
+  }
+`;

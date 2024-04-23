@@ -1,23 +1,23 @@
 import SubNavbar from "./utils/SubNavbar";
+import styled from "styled-components";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Archive } from "react-feather";
 
 export default function AdminButtons({
   currentInterface,
   setCurrentInterface,
 }) {
-  const buttons = ["Backup", "Admins"];
+  const buttons = ["Backup"];
 
   let icon = {
-    Backup: <FontAwesomeIcon icon="fa-light fa-cabinet-filing" />,
-    Admins: <FontAwesomeIcon icon="fa-light fa-user-tie" />,
+    Backup: <Archive size={15} />,
   };
   return (
     <SubNavbar>
-      <div className="admin-buttons">
+      <Container className="admin-buttons">
         {buttons.map((button) => {
           return (
-            <div
+            <Button
               key={button}
               className={`admin-button ${
                 currentInterface === button ? "active" : ""
@@ -26,10 +26,34 @@ export default function AdminButtons({
             >
               <span>{icon[button]}</span>
               <span>{button}</span>
-            </div>
+            </Button>
           );
         })}
-      </div>
+      </Container>
     </SubNavbar>
   );
 }
+
+const Container = styled.div`
+  padding: 0 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+`;
+
+const Button = styled.div`
+  padding: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0;
+
+  &.active {
+    background-color: var(--hover);
+  }
+
+  &:hover {
+    background-color: var(--hover);
+  }
+`;
