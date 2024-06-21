@@ -23,7 +23,7 @@ export default function Observability() {
           return {
             ...log,
             timestamp: new Date(parseInt(log.time)),
-            headers: JSON.parse(log.headers),
+            // headers: JSON.parse(log.headers),
           };
         })
       );
